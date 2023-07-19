@@ -3,7 +3,7 @@ const IS_SERVER = typeof window === "undefined";
 
 export function getURL(path: string) {
   const baseURL = IS_SERVER
-    ? process.env.NEXT_PUBLIC_SITE_URL!
+    ? "https://aram-insights.vercel.app" 
     : window.location.origin;
   return new URL(path, baseURL).toString();
 }
