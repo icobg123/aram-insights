@@ -102,7 +102,7 @@ const fetchIndividualChampionData = async (champName: string) => {
     const passiveId = json.data[champName][`passive`]["image"]["full"];
 
     return spells.reduce(
-      (acc, spell) => {
+      (acc: any, spell: any) => {
         const spellId = spell.image.full;
         const spellName = spell.name.toLowerCase();
 
