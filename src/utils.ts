@@ -2,9 +2,17 @@
 const IS_SERVER = typeof window === "undefined";
 
 export function getURL(path: string) {
-  const baseURL = IS_SERVER
-    ? "https://aram-insights.vercel.app" 
-    : window.location.origin;
+  const env = process.env.NODE_ENV;
+  let base = "";
+  if (env == "development") {
+    // do something
+    base = "http://localhost:3000";
+  } else if (env == "production") {
+    // do something
+    base = "https://aram-insights.vercel.app";
+  }
+
+  const baseURL = IS_SERVER ? base : window.location.origin;
   return new URL(path, baseURL).toString();
 }
 

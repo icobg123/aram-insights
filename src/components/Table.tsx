@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import AbilityChanges from "@/components/AbilityChanges";
+import { AbilityChanges } from "@/components/AbilityChanges";
 import { ChampionData } from "@/app/aramAdjustments/route";
 import { SearchBar } from "@/components/SearchBar";
 

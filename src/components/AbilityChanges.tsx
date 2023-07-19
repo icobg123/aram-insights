@@ -1,8 +1,8 @@
-import { AbilityChanges } from "@/app/aramAdjustments/route";
+import { AbilityChanges as AbilityChangesProps } from "@/app/aramAdjustments/route";
 import React from "react";
 
-type Props = { spells: { [spellName: string]: string } } & AbilityChanges;
-export default function AbilityChanges(props: Props) {
+type Props = { spells: { [spellName: string]: string } } & AbilityChangesProps;
+export const AbilityChanges = (props: Props) => {
   const { abilityName, changes, iconName, spells } = props;
 
   return (
@@ -18,4 +18,4 @@ export default function AbilityChanges(props: Props) {
       </div>
     </div>
   );
-}
+};
