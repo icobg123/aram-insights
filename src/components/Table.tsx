@@ -77,11 +77,11 @@ export const Table: React.FC<TableProps> = ({
                 <th scope="col" className="w-[100px] px-4 py-3">
                   Win %
                 </th>
-                <th scope="col" className="w-[100px] px-4 py-3">
-                  Damage dealt
+                <th scope="col" className="w-[100px] px-1 py-3">
+                  Dmg dealt
                 </th>
-                <th scope="col" className="w-[100px] px-4 py-3">
-                  Damage received
+                <th scope="col" className="w-[100px] px-1 py-3">
+                  Dmg received
                 </th>
                 <th scope="col" className="w-1/3 px-4 py-3">
                   Other effects
