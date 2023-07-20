@@ -1,6 +1,7 @@
 import { Table } from "@/components/Table";
 import axios from "axios";
 import cheerio from "cheerio";
+import { ReactDOM } from "react";
 
 export type AbilityChangesScrapped = {
   abilityName: string;

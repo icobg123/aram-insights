@@ -55,13 +55,15 @@ export const Table: React.FC<TableProps> = ({
     <div
       className={`relative flex min-h-[567px]  w-[890px] flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg`}
     >
-      <div className="absolute right-0 top-[-131px] ">
+      <div className="absolute right-0 top-[-131px]">
         <Image
           className=""
-          width={512 - 300}
-          height={515 - 300}
+          width={212}
+          height={215}
           src={"/peeking-poro.svg"}
           alt={"Table background"}
+          placeholder="blur"
+          blurDataURL="/images/blur.jpg"
         />
       </div>
       {scrappedChampsLen > 0 ? (
