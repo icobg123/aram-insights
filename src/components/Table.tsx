@@ -4,7 +4,6 @@ import { AbilityChanges } from "@/components/AbilityChanges";
 import { SearchBar } from "@/components/SearchBar";
 import { ChampionDataScrapped } from "@/app/page";
 import Image from "next/legacy/image";
-
 interface TableProps {
   scrappedData: ChampionDataScrapped;
   winRates: { [key: string]: string };
@@ -60,10 +59,11 @@ export const Table: React.FC<TableProps> = ({
           className=""
           width={212}
           height={215}
-          src={"/peeking-poro.svg"}
-          alt={"Table background"}
+          src="/peeking-poro.png"
+          alt={"A poro table background"}
+          title={"A poro peeking behind the table"}
           placeholder="blur"
-          blurDataURL="/images/blur.jpg"
+          blurDataURL="/transperant-placeholder.png"
         />
       </div>
       {scrappedChampsLen > 0 ? (
