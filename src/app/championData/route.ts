@@ -55,7 +55,7 @@ const fetchChampionAllData = async () => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      "http://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion.json"
+      "https://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion.json"
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -74,7 +74,7 @@ const fetchChampionAllData = async () => {
         // console.log(spells);
         return {
           [champName]: {
-            icon: `http://ddragon.leagueoflegends.com/cdn/13.14.1/img/champion/${championIcon}`,
+            icon: `https://ddragon.leagueoflegends.com/cdn/13.14.1/img/champion/${championIcon}`,
             title: championTitle,
             spells: spells,
           },

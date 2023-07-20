@@ -2,20 +2,41 @@ import { Table } from "@/components/Table";
 import axios from "axios";
 import cheerio from "cheerio";
 
-export type AbilityChanges = {
+export type AbilityChangesScrapped = {
   abilityName: string;
   changes: string;
   iconName: string;
 };
 export type ChampionDataScrapped = {
-  champion: string;
-  damageDealt: string;
-  damageReceived: string;
-  generalChanges: string[];
-  abilityChanges: AbilityChanges[];
+  [key: string]: {
+    champion: string;
+    damageDealt: string;
+    damageReceived: string;
+    generalChanges: string[];
+    abilityChanges: AbilityChangesScrapped[];
+  };
 };
+/*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
+const scrapePatchVersion = async (): Promise<string> => {
+  try {
+    const response = await axios.get(
+      "https://leagueoflegends.fandom.com/wiki/ARAM"
+    );
+    const $ = cheerio.load(response.data);
 
-const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
+    return $("h2:has(span#Patch_History)")
+      .next("div")
+      .find("a")
+      .first()
+      .text()
+      .trim()
+      .substring(1);
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+};
+const scrapeTable = async (): Promise<ChampionDataScrapped> => {
   try {
     const response = await axios.get(
       "https://leagueoflegends.fandom.com/wiki/ARAM"
@@ -23,7 +44,7 @@ const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
     );
     const $ = cheerio.load(response.data);
 
-    const championData: ChampionDataScrapped[] = [];
+    const championData: ChampionDataScrapped = {};
 
     $(".article-table tbody tr").each((index, element) => {
       const champion = $(element).find("td").eq(0).text().trim();
@@ -31,12 +52,10 @@ const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
       const damageReceived = $(element).find("td").eq(2).text().trim();
       const otherEffectsElements = $(element).find("td").eq(3).find("li");
       const generalChanges: string[] = [];
-      const abilityChanges: AbilityChanges[] = [];
+      const abilityChanges: AbilityChangesScrapped[] = [];
 
-      // if (champion === "Akshan") {
       otherEffectsElements.each((index, element) => {
         const text = $(element).text().trim();
-        console.log(text);
         if (text) {
           // Check if the changes are ability-specific
           const abilityElement = $(element).parent().prev("p").find("span");
@@ -47,7 +66,6 @@ const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
               .attr("alt")
               ?.toLowerCase();
 
-            console.log(iconName);
             abilityChanges.push({
               abilityName: ability,
               changes: text,
@@ -58,15 +76,15 @@ const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
           }
         }
       });
-      const data: ChampionDataScrapped = {
-        champion,
-        damageDealt,
-        damageReceived,
-        generalChanges,
-        abilityChanges,
-      };
+
       if (champion !== "") {
-        championData.push(data);
+        championData[champion] = {
+          champion,
+          damageDealt,
+          damageReceived,
+          generalChanges,
+          abilityChanges,
+        };
       }
       // }
     });
@@ -74,7 +92,7 @@ const scrapeTable = async (): Promise<ChampionDataScrapped[]> => {
     return championData;
   } catch (error) {
     console.error("Error scraping data:", error);
-    return [];
+    return {};
   }
 };
 
@@ -125,12 +143,38 @@ type ChampionData = {
     attackspeed: number;
   };
 };
+/*create a function that scrapes a page using cheerio and returns an object that has champion names as keys and win rate percentages as values
+ * from this url https://www.metasrc.com/lol/aram/13.13/stats
+ *
+ * */
+const scrapeWinRate = async (
+  version: string
+): Promise<{ [key: string]: string }> => {
+  try {
+    const response = await axios.get(
+      `https://www.metasrc.com/lol/aram/${version}/stats`
+    );
+    const $ = cheerio.load(response.data);
 
+    const winRateData: { [key: string]: string } = {};
+
+    $(".stats-table tbody tr").each((index, element) => {
+      const champion = $(element).find("td").eq(0).find("a").text().trim();
+      const winRate = $(element).find("td").eq(6).text().trim();
+      winRateData[champion] = winRate;
+    });
+
+    return winRateData;
+  } catch (error) {
+    console.error("Error scraping data:", error);
+    return {};
+  }
+};
 const fetchChampionAllData = async () => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      "http://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion.json"
+      "https://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion.json"
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -149,7 +193,7 @@ const fetchChampionAllData = async () => {
         // console.log(spells);
         return {
           [champName]: {
-            icon: `http://ddragon.leagueoflegends.com/cdn/13.14.1/img/champion/${championIcon}`,
+            icon: `https://ddragon.leagueoflegends.com/cdn/13.14.1/img/champion/${championIcon}`,
             title: championTitle,
             spells: spells,
           },
@@ -195,19 +239,31 @@ const fetchIndividualChampionData = async (champName: string) => {
   }
 };
 
+export async function generateMetadata() {
+  return {
+    title: "ARAM Insights",
+    description: `ARAM Insights: Real-time updates on champion balance changes for League of Legends' ARAM game mode.`,
+  };
+}
+
 export default async function Home() {
+  const patchVersion = await scrapePatchVersion();
+  const winRates = await scrapeWinRate(patchVersion);
   const aramChanges = await scrapeTable();
   const championData = await fetchChampionAllData();
-  const [changes, data] = await Promise.all([aramChanges, championData]);
-
-  // console.log(champions[0])
-  // console.log(icons)
+  const [aramAdjustments, champAssets] = await Promise.all([
+    aramChanges,
+    championData,
+  ]);
   return (
     <div className="hero min-h-screen">
       <div className="hero-content text-center">
-        <div className="min-h-[473px] w-[928px]">
-          <Table data={changes} icons={data} />
-        </div>
+        <Table
+          scrappedData={aramAdjustments}
+          icons={champAssets}
+          winRates={winRates}
+          version={patchVersion}
+        />
       </div>
     </div>
   );

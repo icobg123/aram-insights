@@ -9,5 +9,8 @@
   "bracketSpacing": true,
   "plugins": [
     "prettier-plugin-tailwindcss"
+  ],
+  "tailwindFunctions": [
+    "tw"
   ]
 }

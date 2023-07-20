@@ -9,10 +9,10 @@ export const SearchBar = ({ value, handleSearch }: Props) => {
   const champSearch = useAutoFocus();
 
   return (
-    <div className="container mb-2 w-full max-w-4xl ">
+    <div className="container  w-full max-w-4xl ">
       <div className="form-control w-full max-w-xs">
         <label className="label">
-          <span className="label-text">Who are we picking this game?</span>
+          <span className="label-text">Who is your pick for this game?</span>
         </label>
         <input
           type="text"

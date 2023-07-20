@@ -36,7 +36,6 @@ const scrapeTable = async (): Promise<ChampionData[]> => {
       // if (champion === "Akshan") {
       otherEffectsElements.each((index, element) => {
         const text = $(element).text().trim();
-        console.log(text);
         if (text) {
           // Check if the changes are ability-specific
           const abilityElement = $(element).parent().prev("p").find("span");
