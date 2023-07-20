@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { AbilityChanges } from "@/components/AbilityChanges";
 import { SearchBar } from "@/components/SearchBar";
 import { ChampionDataScrapped } from "@/app/page";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface TableProps {
   scrappedData: ChampionDataScrapped;
@@ -36,7 +36,7 @@ export const Table: React.FC<TableProps> = ({
     if (value.length === 0) {
       return setChampNames(Object.keys(icons));
     }
-    if (value.length < 3) {
+    if (value.length < 2) {
       return;
     }
 
@@ -49,7 +49,7 @@ export const Table: React.FC<TableProps> = ({
   const flexStyles = scrappedChampsLen > 0 ? "" : "flex items-center";
   return scrappedChampsLen > 0 ? (
     <div
-      className={`flex min-h-[567px] w-[928px] flex-col bg-gray-950 px-1 pb-4 pt-3 shadow-lg sm:rounded-lg`}
+      className={`flex min-h-[567px]  flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg`}
     >
       <div className="w-4xl container max-w-4xl  ">
         <div className="mb-3 flex items-center justify-between">
@@ -60,7 +60,7 @@ export const Table: React.FC<TableProps> = ({
           </div>
         </div>
       </div>
-      <div className="w-4xl container flex max-h-[443px] max-w-4xl flex-grow overflow-auto shadow-md sm:rounded-lg">
+      <div className="w-4xl container flex max-h-[443px] max-w-4xl flex-grow overflow-auto rounded-lg shadow-md">
         {searchedChampsLen === 0 && searchQuery !== "" ? (
           <div
             className={`flex w-full items-center justify-center text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400`}
