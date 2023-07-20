@@ -53,8 +53,17 @@ export const Table: React.FC<TableProps> = ({
   const flexStyles = scrappedChampsLen > 0 ? "" : "flex items-center";
   return (
     <div
-      className={`flex min-h-[567px] w-[890px]  flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg`}
+      className={`relative flex min-h-[567px]  w-[890px] flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg`}
     >
+      <div className="absolute right-0 top-[-131px] ">
+        <Image
+          className=""
+          width={512 - 300}
+          height={515 - 300}
+          src={"/peeking-poro.svg"}
+          alt={"Table background"}
+        />
+      </div>
       {scrappedChampsLen > 0 ? (
         <>
           <div className="w-4xl container max-w-4xl  ">
@@ -74,7 +83,15 @@ export const Table: React.FC<TableProps> = ({
               <div
                 className={`flex w-full items-center justify-center text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400`}
               >
-                No champions found
+                <span>No champions found!</span>
+                <div className="">
+                  <Image
+                    src={"/no-results.png"}
+                    width={64}
+                    height={64}
+                    alt={"A sad poro"}
+                  />
+                </div>
               </div>
             ) : !loading ? (
               <table className="w-full table-fixed text-left text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400">
