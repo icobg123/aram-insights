@@ -104,25 +104,27 @@ export const Table: React.FC<TableProps> = ({
                     >
                       <th
                         scope="row"
-                        className=" whitespace-nowrap px-4 py-4 font-medium text-gray-900 dark:text-white"
+                        className=" px-4 py-4 font-medium text-gray-900 dark:text-white"
                       >
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center">
                           <div className="avatar">
-                            <div className="w-24 rounded-full">
+                            <div className="w-24 rounded-full ring  ring-offset-2 ring-offset-base-100">
                               <Image
                                 width={96}
                                 height={96}
                                 src={icons[champion].icon || ""}
                                 alt={champion}
                                 title={champion}
+                                placeholder="blur"
+                                blurDataURL="/champion-placeholder.png"
                               />
                             </div>
                           </div>
-                          <div>
+                          <div className="break-normal	px-4">
                             <div className="font-bold">{champion}</div>
-                            <div className="text-sm opacity-50">
+                            <span className="text-sm opacity-50">
                               {icons[champion]?.title}
-                            </div>
+                            </span>
                           </div>
                         </div>
                       </th>
@@ -173,9 +175,7 @@ export const Table: React.FC<TableProps> = ({
                           </span>
                         ) : null}
                         {!(champion in scrappedData) ? (
-                          <span className="flex flex-col space-y-3 pb-2">
-                            Perfectly balanced, as all things should be
-                          </span>
+                          <>Perfectly balanced, as all things should be</>
                         ) : null}
                       </td>
                     </tr>
