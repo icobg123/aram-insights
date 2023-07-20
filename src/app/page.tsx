@@ -170,7 +170,7 @@ const scrapeWinRate = async (
     return {};
   }
 };
-const fetchChampionAllData = async () => {
+const fetchChampionAllData = async (version: string) => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
@@ -188,7 +188,7 @@ const fetchChampionAllData = async () => {
         const championIcon = champion.image.full;
         const championTitle = champion.title;
         const champName = champion.name;
-        const spells = await fetchIndividualChampionData(championName);
+        const spells = await fetchIndividualChampionData(championName, version);
         promises.push(spells);
         // console.log(spells);
         return {
@@ -206,11 +206,14 @@ const fetchChampionAllData = async () => {
   }
 };
 
-const fetchIndividualChampionData = async (champName: string) => {
+const fetchIndividualChampionData = async (
+  champName: string,
+  version?: string
+) => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion/${champName}.json`
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -250,7 +253,7 @@ export default async function Home() {
   const patchVersion = await scrapePatchVersion();
   const winRates = await scrapeWinRate(patchVersion);
   const aramChanges = await scrapeTable();
-  const championData = await fetchChampionAllData();
+  const championData = await fetchChampionAllData(patchVersion);
   const [aramAdjustments, champAssets] = await Promise.all([
     aramChanges,
     championData,

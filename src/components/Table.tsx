@@ -63,7 +63,7 @@ export const Table: React.FC<TableProps> = ({
 
               <div
                 className="tooltip self-end"
-                data-tip="Leage of Legends version"
+                data-tip="Leage of Legends patch"
               >
                 <div className="badge">v{version}</div>
               </div>
