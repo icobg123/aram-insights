@@ -4,6 +4,7 @@ import { ChampionDataScrapped } from "@/app/page";
 import Image from "next/legacy/image";
 import { Table } from "@/components/table/Table";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
+import peekingPoro from "../../../public/peeking-poro.svg";
 
 export interface IconData {
   [champion: string]: {
@@ -59,7 +60,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             className=""
             width={212}
             height={215}
-            src="/peeking-poro.png"
+            src={peekingPoro}
             alt="A poro table background"
             title="A poro peeking behind the table"
             placeholder="blur"

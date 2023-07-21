@@ -40,7 +40,6 @@ const TableRow: React.FC<TableRowProps> = ({
                 height={96}
                 src={icons[champion]?.icon || ""}
                 alt={champion}
-                title={champion}
                 placeholder="blur"
                 blurDataURL="/champion-placeholder.png"
               />

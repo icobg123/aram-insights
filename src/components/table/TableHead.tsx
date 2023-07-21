@@ -2,7 +2,7 @@ import React from "react";
 
 export const TableHead = () => {
   return (
-    <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+    <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase  dark:bg-gray-700 dark:text-gray-200">
       <tr>
         <th scope="col" className="w-1/3 px-4 py-3">
           Champion

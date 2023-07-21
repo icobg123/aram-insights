@@ -16,7 +16,6 @@ export const AbilityChanges = (props: Props) => {
             height={44}
             src={spells[`${iconName}`] || ""}
             alt={abilityName}
-            title={abilityName}
             placeholder="blur"
             blurDataURL="/ability-placeholder.png"
           />

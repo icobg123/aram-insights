@@ -11,11 +11,12 @@ export const SearchBar = ({ value, handleSearch }: Props) => {
   return (
     <div className="container  w-full max-w-4xl ">
       <div className="form-control w-full max-w-xs">
-        <label className="label">
+        <label className="label" htmlFor="champSearch">
           <span className="label-text">Who is your pick for this game?</span>
         </label>
         <input
           type="text"
+          id="champSearch"
           placeholder="Search for a champion"
           ref={champSearch}
           onChange={handleSearch}
