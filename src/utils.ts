@@ -2,7 +2,6 @@
 const IS_SERVER = typeof window === "undefined";
 
 export function getURL(path: string) {
-  const env = process.env.NODE_ENV;
   let base = process.env.NEXT_PUBLIC_BASE_URL;
   const baseURL = IS_SERVER ? base : window.location.origin;
   return new URL(path, baseURL).toString();
