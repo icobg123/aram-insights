@@ -244,8 +244,8 @@ const fetchIndividualChampionData = async (
 
 export async function generateMetadata() {
   return {
-    title: "ARAM Insights",
-    description: `ARAM Insights: Real-time updates on champion balance changes for League of Legends' ARAM game mode.`,
+    title: "ARAM Balance",
+    description: `ARAM Balance: Champion balance changes for League of Legends' ARAM game mode.`,
   };
 }
 
