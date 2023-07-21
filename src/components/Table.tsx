@@ -78,7 +78,7 @@ export const Table: React.FC<TableProps> = ({
 
             <div className="max-h-[443px] w-full overflow-auto rounded-lg shadow-md ">
               {!loading ? (
-                <table className="table h-full w-full text-left text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+                <table className="h-full w-full table-fixed text-left text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400">
                   <thead className="sticky top-0 z-10 bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                       <th scope="col" className="w-1/3 px-4 py-3">
