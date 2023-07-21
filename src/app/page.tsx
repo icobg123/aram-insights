@@ -1,4 +1,4 @@
-import { Table } from "@/components/Table";
+import { TableWrapper } from "@/components/table-wrapper/TableWrapper";
 import axios from "axios";
 import cheerio from "cheerio";
 import { ReactDOM } from "react";
@@ -262,7 +262,7 @@ export default async function Home() {
   return (
     <div className="hero min-h-screen">
       <div className="hero-content text-center">
-        <Table
+        <TableWrapper
           scrappedData={aramAdjustments}
           icons={champAssets}
           winRates={winRates}

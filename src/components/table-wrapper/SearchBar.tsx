@@ -1,7 +1,7 @@
 import React from "react";
 import useAutoFocus from "@/components/hooks/useAutoFocus";
 // create a type that takes in the props a value and handlesearch function
-type Props = {
+export type Props = {
   value: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
