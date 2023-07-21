@@ -1,11 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { AbilityChanges } from "@/components/table/AbilityChanges";
-import { SearchBar } from "@/components/table-wrapper/SearchBar";
 import { ChampionDataScrapped } from "@/app/page";
 import Image from "next/legacy/image";
-import { TableHead } from "@/components/table/TableHead";
-import { TableBody } from "@/components/table/TableBody";
 import { Table } from "@/components/table/Table";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 

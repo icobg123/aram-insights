@@ -1,5 +1,3 @@
-import Image from "next/legacy/image";
-import { AbilityChanges } from "@/components/table/AbilityChanges";
 import React from "react";
 import { TableProps } from "@/components/table/Table";
 import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";

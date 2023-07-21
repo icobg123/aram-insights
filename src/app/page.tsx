@@ -1,7 +1,6 @@
 import { TableWrapper } from "@/components/table-wrapper/TableWrapper";
 import axios from "axios";
 import cheerio from "cheerio";
-import { ReactDOM } from "react";
 
 export type AbilityChangesScrapped = {
   abilityName: string;
