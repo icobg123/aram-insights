@@ -10,7 +10,7 @@ export const AbilityChanges = (props: Props) => {
   return (
     <div className="flex flex-col items-center space-y-2 md:flex-row md:space-x-3 md:space-y-0">
       <div className="avatar flex-shrink-0">
-        <div className="rounded-full ring  ring-offset-2 ring-offset-base-100">
+        <div className="rounded-full ring ring-offset-2 ring-offset-gray-900">
           <Image
             width={44}
             height={44}

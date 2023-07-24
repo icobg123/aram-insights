@@ -6,7 +6,7 @@ export const NoChampionsFoundRow = () => {
   return (
     <tr>
       <td colSpan={5}>
-        <div className="flex w-full items-center justify-center space-x-2 text-sm dark:bg-gray-900 dark:text-gray-400">
+        <div className="flex w-full items-center justify-center space-x-2 bg-gray-900 bg-gray-900 text-sm text-gray-400 text-gray-400">
           <span>No champions found!</span>
           <div className="">
             <Image

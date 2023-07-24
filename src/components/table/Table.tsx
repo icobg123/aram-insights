@@ -20,7 +20,7 @@ export const Table = ({
   scrappedData,
 }: TableProps) => {
   return (
-    <table className="h-full w-full table-fixed text-left text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+    <table className="h-full w-full table-fixed bg-gray-900 bg-gray-900 text-left  text-sm text-gray-400 text-gray-500">
       <TableHead />
 
       <TableBody

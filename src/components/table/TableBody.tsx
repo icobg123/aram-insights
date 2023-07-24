@@ -17,7 +17,9 @@ export const TableBody: React.FC<TableProps> = ({
       ) : (
         champNames.map((champion, index) => {
           const isOdd = index % 2 === 0;
-          const bgColor = isOdd ? "dark:bg-gray-900" : "dark:bg-gray-800";
+          const bgColor = isOdd
+            ? "bg-gray-900 bg-gray-900"
+            : "bg-gray-800 bg-gray-800";
 
           return (
             <TableRow
