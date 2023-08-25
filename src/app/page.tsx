@@ -193,7 +193,7 @@ const fetchChampionAllData = async (version: string) => {
         // console.log(spells);
         return {
           [champName]: {
-            icon: `https://ddragon.leagueoflegends.com/cdn/13.14.1/img/champion/${championIcon}`,
+            icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
             title: championTitle,
             spells: spells,
           },
@@ -259,15 +259,13 @@ export default async function Home() {
     championData,
   ]);
   return (
-    <div className="hero min-h-screen">
-      <div className="hero-content text-center">
-        <TableWrapper
-          scrappedData={aramAdjustments}
-          icons={champAssets}
-          winRates={winRates}
-          version={patchVersion}
-        />
-      </div>
+    <div className={`flex min-h-screen items-center justify-center`}>
+      <TableWrapper
+        scrappedData={aramAdjustments}
+        icons={champAssets}
+        winRates={winRates}
+        version={patchVersion}
+      />
     </div>
   );
 }

@@ -56,7 +56,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   };
 
   return (
-    <div className="container max-w-4xl">
+    <div className="container max-w-4xl p-1">
       <div className="relative min-h-[567px] w-full rounded-lg bg-gray-950 bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
         <div className="absolute -right-4 top-[-131px]">
           <Image

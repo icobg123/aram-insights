@@ -30,7 +30,7 @@ const TableRow: React.FC<TableRowProps> = ({
     <tr key={champion} className={`${bgColor} border-gray-700 text-gray-400`}>
       <th scope="row" className="px-4 py-4 font-medium  text-white">
         <div className="flex items-center">
-          <div className="avatar hidden md:inline-flex">
+          <div className="avatar inline-flex">
             <div className="w-20 rounded-full ring ring-offset-2 ring-offset-gray-900">
               <Image
                 width={96}

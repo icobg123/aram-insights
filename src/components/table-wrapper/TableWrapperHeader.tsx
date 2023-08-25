@@ -7,17 +7,22 @@ import React from "react";
 interface TableWrapperHeaderProps extends SearchBarProps {
   version: string;
 }
+
 export const TableWrapperHeader = ({
   version,
   value,
   handleSearch,
 }: TableWrapperHeaderProps) => {
+  /*Tooltip overflows causing the page to break*/
+
   return (
     <div className="mb-3 flex items-center justify-between">
       <SearchBar handleSearch={handleSearch} value={value} />
-      <div className="tooltip ml-2 self-end" data-tip="Leage of Legends patch">
-        <div className="badge badge-neutral">v{version}</div>
+      {/*<div className="tooltip ml-2 self-end" data-tip="League of Legends patch">*/}
+      <div className="badge badge-neutral ml-2 self-end">
+        <span>{"v" + version}</span>
       </div>
+      {/*</div>*/}
     </div>
   );
 };
