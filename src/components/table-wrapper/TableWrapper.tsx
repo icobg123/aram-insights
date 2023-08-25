@@ -5,6 +5,9 @@ import Image from "next/legacy/image";
 import { Table } from "@/components/table/Table";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import peekingPoro from "../../../public/peeking-poro.svg";
+import { TableBody } from "@/components/table/TableBody";
+import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
+import TableRow from "@/components/table/TableRow";
 
 export interface IconData {
   [champion: string]: {
@@ -77,13 +80,29 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 
             <div className="max-h-[443px] w-full overflow-auto rounded-lg shadow-md ">
               {!loading ? (
-                <Table
-                  winRates={winRates}
-                  icons={icons}
-                  scrappedData={scrappedData}
-                  champNames={champNames}
-                  searchQuery={searchQuery}
-                />
+                <Table>
+                  <TableBody>
+                    {champNames.length === 0 && searchQuery !== "" ? (
+                      <NoChampionsFoundRow />
+                    ) : (
+                      champNames.map((champion, index) => {
+                        const isOdd = index % 2 === 0;
+                        const bgColor = isOdd ? "bg-gray-900 " : "bg-gray-800 ";
+
+                        return (
+                          <TableRow
+                            key={index}
+                            icons={icons}
+                            scrappedData={scrappedData}
+                            winRates={winRates}
+                            champion={champion}
+                            bgColor={bgColor}
+                          />
+                        );
+                      })
+                    )}
+                  </TableBody>
+                </Table>
               ) : (
                 <div className="container flex w-full max-w-4xl items-center justify-center">
                   <span className="loading loading-spinner loading-lg text-info"></span>
