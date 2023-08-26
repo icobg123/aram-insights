@@ -16,6 +16,7 @@ export type ChampionDataScrapped = {
     abilityChanges: AbilityChangesScrapped[];
   };
 };
+
 /*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
 const scrapePatchVersion = async (): Promise<string> => {
   try {
@@ -36,7 +37,7 @@ const scrapePatchVersion = async (): Promise<string> => {
     return "";
   }
 };
-const scrapeTable = async (): Promise<ChampionDataScrapped> => {
+const scrapeTable = async (version: string): Promise<ChampionDataScrapped> => {
   try {
     const response = await axios.get(
       "https://leagueoflegends.fandom.com/wiki/ARAM"
@@ -48,12 +49,21 @@ const scrapeTable = async (): Promise<ChampionDataScrapped> => {
 
     $(".article-table tbody tr").each((index, element) => {
       const champion = $(element).find("td").eq(0).text().trim();
-      const damageDealt = $(element).find("td").eq(1).text().trim();
-      const damageReceived = $(element).find("td").eq(2).text().trim();
+      const damageDealt = $(element)
+        .find("td")
+        .eq(1)
+        .text()
+        .trim()
+        .replace("%", "");
+      const damageReceived = $(element)
+        .find("td")
+        .eq(2)
+        .text()
+        .trim()
+        .replace("%", "");
       const otherEffectsElements = $(element).find("td").eq(3).find("li");
       const generalChanges: string[] = [];
       const abilityChanges: AbilityChangesScrapped[] = [];
-
       otherEffectsElements.each((index, element) => {
         const text = $(element).text().trim();
         if (text) {
@@ -160,8 +170,12 @@ const scrapeWinRate = async (
 
     $(".stats-table tbody tr").each((index, element) => {
       const champion = $(element).find("td").eq(0).find("a").text().trim();
-      const winRate = $(element).find("td").eq(6).text().trim();
-      winRateData[champion] = winRate;
+      winRateData[champion] = $(element)
+        .find("td")
+        .eq(6)
+        .text()
+        .trim()
+        .replace("%", "");
     });
 
     return winRateData;
@@ -181,14 +195,23 @@ const fetchChampionAllData = async (version: string) => {
     const champions = json.data;
     const championNames = Object.keys(champions);
     const promises = [];
+    const winRates = await scrapeWinRate(version);
+    console.log(winRates);
 
+    const allChampData = await scrapeTable(version);
     const data = await Promise.all(
       championNames.map(async (championName) => {
+        console.log(championName);
         const champion = champions[championName] as ChampionData;
         const championIcon = champion.image.full;
         const championTitle = champion.title;
         const champName = champion.name;
         const spells = await fetchIndividualChampionData(championName, version);
+        // if (championName === "Aurelion Sol") console.log(spells);
+        const winRate =
+          championName === "Nunu & Willump"
+            ? winRates["Nunu"]
+            : winRates[champName];
         promises.push(spells);
         // console.log(spells);
         return {
@@ -196,6 +219,8 @@ const fetchChampionAllData = async (version: string) => {
             icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
             title: championTitle,
             spells: spells,
+            winRate: winRate,
+            ...allChampData[champName],
           },
         };
       })
@@ -251,8 +276,7 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const patchVersion = await scrapePatchVersion();
-  const winRates = await scrapeWinRate(patchVersion);
-  const aramChanges = await scrapeTable();
+  const aramChanges = await scrapeTable(patchVersion);
   const championData = await fetchChampionAllData(patchVersion);
   const [aramAdjustments, champAssets] = await Promise.all([
     aramChanges,
@@ -262,8 +286,7 @@ export default async function Home() {
     <div className={`flex min-h-screen items-center justify-center`}>
       <TableWrapper
         scrappedData={aramAdjustments}
-        icons={champAssets}
-        winRates={winRates}
+        apiData={champAssets}
         version={patchVersion}
       />
     </div>

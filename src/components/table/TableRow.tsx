@@ -1,22 +1,20 @@
 import React from "react";
 import Image from "next/image";
 import { ChampionDataScrapped } from "@/app/page";
-import { IconData } from "@/components/table-wrapper/TableWrapper";
+import { APIData } from "@/components/table-wrapper/TableWrapper";
 import { AbilityChanges } from "@/components/table/AbilityChanges";
 
 interface TableRowProps {
   champion: string;
   bgColor: string;
-  icons: IconData;
-  winRates: { [key: string]: string };
+  apiData: APIData;
   scrappedData: ChampionDataScrapped;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
   champion,
   bgColor,
-  icons,
-  winRates,
+  apiData,
   scrappedData,
 }) => {
   const hasBalanceChanges = champion in scrappedData;
@@ -25,7 +23,9 @@ const TableRow: React.FC<TableRowProps> = ({
   const hasAbilityChanges =
     hasBalanceChanges &&
     Object.keys(scrappedData[champion].abilityChanges).length > 0;
-
+  console.log(champion);
+  console.log(apiData[champion].champion);
+  console.log(apiData[champion]);
   return (
     <tr key={champion} className={`${bgColor} border-gray-700 text-gray-400`}>
       <th scope="row" className="px-4 py-4 font-medium  text-white">
@@ -35,7 +35,7 @@ const TableRow: React.FC<TableRowProps> = ({
               <Image
                 width={96}
                 height={96}
-                src={icons[champion]?.icon || ""}
+                src={apiData[champion]?.icon || ""}
                 alt={champion}
                 placeholder="blur"
                 blurDataURL="/champion-placeholder.png"
@@ -44,33 +44,37 @@ const TableRow: React.FC<TableRowProps> = ({
           </div>
           <div className="break-normal px-4">
             <div className="font-bold">{champion}</div>
-            <span className="text-sm opacity-50">{icons[champion]?.title}</span>
+            <span className="text-sm opacity-50">
+              {apiData[champion]?.title}
+            </span>
           </div>
         </div>
       </th>
-      <td className="px-4 py-4">{winRates[champion]}</td>
+      <td className="px-4 py-4">{apiData[champion]?.winRate}%</td>
       <td
         className={`px-4 py-4 text-center ${
           hasBalanceChanges && scrappedData[champion]?.damageDealt
-            ? parseFloat(scrappedData[champion]?.damageDealt) > 0
+            ? parseFloat(scrappedData[champion]?.damageDealt) >= 0
               ? "text-green-400"
               : "text-red-400"
             : "inherit"
         }`}
       >
-        {hasBalanceChanges ? scrappedData[champion]?.damageDealt || "0%" : "0%"}
+        {hasBalanceChanges && scrappedData[champion]?.damageDealt
+          ? scrappedData[champion]?.damageDealt + "%" || "0%"
+          : "0%"}
       </td>
       <td
         className={`px-4 py-4 text-center ${
           hasBalanceChanges && scrappedData[champion]?.damageReceived
-            ? parseFloat(scrappedData[champion]?.damageReceived) > 0
+            ? parseFloat(scrappedData[champion]?.damageReceived) <= 0
               ? "text-green-400"
               : "text-red-400"
             : "inherit"
         }`}
       >
-        {hasBalanceChanges
-          ? scrappedData[champion]?.damageReceived || "0%"
+        {hasBalanceChanges && scrappedData[champion]?.damageReceived
+          ? scrappedData[champion]?.damageReceived + "%" || "0%"
           : "0%"}
       </td>
       <td className="px-4 py-4">
@@ -94,7 +98,7 @@ const TableRow: React.FC<TableRowProps> = ({
               (abilityChange, index) => (
                 <AbilityChanges
                   key={abilityChange.abilityName + champion + index}
-                  spells={icons[champion]?.spells || {}}
+                  spells={apiData[champion]?.spells || {}}
                   {...abilityChange}
                 />
               )
