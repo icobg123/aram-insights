@@ -12,7 +12,7 @@ export const TableWrapperHeader = ({
   /*Tooltip overflows causing the page to break*/
 
   return (
-    <div className="mb-3 flex items-center justify-between">
+    <div className="relative z-[100] mb-3 flex items-center justify-between">
       {children}
       {/*<div className="tooltip ml-2 self-end" data-tip="League of Legends patch">*/}
       <div className="badge badge-neutral ml-2 self-end">
