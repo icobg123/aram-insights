@@ -49,10 +49,26 @@ const TableRow: React.FC<TableRowProps> = ({
         </div>
       </th>
       <td className="px-4 py-4">{winRates[champion]}</td>
-      <td className="px-4 py-4 text-center">
+      <td
+        className={`px-4 py-4 text-center ${
+          hasBalanceChanges && scrappedData[champion]?.damageDealt
+            ? parseFloat(scrappedData[champion]?.damageDealt) > 0
+              ? "text-green-400"
+              : "text-red-400"
+            : "inherit"
+        }`}
+      >
         {hasBalanceChanges ? scrappedData[champion]?.damageDealt || "0%" : "0%"}
       </td>
-      <td className="px-4 py-4 text-center">
+      <td
+        className={`px-4 py-4 text-center ${
+          hasBalanceChanges && scrappedData[champion]?.damageReceived
+            ? parseFloat(scrappedData[champion]?.damageReceived) > 0
+              ? "text-green-400"
+              : "text-red-400"
+            : "inherit"
+        }`}
+      >
         {hasBalanceChanges
           ? scrappedData[champion]?.damageReceived || "0%"
           : "0%"}
