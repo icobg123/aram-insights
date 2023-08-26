@@ -8,6 +8,7 @@ import peekingPoro from "../../../public/peeking-poro.svg";
 import { TableBody } from "@/components/table/TableBody";
 import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
 import TableRow from "@/components/table/TableRow";
+import { SearchBar } from "@/components/table-wrapper/SearchBar";
 
 export interface IconData {
   [champion: string]: {
@@ -54,7 +55,10 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     );
     setLoading(false);
   };
-
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setChampNames(Object.keys(icons));
+  };
   return (
     <div className="container max-w-4xl p-1">
       <div className="relative min-h-[567px] w-full rounded-lg bg-gray-950 bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
@@ -72,11 +76,13 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         </div>
         {scrappedData && Object.keys(scrappedData).length > 0 ? (
           <>
-            <TableWrapperHeader
-              version={version}
-              value={searchQuery}
-              handleSearch={handleSearch}
-            />
+            <TableWrapperHeader version={version}>
+              <SearchBar
+                handleSearch={handleSearch}
+                value={searchQuery}
+                handleClearSearch={handleClearSearch}
+              />
+            </TableWrapperHeader>
 
             <div className="max-h-[443px] w-full overflow-auto rounded-lg shadow-md ">
               {!loading ? (
