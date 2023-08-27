@@ -62,7 +62,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-1/4 px-4 py-3 md:w-1/4"
+            className="w-1/4 px-4 py-3 sm:w-1/5 md:w-1/4"
             title="Champion"
           />
         ),
@@ -72,7 +72,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         id: "winRate",
         cell: (info) => {
           const winrate = info.getValue();
-          return <td className="px-4 py-4">{winrate}%</td>;
+          return <td className="p-2 md:p-4">{winrate}%</td>;
         },
         header: (header) => (
           <TableHeadCell
@@ -90,7 +90,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           const damageDealt = info.getValue();
           return (
             <td
-              className={`px-4 py-4 text-center ${
+              className={`p-2 text-center md:p-4 ${
                 damageDealt
                   ? damageDealt >= 0
                     ? "text-green-400"
@@ -122,7 +122,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           const damageReceived = info.getValue();
           return (
             <td
-              className={`px-4 py-4 text-center ${
+              className={`p-2 text-center md:p-4 ${
                 damageReceived
                   ? damageReceived <= 0
                     ? "text-green-400"
@@ -152,11 +152,14 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         id: "Changes",
         cell: (props) => <OtherChangesCell props={props} />,
         header: () => (
-          <th scope="col" className="w-1/4 px-4 py-3 md:w-1/3">
+          <th scope="col" className="w-1/4 px-4 py-3 text-center  md:w-1/3">
             Other changes
           </th>
         ),
         enableColumnFilter: false,
+        enableResizing: true,
+        minSize: 100,
+        size: 100,
       }),
     ];
   }, [columnHelper]);
@@ -188,7 +191,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   });
   return (
     <div className="container max-w-5xl p-1">
-      <div className="relative min-h-[775px] w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
+      <div className="relative w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg md:h-[81svh] md:min-h-[81svh]">
         <div className="absolute right-4 top-[-131px]">
           <Image
             className=""
@@ -218,7 +221,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
               </SearchBar>
             </TableWrapperHeader>
 
-            <div className="max-h-[673px] w-full overflow-auto rounded-lg shadow-md ">
+            <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[68svh] ">
               <Table table={table} />
             </div>
           </>

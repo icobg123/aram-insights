@@ -21,7 +21,7 @@ const OtherChangesCell: React.FC<TableRowProps> = ({ props }) => {
   const hasAbilityChanges = abilityChanges.length > 0;
 
   return (
-    <td className="px-4 py-4">
+    <td className="p-2 md:p-4">
       {hasGeneralChanges && (
         <span className="flex flex-col space-y-2">
           {generalChanges.map((generalChange, index) => (

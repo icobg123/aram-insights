@@ -187,7 +187,7 @@ const scrapeWinRate = async (
         .trim()
         .replace("%", "");
     });
-
+    console.log(winRateData);
     return winRateData;
   } catch (error) {
     console.error("Error scraping data:", error);
@@ -206,7 +206,6 @@ const fetchChampionAllData = async (version: string) => {
     const championNames = Object.keys(champions);
     const promises = [];
     const winRates = await scrapeWinRate(version);
-
     const allChampData = await scrapeLoLWikiData(version);
     return await Promise.all(
       championNames.map(async (championName) => {
@@ -215,15 +214,9 @@ const fetchChampionAllData = async (version: string) => {
         const championTitle = champion.title;
         const champName = champion.name;
         const spells = await fetchIndividualChampionData(championName, version);
-        // if (championName === "Aurelion Sol") console.log(spells);
-        console.log(championName);
         const winRate =
-          championName === "Nunu & Willump"
-            ? winRates["Nunu"]
-            : winRates[champName];
+          championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
         promises.push(spells);
-        // console.log(spells);
-        // @ts-ignore
 
         const championObject = {
           icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
@@ -301,7 +294,7 @@ export default async function Home() {
     championData,
   ]);
   return (
-    <div className={`flex min-h-screen items-end justify-center pb-10`}>
+    <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
       <TableWrapper
         scrappedData={aramAdjustments}
         apiData={champAssets}

@@ -34,7 +34,11 @@ export const TableHeadCell = ({
   };
 
   return (
-    <th {...headerSortObj(header)} scope="col" className={className}>
+    <th
+      {...headerSortObj(header)}
+      scope="col"
+      className={className + " text-center"}
+    >
       {title}
       {sortingArrows(header)}
     </th>
