@@ -1,33 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { AbilityChangesScrapped, ChampionDataScrapped } from "@/app/page";
 import Image from "next/legacy/image";
-import { Table } from "@/components/table/Table";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import peekingPoro from "../../../public/peeking-poro.svg";
-import { TableBody } from "@/components/table/TableBody";
-import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
-import TableRow from "@/components/table/TableRow";
+
+import {
+  ColumnFiltersState,
+  createColumnHelper,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  Row,
+  SortingState,
+} from "@tanstack/table-core";
+import { useReactTable } from "@tanstack/react-table";
+import { DebouncedInput } from "@/components/table/DebouncedInput";
+import OtherChangesCell from "@/components/table/OtherChangesCell";
 import { SearchBar } from "@/components/table-wrapper/SearchBar";
+import { Table } from "@/components/table/Table";
+import ChampionCell from "@/components/table/ChampionCell";
+import { TableHeadCell } from "@/components/table/TableHeadCell";
 
 export interface APIData {
-  [champion: string]: {
-    champion: string;
-    damageDealt: string;
-    damageReceived: string;
-    generalChanges: string[];
-    abilityChanges: AbilityChangesScrapped[];
-    winRate: string;
-    icon?: string;
-    title?: string;
-    spells?: { [spellName: string]: string };
-  };
+  // [champion: string]: {
+  champion: string;
+  damageDealt: number;
+  damageReceived: number;
+  generalChanges: string[];
+  abilityChanges: AbilityChangesScrapped[];
+  winRate: string;
+  icon?: string;
+  title?: string;
+  spells?: { [spellName: string]: string };
+  // };
 }
 
 export interface TableWrapperProps {
   scrappedData: ChampionDataScrapped;
   version: string;
-  apiData: APIData;
+  apiData: APIData[];
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
@@ -35,97 +47,145 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   apiData,
   version,
 }) => {
-  const [champNames, setChampNames] = useState<string[]>(Object.keys(apiData));
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sortColumn, setSortColumn] = useState<string>("championName");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
-  const sortedNames = (
-    sorted: string[],
-    column: string,
-    isDifferentColumn: boolean
-  ) => {
-    return sorted.slice().sort((a, b) => {
-      if (column === "winRate") {
-        const championA = apiData[a].winRate;
-        const championB = apiData[a].winRate;
-        const winRateA = parseFloat(championA);
-        const winRateB = parseFloat(championB);
-        return isDifferentColumn
-          ? winRateA - winRateB
-          : sortOrder === "asc"
-          ? winRateA - winRateB
-          : winRateB - winRateA;
-      } else if (column === "damageDealt") {
-        const damageDealtA = parseFloat(scrappedData[a]?.damageDealt) || 0;
-        const damageDealtB = parseFloat(scrappedData[b]?.damageDealt) || 0;
-        return isDifferentColumn
-          ? damageDealtA - damageDealtB
-          : sortOrder === "asc"
-          ? damageDealtA - damageDealtB
-          : damageDealtB - damageDealtA;
-      } else if (column === "damageReceived") {
-        const damageReceivedA =
-          parseFloat(scrappedData[a]?.damageReceived) || 0;
-        const damageReceivedB =
-          parseFloat(scrappedData[b]?.damageReceived) || 0;
-        return isDifferentColumn
-          ? damageReceivedA - damageReceivedB
-          : sortOrder === "asc"
-          ? damageReceivedA - damageReceivedB
-          : damageReceivedB - damageReceivedA;
-      } else {
-        // Sort by "Champion Name" by default
-        return sortOrder === "asc" ? a.localeCompare(b) : b.localeCompare(a);
-      }
-    });
-  };
-  const handleSort = (column?: string) => {
-    const newSortOrder =
-      column === sortColumn ? (sortOrder === "asc" ? "desc" : "asc") : "asc";
-
-    const sorted = [
-      ...sortedNames(
-        [...champNames],
-        column || "championName",
-        column !== sortColumn
-      ), // Pass the correct boolean value here
-    ];
-    setSortColumn(column || "championName");
-    setChampNames(sorted);
-    setSortOrder(newSortOrder);
-  };
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
-    const value = event.target.value;
-    setSearchQuery(value);
-    if (value.length === 0) {
-      const sorted = [
-        ...sortedNames(
-          [...Object.keys(apiData)],
-          sortColumn || "championName",
-          true
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = React.useState("");
+  const columnHelper = createColumnHelper<APIData>();
+  const columns = React.useMemo(() => {
+    return [
+      // Display Column
+      columnHelper.accessor((row) => row.champion, {
+        id: "champion",
+        cell: (props) => <ChampionCell props={props} />,
+        header: (header) => (
+          <TableHeadCell
+            header={header}
+            className="w-1/4 px-4 py-3 md:w-1/3"
+            title="Champion"
+          />
         ),
-      ];
-      setChampNames(sorted);
-    } else if (value.length >= 2) {
-      const filteredNames = Object.keys(apiData).filter((champName) =>
-        champName.toLowerCase().includes(event.target.value.toLowerCase())
-      );
-      const sorted = [
-        ...sortedNames([...filteredNames], sortColumn || "championName", true),
-      ];
-      setChampNames(sorted);
-    }
-    setLoading(false);
-  };
-  const handleClearSearch = () => {
-    setSearchQuery("");
-    setChampNames(Object.keys(apiData));
-  };
-
+        footer: (props) => props.column.id,
+      }),
+      columnHelper.accessor((row) => row.winRate, {
+        id: "winRate",
+        cell: (info) => {
+          const winrate = info.getValue();
+          return <td className="px-4 py-4">{winrate}%</td>;
+        },
+        header: (header) => (
+          <TableHeadCell
+            header={header}
+            className="w-auto px-4 py-3 md:w-[100px]"
+            title="Win %"
+          />
+        ),
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+      }),
+      columnHelper.accessor((row) => row.damageDealt, {
+        id: "damageDealt",
+        cell: (info) => {
+          const damageDealt = info.getValue();
+          return (
+            <td
+              className={`px-4 py-4 text-center ${
+                damageDealt
+                  ? damageDealt >= 0
+                    ? "text-green-400"
+                    : "text-red-400"
+                  : "inherit"
+              }`}
+            >
+              {damageDealt
+                ? damageDealt >= 0
+                  ? `+${damageDealt}%`
+                  : `${damageDealt}%`
+                : "0%"}
+            </td>
+          );
+        },
+        header: (header) => (
+          <TableHeadCell
+            header={header}
+            className="w-auto px-1 py-3 md:w-[100px]"
+            title="Dmg dealt"
+          />
+        ),
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+      }),
+      columnHelper.accessor((row) => row.damageReceived, {
+        id: "damageReceived",
+        cell: (info) => {
+          const damageReceived = info.getValue();
+          return (
+            <td
+              className={`px-4 py-4 text-center ${
+                damageReceived
+                  ? damageReceived <= 0
+                    ? "text-green-400"
+                    : "text-red-400"
+                  : "inherit"
+              }`}
+            >
+              {damageReceived
+                ? damageReceived <= 0
+                  ? `${damageReceived}%`
+                  : `+${damageReceived}%`
+                : "0%"}
+            </td>
+          );
+        },
+        header: (header) => (
+          <TableHeadCell
+            header={header}
+            className="w-auto px-1 py-3 md:w-[100px]"
+            title="Dmg received"
+          />
+        ),
+        footer: (props) => props.column.id,
+        enableColumnFilter: false,
+      }),
+      columnHelper.accessor((row) => row, {
+        id: "Changes",
+        cell: (props) => <OtherChangesCell props={props} />,
+        header: () => (
+          <th scope="col" className="w-1/4 px-4 py-3 md:w-1/3">
+            Other changes
+          </th>
+        ),
+        enableColumnFilter: false,
+      }),
+    ];
+  }, [columnHelper]);
+  const globalFilterFn = React.useCallback(
+    (row: Row<APIData>, columnId: string, filterValue: any) => {
+      const searchTerm = String(filterValue);
+      return row.original.champion
+        .toLowerCase()
+        .startsWith(searchTerm.toLowerCase());
+    },
+    []
+  );
+  const table = useReactTable({
+    data: apiData,
+    columns,
+    state: {
+      sorting,
+      columnFilters,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: globalFilterFn,
+    getFilteredRowModel: getFilteredRowModel(),
+    debugTable: true,
+  });
   return (
     <div className="container max-w-4xl p-1">
       <div className="relative min-h-[567px] w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
@@ -144,42 +204,22 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         {scrappedData && Object.keys(scrappedData).length > 0 ? (
           <>
             <TableWrapperHeader version={version}>
-              <SearchBar
-                handleSearch={handleSearch}
-                value={searchQuery}
-                handleClearSearch={handleClearSearch}
-              />
+              <SearchBar>
+                <DebouncedInput
+                  value={globalFilter ?? ""}
+                  onChange={(value) => setGlobalFilter(String(value))}
+                  className="input input-bordered w-full max-w-xs bg-gray-900 text-gray-400 focus:border-gray-400 focus:ring-0"
+                  placeholder="Search for a champion"
+                  type="text"
+                  id="champSearch"
+                  autoFocus
+                  clearInput
+                />
+              </SearchBar>
             </TableWrapperHeader>
 
             <div className="max-h-[443px] w-full overflow-auto rounded-lg shadow-md ">
-              {!loading ? (
-                <Table>
-                  <TableBody>
-                    {champNames.length === 0 && searchQuery !== "" ? (
-                      <NoChampionsFoundRow />
-                    ) : (
-                      champNames.map((champion, index) => {
-                        const isOdd = index % 2 === 0;
-                        const bgColor = isOdd ? "bg-gray-900 " : "bg-gray-800 ";
-
-                        return (
-                          <TableRow
-                            key={index}
-                            apiData={apiData}
-                            scrappedData={scrappedData}
-                            champion={champion}
-                            bgColor={bgColor}
-                          />
-                        );
-                      })
-                    )}
-                  </TableBody>
-                </Table>
-              ) : (
-                <div className="container flex w-full max-w-4xl items-center justify-center">
-                  <span className="loading loading-spinner loading-lg text-info"></span>
-                </div>
-              )}
+              <Table table={table} />
             </div>
           </>
         ) : (

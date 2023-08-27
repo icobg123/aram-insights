@@ -10,8 +10,8 @@ export type AbilityChangesScrapped = {
 export type ChampionDataScrapped = {
   [key: string]: {
     champion: string;
-    damageDealt: string;
-    damageReceived: string;
+    damageDealt: number;
+    damageReceived: number;
     generalChanges: string[];
     abilityChanges: AbilityChangesScrapped[];
   };
@@ -37,7 +37,9 @@ const scrapePatchVersion = async (): Promise<string> => {
     return "";
   }
 };
-const scrapeTable = async (version: string): Promise<ChampionDataScrapped> => {
+const scrapeLoLWikiData = async (
+  version: string
+): Promise<ChampionDataScrapped> => {
   try {
     const response = await axios.get(
       "https://leagueoflegends.fandom.com/wiki/ARAM"
@@ -49,18 +51,26 @@ const scrapeTable = async (version: string): Promise<ChampionDataScrapped> => {
 
     $(".article-table tbody tr").each((index, element) => {
       const champion = $(element).find("td").eq(0).text().trim();
-      const damageDealt = $(element)
-        .find("td")
-        .eq(1)
-        .text()
-        .trim()
-        .replace("%", "");
-      const damageReceived = $(element)
-        .find("td")
-        .eq(2)
-        .text()
-        .trim()
-        .replace("%", "");
+      const damageDealt =
+        parseInt(
+          $(element)
+            .find("td")
+            .eq(1)
+            .text()
+            .trim()
+            .replace("%", "")
+            .replace("+", "")
+        ) || 0;
+      const damageReceived =
+        parseInt(
+          $(element)
+            .find("td")
+            .eq(2)
+            .text()
+            .trim()
+            .replace("%", "")
+            .replace("+", "")
+        ) || 0;
       const otherEffectsElements = $(element).find("td").eq(3).find("li");
       const generalChanges: string[] = [];
       const abilityChanges: AbilityChangesScrapped[] = [];
@@ -196,36 +206,44 @@ const fetchChampionAllData = async (version: string) => {
     const championNames = Object.keys(champions);
     const promises = [];
     const winRates = await scrapeWinRate(version);
-    console.log(winRates);
 
-    const allChampData = await scrapeTable(version);
-    const data = await Promise.all(
+    const allChampData = await scrapeLoLWikiData(version);
+    return await Promise.all(
       championNames.map(async (championName) => {
-        console.log(championName);
         const champion = champions[championName] as ChampionData;
         const championIcon = champion.image.full;
         const championTitle = champion.title;
         const champName = champion.name;
         const spells = await fetchIndividualChampionData(championName, version);
         // if (championName === "Aurelion Sol") console.log(spells);
+        console.log(championName);
         const winRate =
           championName === "Nunu & Willump"
             ? winRates["Nunu"]
             : winRates[champName];
         promises.push(spells);
         // console.log(spells);
+        // @ts-ignore
+
+        const championObject = {
+          icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
+          title: championTitle,
+          spells: spells,
+          winRate: winRate,
+          damageReceived: 0,
+          damageDealt: 0,
+          generalChanges: [],
+          abilityChanges: [],
+        };
         return {
-          [champName]: {
-            icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
-            title: championTitle,
-            spells: spells,
-            winRate: winRate,
-            ...allChampData[champName],
-          },
+          // [champName]: {
+          ...championObject,
+          ...allChampData[champName],
+          champion: champName,
+          // },
         };
       })
     );
-    return Object.assign({}, ...data);
   } catch (error) {
     throw error;
   }
@@ -276,7 +294,7 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const patchVersion = await scrapePatchVersion();
-  const aramChanges = await scrapeTable(patchVersion);
+  const aramChanges = await scrapeLoLWikiData(patchVersion);
   const championData = await fetchChampionAllData(patchVersion);
   const [aramAdjustments, champAssets] = await Promise.all([
     aramChanges,
