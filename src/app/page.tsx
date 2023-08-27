@@ -301,7 +301,7 @@ export default async function Home() {
     championData,
   ]);
   return (
-    <div className={`flex min-h-screen items-center justify-center`}>
+    <div className={`flex min-h-screen items-end justify-center pb-10`}>
       <TableWrapper
         scrappedData={aramAdjustments}
         apiData={champAssets}

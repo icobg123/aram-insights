@@ -62,7 +62,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-1/4 px-4 py-3 md:w-1/3"
+            className="w-1/4 px-4 py-3 md:w-1/4"
             title="Champion"
           />
         ),
@@ -187,9 +187,9 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     debugTable: true,
   });
   return (
-    <div className="container max-w-4xl p-1">
-      <div className="relative min-h-[567px] w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
-        <div className="absolute -right-4 top-[-131px]">
+    <div className="container max-w-5xl p-1">
+      <div className="relative min-h-[775px] w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg ">
+        <div className="absolute right-4 top-[-131px]">
           <Image
             className=""
             width={212}
@@ -218,7 +218,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
               </SearchBar>
             </TableWrapperHeader>
 
-            <div className="max-h-[443px] w-full overflow-auto rounded-lg shadow-md ">
+            <div className="max-h-[673px] w-full overflow-auto rounded-lg shadow-md ">
               <Table table={table} />
             </div>
           </>
