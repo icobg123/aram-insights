@@ -26,12 +26,12 @@ export const TableHeadCell = ({
       scope="col"
       className={`${className}  text-center hover:bg-gray-600 hover:text-gray-200`}
     >
-      <div className="flex flex-col justify-between">
+      <div className="flex h-full flex-col justify-between">
         <div
           onClick={header.column.getToggleSortingHandler()}
           className={
             header.column.getCanSort()
-              ? "group cursor-pointer select-none "
+              ? "group cursor-pointer select-none pt-2"
               : "cursor-default"
           }
         >

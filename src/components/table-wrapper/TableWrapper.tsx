@@ -74,7 +74,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           <TableHeadCell
             header={header}
             table={header.table}
-            className="w-1/4 px-2 py-3 sm:w-1/5 md:w-1/4"
+            className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Champion"
           />
         ),
@@ -92,7 +92,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           <TableHeadCell
             header={header}
             table={header.table}
-            className="w-auto px-2 py-3 md:w-[100px]"
+            className="w-auto px-2 py-2 md:w-[100px]"
             title="Win %"
           />
         ),
@@ -125,7 +125,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           <TableHeadCell
             header={header}
             table={header.table}
-            className="w-auto px-2 py-3 md:w-[100px]"
+            className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg dealt"
           />
         ),
@@ -158,7 +158,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           <TableHeadCell
             header={header}
             table={header.table}
-            className="w-auto px-2 py-3 md:w-[100px]"
+            className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg received"
           />
         ),
@@ -171,7 +171,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: () => (
           <th
             scope="col"
-            className="w-1/4 cursor-default px-2 py-3 text-center md:w-1/3"
+            className="w-1/4 cursor-default px-2 py-2 text-center md:w-1/3"
           >
             Other changes
           </th>
