@@ -72,7 +72,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         id: "winRate",
         cell: (info) => {
           const winrate = info.getValue();
-          return <td className="p-2 md:p-4">{winrate}%</td>;
+          return <td className="p-2 text-center md:p-4">{winrate}%</td>;
         },
         header: (header) => (
           <TableHeadCell
@@ -152,7 +152,10 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         id: "Changes",
         cell: (props) => <OtherChangesCell props={props} />,
         header: () => (
-          <th scope="col" className="w-1/4 px-4 py-3 text-center  md:w-1/3">
+          <th
+            scope="col"
+            className="w-1/4 cursor-default px-4 py-3 text-center md:w-1/3"
+          >
             Other changes
           </th>
         ),

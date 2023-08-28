@@ -12,35 +12,24 @@ export const TableHeadCell = ({
   title,
   header,
 }: TableHeadCellProps) => {
-  const headerSortObj = (
-    header: HeaderContext<APIData, APIData | number | string>
-  ) => {
-    return {
-      className: header.column.getCanSort() ? "cursor-pointer select-none" : "",
-      onClick: header.column.getToggleSortingHandler(),
-    };
-  };
-
-  const sortingArrows = (
-    header: HeaderContext<APIData, APIData | string | number>
-  ) => {
-    /*accessing the arrows object with the array notation*/
-    return (
-      {
-        asc: " ▲",
-        desc: " ▼",
-      }[header.column.getIsSorted() as string] ?? null
-    );
-  };
-
+  /*accessing the arrows object with the array notation*/
+  const arrows: string | null =
+    {
+      asc: " ▲",
+      desc: " ▼",
+    }[header.column.getIsSorted() as string] ?? null;
   return (
     <th
-      {...headerSortObj(header)}
       scope="col"
-      className={className + " text-center"}
+      onClick={header.column.getToggleSortingHandler()}
+      className={`${className} text-center ${
+        header.column.getCanSort()
+          ? "cursor-pointer select-none hover:bg-gray-600 hover:text-gray-200"
+          : "cursor-default"
+      }`}
     >
       {title}
-      {sortingArrows(header)}
+      {arrows}
     </th>
   );
 };
