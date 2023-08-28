@@ -16,11 +16,11 @@ export const TextFilter = ({
 }: TextFilterProps) => {
   return (
     <>
-      <datalist id={column.id + "list"}>
+      {/*<datalist id={column.id + "list"}>
         {sortedUniqueValues.map((value: any) => (
           <option value={value} key={value} />
         ))}
-      </datalist>
+      </datalist>*/}
       <div className="w-7/8 join join-horizontal">
         <div className="join-item  btn-xs flex min-w-[38px] items-center justify-end bg-gray-900 text-gray-400">
           {totalResults}
@@ -32,7 +32,7 @@ export const TextFilter = ({
           value={(columnFilterValue ?? "") as string}
           onChange={(value: string | number) => column.setFilterValue(value)}
           placeholder={`Who's your pick?`}
-          className="input join-item  input-xs w-full rounded bg-gray-900 text-gray-400 focus:border-gray-400 focus:ring-0"
+          className="input join-item input-xs w-full rounded bg-gray-900 font-normal text-gray-400"
           list={column.id + "list"}
           clearInput
           autoFocus

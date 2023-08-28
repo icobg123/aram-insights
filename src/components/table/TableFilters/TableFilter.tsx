@@ -41,7 +41,7 @@ export default function TableFilter({
             : ""
         }`}
         className={`
-          "input focus:ring-0"  join-item input-xs w-1/2 bg-gray-900 text-gray-400 focus:border-gray-400
+          input join-item  input-xs w-1/2 bg-gray-900 font-normal text-gray-400 
         ${noArrowsClasses}`}
       />
       <DebouncedInput
@@ -59,7 +59,7 @@ export default function TableFilter({
             : ""
         }`}
         className={`
-          "input focus:ring-0"  join-item input-xs w-1/2 bg-gray-900 text-gray-400 focus:border-gray-400
+          input join-item input-xs w-1/2 bg-gray-900 font-normal text-gray-400 
         ${noArrowsClasses}`}
       />
     </div>

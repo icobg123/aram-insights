@@ -202,7 +202,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   });
   return (
     <div className="container max-w-5xl p-1">
-      <div className="relative w-full rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg md:h-[81svh] md:min-h-[81svh]">
+      <div className="relative flex w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg md:h-[81svh] md:min-h-[81svh]">
         <div className="absolute right-4 top-[-131px]">
           <Image
             className=""
@@ -217,22 +217,9 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         </div>
         {scrappedData && Object.keys(scrappedData).length > 0 ? (
           <>
-            <TableWrapperHeader version={version}>
-              {/*<SearchBar>
-                <DebouncedInput
-                  value={globalFilter ?? ""}
-                  onChange={(value) => setGlobalFilter(String(value))}
-                  className="input input-bordered w-full max-w-xs bg-gray-900 text-gray-400 focus:border-gray-400 focus:ring-0"
-                  placeholder="Search for a champion"
-                  type="text"
-                  id="champSearch"
-                  autoFocus
-                  clearInput
-                />
-              </SearchBar>*/}
-            </TableWrapperHeader>
+            <TableWrapperHeader version={version} />
 
-            <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[68svh] ">
+            <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[73svh] ">
               <Table table={table} />
             </div>
           </>

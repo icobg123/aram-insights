@@ -41,7 +41,7 @@ export const DebouncedInput = ({
       {clearInput && (
         <button
           disabled={!value}
-          className="btn join-item btn-xs rounded border"
+          className="btn join-item btn-xs rounded border text-gray-400 disabled:bg-gray-900 disabled:text-gray-700"
           onClick={() => setValue("")}
         >
           <svg
