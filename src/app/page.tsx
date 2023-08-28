@@ -169,23 +169,20 @@ type ChampionData = {
  * */
 const scrapeWinRate = async (
   version: string
-): Promise<{ [key: string]: string }> => {
+): Promise<{ [key: string]: number }> => {
   try {
     const response = await axios.get(
       `https://www.metasrc.com/lol/aram/${version}/stats`
     );
     const $ = cheerio.load(response.data);
 
-    const winRateData: { [key: string]: string } = {};
+    const winRateData: { [key: string]: number } = {};
 
     $(".stats-table tbody tr").each((index, element) => {
       const champion = $(element).find("td").eq(0).find("a").text().trim();
-      winRateData[champion] = $(element)
-        .find("td")
-        .eq(6)
-        .text()
-        .trim()
-        .replace("%", "");
+      winRateData[champion] = parseFloat(
+        $(element).find("td").eq(6).text().trim().replace("%", "")
+      );
     });
     console.log(winRateData);
     return winRateData;

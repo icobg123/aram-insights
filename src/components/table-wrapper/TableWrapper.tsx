@@ -9,15 +9,15 @@ import {
   ColumnFiltersState,
   createColumnHelper,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
   Row,
   SortingState,
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
-import { DebouncedInput } from "@/components/table/DebouncedInput";
 import OtherChangesCell from "@/components/table/OtherChangesCell";
-import { SearchBar } from "@/components/table-wrapper/SearchBar";
 import { Table } from "@/components/table/Table";
 import ChampionCell from "@/components/table/ChampionCell";
 import { TableHeadCell } from "@/components/table/TableHeadCell";
@@ -29,7 +29,7 @@ export interface APIData {
   damageReceived: number;
   generalChanges: string[];
   abilityChanges: AbilityChangesScrapped[];
-  winRate: string;
+  winRate: number;
   icon?: string;
   title?: string;
   spells?: { [spellName: string]: string };
@@ -52,7 +52,18 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     []
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const columnHelper = createColumnHelper<APIData>();
+  const columnHelper = React.useMemo(() => createColumnHelper<APIData>(), []);
+  const globalFilterFn = React.useCallback(
+    (row: Row<APIData>, columnId: string, filterValue: any) => {
+      const searchTerm = String(filterValue);
+      return row.original.champion
+        .toLowerCase()
+        .startsWith(searchTerm.toLowerCase());
+    },
+    []
+  );
+  const tabData = React.useMemo(() => [...apiData], [apiData]);
+
   const columns = React.useMemo(() => {
     return [
       // Display Column
@@ -62,11 +73,14 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-1/4 px-4 py-3 sm:w-1/5 md:w-1/4"
+            table={header.table}
+            className="w-1/4 px-2 py-3 sm:w-1/5 md:w-1/4"
             title="Champion"
           />
         ),
         footer: (props) => props.column.id,
+        enableColumnFilter: true,
+        filterFn: globalFilterFn,
       }),
       columnHelper.accessor((row) => row.winRate, {
         id: "winRate",
@@ -77,12 +91,13 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-auto px-4 py-3 md:w-[100px]"
+            table={header.table}
+            className="w-auto px-2 py-3 md:w-[100px]"
             title="Win %"
           />
         ),
         footer: (props) => props.column.id,
-        enableColumnFilter: false,
+        enableColumnFilter: true,
       }),
       columnHelper.accessor((row) => row.damageDealt, {
         id: "damageDealt",
@@ -109,12 +124,13 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-auto px-1 py-3 md:w-[100px]"
+            table={header.table}
+            className="w-auto px-2 py-3 md:w-[100px]"
             title="Dmg dealt"
           />
         ),
         footer: (props) => props.column.id,
-        enableColumnFilter: false,
+        enableColumnFilter: true,
       }),
       columnHelper.accessor((row) => row.damageReceived, {
         id: "damageReceived",
@@ -141,12 +157,13 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: (header) => (
           <TableHeadCell
             header={header}
-            className="w-auto px-1 py-3 md:w-[100px]"
+            table={header.table}
+            className="w-auto px-2 py-3 md:w-[100px]"
             title="Dmg received"
           />
         ),
         footer: (props) => props.column.id,
-        enableColumnFilter: false,
+        enableColumnFilter: true,
       }),
       columnHelper.accessor((row) => row, {
         id: "Changes",
@@ -154,29 +171,18 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         header: () => (
           <th
             scope="col"
-            className="w-1/4 cursor-default px-4 py-3 text-center md:w-1/3"
+            className="w-1/4 cursor-default px-2 py-3 text-center md:w-1/3"
           >
             Other changes
           </th>
         ),
         enableColumnFilter: false,
-        enableResizing: true,
-        minSize: 100,
-        size: 100,
       }),
     ];
-  }, [columnHelper]);
-  const globalFilterFn = React.useCallback(
-    (row: Row<APIData>, columnId: string, filterValue: any) => {
-      const searchTerm = String(filterValue);
-      return row.original.champion
-        .toLowerCase()
-        .startsWith(searchTerm.toLowerCase());
-    },
-    []
-  );
+  }, []);
+
   const table = useReactTable({
-    data: apiData,
+    data: tabData,
     columns,
     state: {
       sorting,
@@ -184,12 +190,14 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
       globalFilter,
     },
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: globalFilterFn,
+    getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     debugTable: true,
   });
   return (
@@ -210,7 +218,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         {scrappedData && Object.keys(scrappedData).length > 0 ? (
           <>
             <TableWrapperHeader version={version}>
-              <SearchBar>
+              {/*<SearchBar>
                 <DebouncedInput
                   value={globalFilter ?? ""}
                   onChange={(value) => setGlobalFilter(String(value))}
@@ -221,7 +229,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                   autoFocus
                   clearInput
                 />
-              </SearchBar>
+              </SearchBar>*/}
             </TableWrapperHeader>
 
             <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[68svh] ">
