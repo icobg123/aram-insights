@@ -34,7 +34,16 @@ export const TableWrapperHeader = ({
           <h1 className="mb-0 font-medium">Aram balance</h1>
         </div>
         <div className="badge badge-neutral ml-2 self-end md:self-baseline">
-          <span>{"v" + version}</span>
+          <span>
+            <a
+              target={"_blank"}
+              href={
+                "https://leagueoflegends.fandom.com/wiki/ARAM#Mode-Specific_Changes"
+              }
+            >
+              {"v" + version}
+            </a>
+          </span>
         </div>
       </div>
       {/*</div>*/}
