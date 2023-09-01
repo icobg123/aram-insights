@@ -9,12 +9,10 @@ interface TableRowProps {
 
 const ChampionCell: React.FC<TableRowProps> = ({ props }) => {
   const { champion, title, icon } = props.row.original;
-
   return (
     <th scope="row" className="p-2 font-medium text-white  md:p-4">
       <div className="flex flex-col md:flex-row md:items-center">
         <div className="avatar flex justify-center md:inline-flex">
-          ¡1{" "}
           <div className="mt-2 w-20 rounded-full ring ring-offset-2 ring-offset-gray-900">
             <Image
               width={96}
