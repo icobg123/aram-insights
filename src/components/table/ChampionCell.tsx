@@ -1,7 +1,7 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
-import { APIData } from "@/components/table-wrapper/TableWrapper";
 import Image from "next/legacy/image";
+import { APIData } from "@/app/page";
 
 interface TableRowProps {
   props: CellContext<APIData, APIData>;
@@ -14,7 +14,8 @@ const ChampionCell: React.FC<TableRowProps> = ({ props }) => {
     <th scope="row" className="p-2 font-medium text-white  md:p-4">
       <div className="flex flex-col md:flex-row md:items-center">
         <div className="avatar flex justify-center md:inline-flex">
-          <div className="w-20 rounded-full ring ring-offset-2 ring-offset-gray-900">
+          ¡1{" "}
+          <div className="mt-2 w-20 rounded-full ring ring-offset-2 ring-offset-gray-900">
             <Image
               width={96}
               height={96}

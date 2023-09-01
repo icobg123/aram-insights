@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { AbilityChangesScrapped, ChampionDataScrapped } from "@/app/page";
+import { APIData, ChampionDataScrapped } from "@/app/page";
 import Image from "next/legacy/image";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import peekingPoro from "../../../public/peeking-poro.svg";
@@ -21,20 +21,7 @@ import OtherChangesCell from "@/components/table/OtherChangesCell";
 import { Table } from "@/components/table/Table";
 import ChampionCell from "@/components/table/ChampionCell";
 import { TableHeadCell } from "@/components/table/TableHeadCell";
-
-export interface APIData {
-  // [champion: string]: {
-  champion: string;
-  damageDealt: number;
-  damageReceived: number;
-  generalChanges: string[];
-  abilityChanges: AbilityChangesScrapped[];
-  winRate: number;
-  icon?: string;
-  title?: string;
-  spells?: { [spellName: string]: string };
-  // };
-}
+import TableFabFilter from "@/components/table/TableFilters/TableFabFilter";
 
 export interface TableWrapperProps {
   scrappedData: ChampionDataScrapped;
@@ -166,7 +153,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         enableColumnFilter: true,
       }),
       columnHelper.accessor((row) => row, {
-        id: "Changes",
+        id: "otherChanges",
         cell: (props) => <OtherChangesCell props={props} />,
         header: () => (
           <th
@@ -202,7 +189,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   });
   return (
     <div className="container max-w-5xl p-1">
-      <div className="relative flex w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg md:h-[81svh] md:min-h-[81svh]">
+      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg">
         <div className="absolute right-4 top-[-131px]">
           <Image
             className=""
@@ -227,6 +214,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           <span className="loading loading-spinner loading-lg text-info"></span>
         )}
       </div>
+      <TableFabFilter table={table} />
     </div>
   );
 };

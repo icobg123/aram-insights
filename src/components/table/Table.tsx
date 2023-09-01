@@ -1,15 +1,14 @@
 import React from "react";
 import { flexRender } from "@tanstack/react-table";
-import { APIData } from "@/components/table-wrapper/TableWrapper";
 import { Table as TanTable } from "@tanstack/table-core";
 import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
+import { APIData } from "@/app/page";
 
 export interface TableProps {
   table: TanTable<APIData>;
 }
 
 export const Table = ({ table }: TableProps) => {
-  const globalFilter = table.getState().globalFilter;
   return (
     <table className="h-full w-full table-fixed bg-gray-900 text-left text-sm text-gray-500">
       <thead className="sticky top-0 z-10 bg-gray-700 text-xs uppercase text-gray-200">
@@ -29,9 +28,7 @@ export const Table = ({ table }: TableProps) => {
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.length === 0 && globalFilter !== "" && (
-          <NoChampionsFoundRow />
-        )}
+        {table.getRowModel().rows.length === 0 && <NoChampionsFoundRow />}
         {table.getRowModel().rows.map((row, index) => {
           const isOdd = index % 2 === 0;
           const bgColor = isOdd ? "bg-gray-900 " : "bg-gray-800 ";

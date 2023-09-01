@@ -17,6 +17,18 @@ export type ChampionDataScrapped = {
   };
 };
 
+export interface APIData {
+  champion: string;
+  damageDealt: number;
+  damageReceived: number;
+  generalChanges: string[];
+  abilityChanges: AbilityChangesScrapped[];
+  winRate: number;
+  icon?: string;
+  title?: string;
+  spells?: { [spellName: string]: string };
+}
+
 /*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
 const scrapePatchVersion = async (): Promise<string> => {
   try {
@@ -163,13 +175,16 @@ type ChampionData = {
     attackspeed: number;
   };
 };
+
 /*create a function that scrapes a page using cheerio and returns an object that has champion names as keys and win rate percentages as values
  * from this url https://www.metasrc.com/lol/aram/13.13/stats
  *
  * */
-const scrapeWinRate = async (
-  version: string
-): Promise<{ [key: string]: number }> => {
+interface ChampionWinRates {
+  [key: string]: number;
+}
+
+const scrapeWinRate = async (version: string): Promise<ChampionWinRates> => {
   try {
     const response = await axios.get(
       `https://www.metasrc.com/lol/aram/${version}/stats`
@@ -184,7 +199,6 @@ const scrapeWinRate = async (
         $(element).find("td").eq(6).text().trim().replace("%", "")
       );
     });
-    console.log(winRateData);
     return winRateData;
   } catch (error) {
     console.error("Error scraping data:", error);
@@ -215,7 +229,7 @@ const fetchChampionAllData = async (version: string) => {
           championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
         promises.push(spells);
 
-        const championObject = {
+        const championObject: APIData = {
           icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
           title: championTitle,
           spells: spells,
@@ -224,13 +238,12 @@ const fetchChampionAllData = async (version: string) => {
           damageDealt: 0,
           generalChanges: [],
           abilityChanges: [],
+          champion: champName,
         };
         return {
-          // [champName]: {
           ...championObject,
           ...allChampData[champName],
           champion: champName,
-          // },
         };
       })
     );

@@ -39,7 +39,7 @@ export const TableHeadCell = ({
           {arrows}
         </div>
         {header.column.getCanFilter() ? (
-          <div className="pt-2">
+          <div className="hidden pt-2 md:block">
             <TableFilter column={header.column} table={table} />
           </div>
         ) : null}
