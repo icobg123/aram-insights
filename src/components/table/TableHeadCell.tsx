@@ -1,7 +1,7 @@
 import React from "react";
 import { HeaderContext, Table } from "@tanstack/table-core";
-import { APIData } from "@/components/table-wrapper/TableWrapper";
 import TableFilter from "@/components/table/TableFilters/TableFilter";
+import { APIData } from "@/app/page";
 
 type TableHeadCellProps = {
   className?: string;

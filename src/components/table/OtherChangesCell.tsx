@@ -1,7 +1,7 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
 import { AbilityChanges } from "@/components/table/AbilityChanges";
-import { APIData } from "@/components/table-wrapper/TableWrapper";
+import { APIData } from "@/app/page";
 
 interface TableRowProps {
   props: CellContext<APIData, APIData>;
