@@ -209,7 +209,7 @@ const fetchChampionAllData = async (version: string) => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      "https://ddragon.leagueoflegends.com/cdn/13.14.1/data/en_US/champion.json"
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion.json`
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -276,11 +276,11 @@ const fetchIndividualChampionData = async (
 
         return {
           ...acc,
-          [`${spellName}`]: `https://ddragon.leagueoflegends.com/cdn/13.14.1/img/spell/${spellId}`,
+          [`${spellName}`]: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/spell/${spellId}`,
         };
       },
       {
-        [`${passiveName}`]: `https://ddragon.leagueoflegends.com/cdn/13.14.1/img/passive/${passiveId}`,
+        [`${passiveName}`]: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/passive/${passiveId}`,
       }
     );
   } catch (error) {
