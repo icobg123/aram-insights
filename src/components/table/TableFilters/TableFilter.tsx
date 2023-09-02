@@ -15,15 +15,32 @@ export default function TableFilter({
     .flatRows[0]?.getValue(column.id);
 
   const columnFilterValue = column.getFilterValue();
-
   const sortedUniqueValues = React.useMemo(() => {
-    const uniqueValues = Array.from(
-      column.getFacetedUniqueValues().keys()
-    ).sort();
+    const uniqueValues = table
+      .getFilteredRowModel()
+      .rows.map((row) => row.getValue("champion"));
     return typeof firstValue === "number" ? [] : uniqueValues;
-  }, [column, firstValue]);
+  }, [firstValue, table]);
+
+  const uniqueValues = table
+    .getFilteredRowModel()
+    .rows.map((row) => row.getValue("champion"));
+  /*const sortedUniqueValues = React.useMemo(() => {
+      const uniqueValues = Array.from(
+        column.getFacetedUniqueValues().keys()
+      ).sort();
+      return typeof firstValue === "number" ? [] : uniqueValues;
+    }, [column, firstValue]);*/
   const noArrowsClasses =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+
+  //TODO: Make numer input change color based on value. e.g. green if positive, red if negative for dmg dealt and oposite for dmg received
+  const numberInputColours = (columnFilterValue as [number, number])?.[0]
+    ? (columnFilterValue as [number, number])?.[0] >= 0
+      ? "text-green-400"
+      : "text-red-400"
+    : "text-gray-400";
+
   return typeof firstValue === "number" ? (
     <div className="join ">
       <DebouncedInput
@@ -65,7 +82,7 @@ export default function TableFilter({
     </div>
   ) : (
     <TextFilter
-      sortedUniqueValues={sortedUniqueValues}
+      sortedUniqueValues={typeof firstValue === "number" ? [] : uniqueValues}
       column={column}
       columnFilterValue={columnFilterValue}
       totalResults={table.getFilteredRowModel().rows.length}

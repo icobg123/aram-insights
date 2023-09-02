@@ -185,7 +185,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    debugTable: true,
+    debugTable: false,
   });
   return (
     <div className="container max-w-5xl p-1">
