@@ -23,13 +23,11 @@ const OtherChangesCell: React.FC<TableRowProps> = ({ props }) => {
   return (
     <td className="p-2 md:p-4">
       {hasGeneralChanges && (
-        <span className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-1">
           {generalChanges.map((generalChange, index) => (
-            <React.Fragment key={index + champion}>
-              {generalChange}
-            </React.Fragment>
+            <div key={index + champion}>{generalChange}</div>
           ))}
-        </span>
+        </div>
       )}
       {hasAbilityChanges && hasGeneralChanges && (
         <div className="divider my-2 h-2" />
