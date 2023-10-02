@@ -2,6 +2,8 @@ import { TableWrapper } from "@/components/table-wrapper/TableWrapper";
 import axios from "axios";
 import cheerio from "cheerio";
 
+export const revalidate = 604800; // If you want to revalidate every 10s
+
 export type AbilityChangesScrapped = {
   abilityName: string;
   changes: string;
