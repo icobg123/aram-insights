@@ -7,7 +7,7 @@ interface TableRowProps {
   props: CellContext<APIData, APIData>;
 }
 
-const ChampionCell: React.FC<TableRowProps> = ({ props }) => {
+const ChampionCell = ({ props }: TableRowProps) => {
   const { champion, title, icon } = props.row.original;
   return (
     <th scope="row" className="p-2 font-medium text-white  md:p-4">
