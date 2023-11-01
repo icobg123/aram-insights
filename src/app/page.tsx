@@ -36,13 +36,22 @@ export type ItemChangesScrapped = {
   changes: string;
   icon?: string;
 };
+export type RunesChangesScrapped = {
+  runeName: string;
+  changes: string;
+  icon?: string;
+};
 
 export type ItemDataScrapped = {
   [key: string]: ItemChangesScrapped;
 };
+export type RunesDataScrapped = {
+  [key: string]: RunesChangesScrapped;
+};
 export type ScrappedData = {
   championData: ChampionDataScrapped;
   itemData: ItemDataScrapped;
+  runeData: RunesDataScrapped;
 };
 /*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
 const scrapePatchVersion = async (): Promise<string> => {
@@ -134,6 +143,7 @@ const scrapeLoLWikiData = async (version: string): Promise<ScrappedData> => {
       // }
     });
     const itemData: ItemDataScrapped = {};
+
     $("div.wds-tab__content")
       .eq(1)
       .find("ul li")
@@ -145,12 +155,26 @@ const scrapeLoLWikiData = async (version: string): Promise<ScrappedData> => {
           changes: changes,
         } as ItemChangesScrapped;
       });
-    return { championData, itemData };
+
+    const runeData: RunesDataScrapped = {};
+    $("div.wds-tab__content")
+      .eq(2)
+      .find("ul li")
+      .each((index, element) => {
+        const changes = $(element).text().trim();
+        const runeName = $(element).parent().prev("p").text().trim();
+        runeData[runeName] = {
+          runeName: runeName,
+          changes: changes,
+        } as RunesChangesScrapped;
+      });
+    return { championData, itemData, runeData };
   } catch (error) {
     console.error("Error scraping data:", error);
     return {
       championData: {} as ChampionDataScrapped,
       itemData: {} as ItemDataScrapped,
+      runeData: {} as RunesDataScrapped,
     };
   }
 };
@@ -232,7 +256,10 @@ const scrapeWinRate = async (version: string): Promise<ChampionWinRates> => {
     return {};
   }
 };
-const fetchChampionAllData = async (version: string) => {
+const fetchChampionAllData = async (
+  version: string,
+  allChampionData: ChampionDataScrapped
+) => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
@@ -244,8 +271,8 @@ const fetchChampionAllData = async (version: string) => {
     const championNames = Object.keys(champions);
     const promises = [];
     const winRates = await scrapeWinRate(version);
-    const allScrappedData = await scrapeLoLWikiData(version);
-    const allChampionData = allScrappedData.championData;
+    // const allScrappedData = await scrapeLoLWikiData(version);
+    // const allChampionData = allScrappedData.championData;
     return await Promise.all(
       championNames.map(async (championName) => {
         const champion = champions[championName] as ChampionData;
@@ -279,6 +306,7 @@ const fetchChampionAllData = async (version: string) => {
     throw error;
   }
 };
+
 type Item = {
   name: string;
   description: string;
@@ -315,7 +343,10 @@ type ItemData = {
   [key: string]: Item;
 };
 
-const fetchItemsAllData = async (version: string) => {
+const fetchItemsAllData = async (
+  version: string,
+  itemData: ItemDataScrapped
+): Promise<ItemChangesScrapped[]> => {
   try {
     // Go to the dev.to tags page
     const response = await fetch(
@@ -324,29 +355,96 @@ const fetchItemsAllData = async (version: string) => {
     // Get the HTML code of the webpage
     const json = await response.json();
     const items: Item[] = json.data;
-    // const itemNames = Object.values(items).map((item: Item) => item.name);
 
-    const allScrappedData = await scrapeLoLWikiData(version);
-    const scrappedItemData = allScrappedData.itemData;
-    return await Promise.all(
-      Object.values(scrappedItemData).map(async (item) => {
+    const itemObjects: ItemChangesScrapped[] = Object.values(itemData).map(
+      (item: ItemChangesScrapped) => {
         const itemData = Object.values(items).find(
           (itemData) => itemData.name === item.itemName
         );
-        const itemName = itemData?.name;
-        const itemIcon = itemData?.image.full;
-        const itemObject: ItemChangesScrapped = {
-          icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/item/${itemIcon}`,
-          itemName: itemName || "",
-          changes: scrappedItemData[itemName || ""]?.changes,
-        };
-        return itemObject;
-      })
+        if (itemData) {
+          const { name: itemName, image } = itemData;
+          const itemIcon = image.full;
+          const itemObject: ItemChangesScrapped = {
+            icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/item/${itemIcon}`,
+            itemName: itemName || "",
+            changes: item.changes,
+          };
+          return itemObject;
+        }
+
+        // Return empty object if no matching item is found
+        return {} as ItemChangesScrapped;
+      }
+    );
+    return itemObjects.filter(
+      (itemObject) => Object.keys(itemObject).length !== 0
     );
   } catch (error) {
     throw error;
   }
 };
+
+type Rune = {
+  id: number;
+  key: string;
+  icon: string;
+  name: string;
+  shortDesc: string;
+  longDesc: string;
+};
+
+type RuneSlot = {
+  runes: Rune[];
+};
+
+type RuneData = {
+  id: number;
+  key: string;
+  icon: string;
+  name: string;
+  slots: RuneSlot[];
+};
+const fetchRunesAllData = async (
+  version: string,
+  runeData: RunesDataScrapped
+) => {
+  try {
+    const response = await fetch(
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/runesReforged.json`
+    );
+    const runesData = await response.json();
+
+    const runeObjects: RunesChangesScrapped[] = Object.values(runeData).map(
+      (scrappedRune) => {
+        const matchingRune = runesData
+          .flatMap((runeData: RuneData) =>
+            runeData.slots.flatMap((runeSlot: RuneSlot) => runeSlot.runes)
+          )
+          .find((rune: Rune) => rune.name === scrappedRune.runeName);
+
+        if (matchingRune) {
+          const { name: runeName, icon } = matchingRune;
+          const runeObject: RunesChangesScrapped = {
+            icon: `https://ddragon.canisback.com/img/${icon}`,
+            runeName: runeName || "",
+            changes: scrappedRune.changes,
+          };
+          return runeObject;
+        }
+
+        // Return empty object if no matching rune is found
+        return {} as RunesChangesScrapped;
+      }
+    );
+
+    return runeObjects.filter(
+      (runeObject) => Object.keys(runeObject).length !== 0
+    );
+  } catch (error) {
+    throw error;
+  }
+};
+
 const fetchIndividualChampionData = async (
   champName: string,
   version?: string
@@ -385,28 +483,29 @@ const fetchIndividualChampionData = async (
 
 export async function generateMetadata() {
   return {
-    title: "ARAM Balance",
+    title: "ARAM Balance - Who's your pick this game?",
     description: `Welcome to ARAM Balance: Your Ultimate Destination for Champion Balance Insights in League of Legends' ARAM Game Mode. Explore in-depth data on champion buffs, nerfs, win rates, and gameplay dynamics, ensuring you stay at the forefront of the ever-evolving ARAM battlefield. Level up your League of Legends experience with ARAM Balance, where data meets strategy.`,
   };
 }
 
 export default async function Home() {
   const patchVersion = await scrapePatchVersion();
-  const aramChanges = await scrapeLoLWikiData(patchVersion);
-  const championDataApi = await fetchChampionAllData(patchVersion);
-  const itemDataApi = await fetchItemsAllData(patchVersion);
-  const [aramAdjustments, champAssets, itemAssets] = await Promise.all([
-    aramChanges,
-    championDataApi,
-    itemDataApi,
+  const { runeData, championData, itemData } = await scrapeLoLWikiData(
+    patchVersion
+  );
+  const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
+    fetchChampionAllData(patchVersion, championData),
+    fetchItemsAllData(patchVersion, itemData),
+    fetchRunesAllData(patchVersion, runeData),
   ]);
+
   return (
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
       <TableWrapper
-        scrappedData={aramAdjustments}
-        apiData={champAssets}
+        championData={championDataApi}
         version={patchVersion}
-        itemData={itemAssets}
+        itemData={itemDataApi}
+        runeData={runesDataApi}
       />
     </div>
   );

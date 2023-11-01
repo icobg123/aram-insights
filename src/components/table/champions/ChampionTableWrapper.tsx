@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { APIData, ScrappedData } from "@/app/page";
+import { APIData } from "@/app/page";
 
 import {
   ColumnFiltersState,
@@ -15,19 +15,19 @@ import {
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
 import OtherChangesCell from "@/components/table/OtherChangesCell";
-import { Table } from "@/components/table/champion/Table";
+import { Table } from "@/components/table/champions/Table";
 import ChampionCell from "@/components/table/ChampionCell";
-import { TableHeadCell } from "@/components/table/champion/TableHeadCell";
+import { TableHeadCell } from "@/components/table/champions/TableHeadCell";
 import TableFabFilter from "@/components/table/TableFilters/TableFabFilter";
 
 export interface TableWrapperProps {
-  scrappedData: ScrappedData;
+  // scrappedData: ScrappedData;
   version: string;
   apiData: APIData[];
 }
 
-export const ChampionTable: React.FC<TableWrapperProps> = ({
-  scrappedData,
+export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
+  // scrappedData,
   apiData,
   version,
 }) => {
@@ -186,14 +186,8 @@ export const ChampionTable: React.FC<TableWrapperProps> = ({
   });
   return (
     <>
-      {scrappedData && Object.keys(scrappedData).length > 0 ? (
-        <>
-          <Table table={table} />
-          <TableFabFilter table={table} />
-        </>
-      ) : (
-        <span className="loading loading-spinner loading-lg text-info"></span>
-      )}
+      <Table table={table} />
+      <TableFabFilter table={table} />
     </>
   );
 };

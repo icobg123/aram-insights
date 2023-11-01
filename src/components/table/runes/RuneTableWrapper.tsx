@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ItemChangesScrapped } from "@/app/page";
+import { RunesChangesScrapped } from "@/app/page";
 
 import {
   ColumnFiltersState,
@@ -14,43 +14,43 @@ import {
   SortingState,
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
-import { Table } from "@/components/table/items/ItemTable";
-import { TableHeadCell } from "@/components/table/items/TableHeadCell";
-import ItemCell from "@/components/table/items/ItemCell";
+import { RuneTableHeadCell } from "@/components/table/runes/RuneTableHeadCell";
+import RuneCell from "@/components/table/runes/RuneCell";
+import { RuneTable } from "@/components/table/runes/RuneTable";
 
 export interface TableWrapperProps {
-  itemData: ItemChangesScrapped[];
+  runeData: RunesChangesScrapped[];
 }
 
-export const ItemTable: React.FC<TableWrapperProps> = ({ itemData }) => {
+export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
   const columnHelper = React.useMemo(
-    () => createColumnHelper<ItemChangesScrapped>(),
+    () => createColumnHelper<RunesChangesScrapped>(),
     []
   );
   const globalFilterFn = React.useCallback(
-    (row: Row<ItemChangesScrapped>, columnId: string, filterValue: any) => {
+    (row: Row<RunesChangesScrapped>, columnId: string, filterValue: any) => {
       const searchTerm = String(filterValue);
-      return row.original.itemName
+      return row.original.runeName
         .toLowerCase()
         .startsWith(searchTerm.toLowerCase());
     },
     []
   );
 
-  const itemsTabData = React.useMemo(() => [...itemData], [itemData]);
+  const itemsTabData = React.useMemo(() => [...runeData], [runeData]);
 
   const columns = React.useMemo(() => {
     return [
       columnHelper.accessor((row) => row, {
-        id: "itemName",
-        cell: (props) => <ItemCell props={props} />,
+        id: "runeName",
+        cell: (props) => <RuneCell props={props} />,
         header: (header) => (
-          <TableHeadCell
+          <RuneTableHeadCell
             header={header}
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
@@ -70,7 +70,7 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ itemData }) => {
           );
         },
         header: (header) => (
-          <TableHeadCell
+          <RuneTableHeadCell
             header={header}
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
@@ -103,8 +103,8 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ itemData }) => {
   });
   return (
     <>
-      {itemData && itemData.length > 0 ? (
-        <Table table={table} />
+      {runeData && runeData.length > 0 ? (
+        <RuneTable table={table} />
       ) : (
         <span className="loading loading-spinner loading-lg text-info"></span>
       )}

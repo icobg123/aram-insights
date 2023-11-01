@@ -1,27 +1,29 @@
 "use client";
 import React, { useState } from "react";
-import { APIData, ItemChangesScrapped, ScrappedData } from "@/app/page";
+import { APIData, ItemChangesScrapped, RunesChangesScrapped } from "@/app/page";
 import Image from "next/legacy/image";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import peekingPoro from "../../../public/peeking-poro.svg";
-import { ItemTable } from "@/components/table-wrapper/ItemTable";
-import { ChampionTable } from "@/components/table-wrapper/ChampionTable";
+import { ItemTableWrapper } from "@/components/table/items/ItemTableWrapper";
+import { ChampionTableWrapper } from "@/components/table/champions/ChampionTableWrapper";
+import { RuneTableWrapper } from "@/components/table/runes/RuneTableWrapper";
 
 export interface TableWrapperProps {
-  scrappedData: ScrappedData;
+  // scrappedData: ScrappedData;
   version: string;
-  apiData: APIData[];
+  championData: APIData[];
   itemData: ItemChangesScrapped[];
+  runeData: RunesChangesScrapped[];
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
-  scrappedData,
-  apiData,
+  // scrappedData,
+  championData,
   version,
   itemData,
+  runeData,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-
   return (
     <div className="container max-w-5xl p-1">
       <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg">
@@ -47,7 +49,6 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           >
             Champions
           </a>
-
           <a
             className={`tab tab-bordered flex-auto ${
               activeTab === 1 && "tab-active"
@@ -56,26 +57,29 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           >
             Items
           </a>
+          <a
+            className={`tab tab-bordered flex-auto ${
+              activeTab === 2 && "tab-active"
+            }`}
+            onClick={() => setActiveTab(2)}
+          >
+            Runes
+          </a>
         </div>
-        {scrappedData && Object.keys(scrappedData).length > 0 ? (
-          <div className="container max-w-5xl">
-            <div className="max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[66svh]">
-              <div>
-                {activeTab === 0 && (
-                  <ChampionTable
-                    scrappedData={scrappedData}
-                    apiData={apiData}
-                    version={version}
-                  />
-                )}
-                {activeTab === 1 && <ItemTable itemData={itemData} />}
-                {/*{activeTab === 2 && tabThreeChildren && <div>{tabThreeChildren}</div>}*/}
-              </div>
+        <div className="container max-w-5xl">
+          <div className="max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[66svh]">
+            <div>
+              {activeTab === 0 && (
+                <ChampionTableWrapper
+                  apiData={championData}
+                  version={version}
+                />
+              )}
+              {activeTab === 1 && <ItemTableWrapper itemData={itemData} />}
+              {activeTab === 2 && <RuneTableWrapper runeData={runeData} />}
             </div>
           </div>
-        ) : (
-          <span className="loading loading-spinner loading-lg text-info"></span>
-        )}
+        </div>
       </div>
     </div>
   );

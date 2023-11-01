@@ -1,14 +1,14 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
 import Image from "next/legacy/image";
-import { ItemChangesScrapped } from "@/app/page";
+import { RunesChangesScrapped } from "@/app/page";
 
 interface TableRowProps {
-  props: CellContext<ItemChangesScrapped, ItemChangesScrapped>;
+  props: CellContext<RunesChangesScrapped, RunesChangesScrapped>;
 }
 
-const ItemCell = ({ props }: TableRowProps) => {
-  const { itemName, icon } = props.row.original;
+const RuneCell = ({ props }: TableRowProps) => {
+  const { runeName, icon } = props.row.original;
   return (
     <th scope="row" className="p-2 font-medium text-white  md:p-4">
       <div className="flex items-center md:flex-row md:items-center">
@@ -18,18 +18,18 @@ const ItemCell = ({ props }: TableRowProps) => {
               width={96}
               height={96}
               src={icon || ""}
-              alt={itemName}
+              alt={runeName}
               placeholder="blur"
               blurDataURL="/champion-placeholder.png"
             />
           </div>
         </div>
         <div className="break-normal px-4 text-left md:text-left">
-          <div className="font-bold">{itemName}</div>
+          <div className="font-bold">{runeName}</div>
         </div>
       </div>
     </th>
   );
 };
 
-export default ItemCell;
+export default RuneCell;
