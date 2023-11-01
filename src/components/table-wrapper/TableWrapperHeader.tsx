@@ -14,7 +14,7 @@ export const TableWrapperHeader = ({
   /*Tooltip overflows causing the page to break*/
 
   return (
-    <div className=" relative z-[100] mb-3 flex items-center justify-between">
+    <div className=" relative z-[100] flex items-center justify-between">
       {children}
       <div className="avatar">
         <div className="rounded-full">

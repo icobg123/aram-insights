@@ -31,6 +31,18 @@ export interface APIData {
   spells?: { [spellName: string]: string };
 }
 
+export type ItemChangesScrapped = {
+  itemName: string;
+  changes: string;
+};
+
+export type ItemDataScrapped = {
+  [key: string]: ItemChangesScrapped;
+};
+export type ScrappedData = {
+  championData: ChampionDataScrapped;
+  itemData: ItemDataScrapped;
+};
 /*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
 const scrapePatchVersion = async (): Promise<string> => {
   try {
@@ -51,9 +63,7 @@ const scrapePatchVersion = async (): Promise<string> => {
     return "";
   }
 };
-const scrapeLoLWikiData = async (
-  version: string
-): Promise<ChampionDataScrapped> => {
+const scrapeLoLWikiData = async (version: string): Promise<ScrappedData> => {
   try {
     const response = await axios.get(
       "https://leagueoflegends.fandom.com/wiki/ARAM"
@@ -122,11 +132,25 @@ const scrapeLoLWikiData = async (
       }
       // }
     });
-
-    return championData;
+    const itemData: ItemDataScrapped = {};
+    $("div.wds-tab__content")
+      .eq(1)
+      .find("ul li")
+      .each((index, element) => {
+        const changes = $(element).text().trim();
+        const itemName = $(element).parent().prev("p").text().trim();
+        itemData[itemName] = {
+          itemName: itemName,
+          changes: changes,
+        } as ItemChangesScrapped;
+      });
+    return { championData, itemData };
   } catch (error) {
     console.error("Error scraping data:", error);
-    return {};
+    return {
+      championData: {} as ChampionDataScrapped,
+      itemData: {} as ItemDataScrapped,
+    };
   }
 };
 
@@ -219,7 +243,9 @@ const fetchChampionAllData = async (version: string) => {
     const championNames = Object.keys(champions);
     const promises = [];
     const winRates = await scrapeWinRate(version);
-    const allChampData = await scrapeLoLWikiData(version);
+    const allScrappedData = await scrapeLoLWikiData(version);
+    const items = allScrappedData.itemData;
+    const allChampionData = allScrappedData.championData;
     return await Promise.all(
       championNames.map(async (championName) => {
         const champion = champions[championName] as ChampionData;
@@ -244,7 +270,7 @@ const fetchChampionAllData = async (version: string) => {
         };
         return {
           ...championObject,
-          ...allChampData[champName],
+          ...allChampionData[champName],
           champion: champName,
         };
       })
@@ -300,10 +326,10 @@ export async function generateMetadata() {
 export default async function Home() {
   const patchVersion = await scrapePatchVersion();
   const aramChanges = await scrapeLoLWikiData(patchVersion);
-  const championData = await fetchChampionAllData(patchVersion);
+  const championDataApi = await fetchChampionAllData(patchVersion);
   const [aramAdjustments, champAssets] = await Promise.all([
     aramChanges,
-    championData,
+    championDataApi,
   ]);
   return (
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>

@@ -2,11 +2,11 @@ import React from "react";
 import { flexRender } from "@tanstack/react-table";
 import { Table as TanTable } from "@tanstack/table-core";
 import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
-import { APIData } from "@/app/page";
+import { ItemChangesScrapped } from "@/app/page";
 
-export interface TableProps {
-  table: TanTable<APIData>;
-}
+export type TableProps = {
+  table: TanTable<ItemChangesScrapped>;
+};
 
 export const Table = ({ table }: TableProps) => {
   return (

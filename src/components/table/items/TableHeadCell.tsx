@@ -1,13 +1,16 @@
 import React from "react";
-import { HeaderContext, Table } from "@tanstack/table-core";
-import TableFilter from "@/components/table/TableFilters/TableFilter";
-import { APIData } from "@/app/page";
+import { HeaderContext } from "@tanstack/table-core";
+import { ItemChangesScrapped } from "@/app/page";
+import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 
 type TableHeadCellProps = {
   className?: string;
   title?: string;
-  header: HeaderContext<APIData, APIData | number | string>;
-  table: Table<APIData>;
+  header: HeaderContext<
+    ItemChangesScrapped,
+    ItemChangesScrapped | number | string
+  >;
+  table: TanTable<ItemChangesScrapped>;
 };
 export const TableHeadCell = ({
   className,
@@ -38,11 +41,6 @@ export const TableHeadCell = ({
           {title}
           {arrows}
         </div>
-        {header.column.getCanFilter() ? (
-          <div className="hidden pt-2 md:block">
-            <TableFilter column={header.column} table={table} />
-          </div>
-        ) : null}
       </div>
     </th>
   );
