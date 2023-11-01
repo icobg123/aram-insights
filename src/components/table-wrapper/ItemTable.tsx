@@ -104,11 +104,7 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ itemData }) => {
   return (
     <>
       {itemData && itemData.length > 0 ? (
-        <>
-          <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[73svh] ">
-            <Table table={table} />
-          </div>
-        </>
+        <Table table={table} />
       ) : (
         <span className="loading loading-spinner loading-lg text-info"></span>
       )}

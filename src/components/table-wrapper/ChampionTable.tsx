@@ -188,9 +188,7 @@ export const ChampionTable: React.FC<TableWrapperProps> = ({
     <>
       {scrappedData && Object.keys(scrappedData).length > 0 ? (
         <>
-          <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[73svh] ">
-            <Table table={table} />
-          </div>
+          <Table table={table} />
           <TableFabFilter table={table} />
         </>
       ) : (
