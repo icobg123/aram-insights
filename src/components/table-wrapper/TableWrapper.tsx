@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { APIData, ScrappedData } from "@/app/page";
+import { APIData, ItemChangesScrapped, ScrappedData } from "@/app/page";
 import Image from "next/legacy/image";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import peekingPoro from "../../../public/peeking-poro.svg";
@@ -11,12 +11,14 @@ export interface TableWrapperProps {
   scrappedData: ScrappedData;
   version: string;
   apiData: APIData[];
+  itemData: ItemChangesScrapped[];
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
   scrappedData,
   apiData,
   version,
+  itemData,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
 
@@ -66,7 +68,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
                     version={version}
                   />
                 )}
-                {activeTab === 1 && <ItemTable scrappedData={scrappedData} />}
+                {activeTab === 1 && <ItemTable itemData={itemData} />}
                 {/*{activeTab === 2 && tabThreeChildren && <div>{tabThreeChildren}</div>}*/}
               </div>
             </div>

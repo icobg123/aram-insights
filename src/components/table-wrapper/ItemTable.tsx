@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { ItemChangesScrapped, ScrappedData } from "@/app/page";
+import { ItemChangesScrapped } from "@/app/page";
 
 import {
   ColumnFiltersState,
@@ -16,13 +16,13 @@ import {
 import { useReactTable } from "@tanstack/react-table";
 import { Table } from "@/components/table/items/ItemTable";
 import { TableHeadCell } from "@/components/table/items/TableHeadCell";
+import ItemCell from "@/components/table/items/ItemCell";
 
 export interface TableWrapperProps {
-  scrappedData: ScrappedData;
+  itemData: ItemChangesScrapped[];
 }
 
-export const ItemTable: React.FC<TableWrapperProps> = ({ scrappedData }) => {
-  const { itemData, championData } = scrappedData;
+export const ItemTable: React.FC<TableWrapperProps> = ({ itemData }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -42,20 +42,13 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ scrappedData }) => {
     []
   );
 
-  const itemsTabData = React.useMemo(
-    () => [...Object.values(itemData)],
-    [itemData]
-  );
+  const itemsTabData = React.useMemo(() => [...itemData], [itemData]);
 
   const columns = React.useMemo(() => {
     return [
       columnHelper.accessor((row) => row, {
         id: "itemName",
-        cell: (props) => (
-          <td className={`p-2 text-left md:p-4`}>
-            {props.getValue().itemName}
-          </td>
-        ),
+        cell: (props) => <ItemCell props={props} />,
         header: (header) => (
           <TableHeadCell
             header={header}
@@ -65,8 +58,6 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ scrappedData }) => {
           />
         ),
         // footer: (props) => props.column.id,
-        enableColumnFilter: true,
-        filterFn: globalFilterFn,
       }),
       columnHelper.accessor((row) => row.changes, {
         id: "itemChanges",
@@ -87,7 +78,6 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ scrappedData }) => {
           />
         ),
         footer: (props) => props.column.id,
-        enableColumnFilter: true,
       }),
     ];
   }, []);
@@ -113,7 +103,7 @@ export const ItemTable: React.FC<TableWrapperProps> = ({ scrappedData }) => {
   });
   return (
     <>
-      {scrappedData && Object.keys(scrappedData).length > 0 ? (
+      {itemData && itemData.length > 0 ? (
         <>
           <div className="max-h-[65svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[73svh] ">
             <Table table={table} />

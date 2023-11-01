@@ -34,6 +34,7 @@ export interface APIData {
 export type ItemChangesScrapped = {
   itemName: string;
   changes: string;
+  icon?: string;
 };
 
 export type ItemDataScrapped = {
@@ -244,7 +245,6 @@ const fetchChampionAllData = async (version: string) => {
     const promises = [];
     const winRates = await scrapeWinRate(version);
     const allScrappedData = await scrapeLoLWikiData(version);
-    const items = allScrappedData.itemData;
     const allChampionData = allScrappedData.championData;
     return await Promise.all(
       championNames.map(async (championName) => {
@@ -279,7 +279,75 @@ const fetchChampionAllData = async (version: string) => {
     throw error;
   }
 };
+type Item = {
+  name: string;
+  description: string;
+  colloq: string;
+  plaintext: string;
+  image: {
+    full: string;
+    sprite: string;
+    group: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  };
+  gold: {
+    base: number;
+    purchasable: boolean;
+    total: number;
+    sell: number;
+  };
+  tags: string[];
+  maps: {
+    [key: string]: boolean;
+  };
+  stats: {
+    FlatMovementSpeedMod: number;
+  };
+  effect: {
+    Effect1Amount: string;
+  };
+};
 
+type ItemData = {
+  [key: string]: Item;
+};
+
+const fetchItemsAllData = async (version: string) => {
+  try {
+    // Go to the dev.to tags page
+    const response = await fetch(
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/item.json`
+    );
+    // Get the HTML code of the webpage
+    const json = await response.json();
+    const items: Item[] = json.data;
+    // const itemNames = Object.values(items).map((item: Item) => item.name);
+
+    const allScrappedData = await scrapeLoLWikiData(version);
+    const scrappedItemData = allScrappedData.itemData;
+    console.log(scrappedItemData);
+    return await Promise.all(
+      Object.values(scrappedItemData).map(async (item) => {
+        const itemData = Object.values(items).find(
+          (itemData) => itemData.name === item.itemName
+        );
+        const itemName = itemData?.name;
+        const itemIcon = itemData?.image.full;
+        const itemObject: ItemChangesScrapped = {
+          icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/item/${itemIcon}`,
+          itemName: itemName || "",
+          changes: scrappedItemData[itemName || ""]?.changes,
+        };
+        return itemObject;
+      })
+    );
+  } catch (error) {
+    throw error;
+  }
+};
 const fetchIndividualChampionData = async (
   champName: string,
   version?: string
@@ -327,9 +395,11 @@ export default async function Home() {
   const patchVersion = await scrapePatchVersion();
   const aramChanges = await scrapeLoLWikiData(patchVersion);
   const championDataApi = await fetchChampionAllData(patchVersion);
-  const [aramAdjustments, champAssets] = await Promise.all([
+  const itemDataApi = await fetchItemsAllData(patchVersion);
+  const [aramAdjustments, champAssets, itemAssets] = await Promise.all([
     aramChanges,
     championDataApi,
+    itemDataApi,
   ]);
   return (
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
@@ -337,6 +407,7 @@ export default async function Home() {
         scrappedData={aramAdjustments}
         apiData={champAssets}
         version={patchVersion}
+        itemData={itemAssets}
       />
     </div>
   );
