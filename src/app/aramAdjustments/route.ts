@@ -46,7 +46,6 @@ const scrapeTable = async (): Promise<ChampionData[]> => {
               .attr("alt")
               ?.toLowerCase();
 
-            console.log(iconName);
             abilityChanges.push({
               abilityName: ability,
               changes: text,

@@ -328,7 +328,6 @@ const fetchItemsAllData = async (version: string) => {
 
     const allScrappedData = await scrapeLoLWikiData(version);
     const scrappedItemData = allScrappedData.itemData;
-    console.log(scrappedItemData);
     return await Promise.all(
       Object.values(scrappedItemData).map(async (item) => {
         const itemData = Object.values(items).find(

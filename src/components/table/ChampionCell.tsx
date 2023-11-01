@@ -4,7 +4,7 @@ import Image from "next/legacy/image";
 import { APIData } from "@/app/page";
 
 interface TableRowProps {
-  props: CellContext<APIData, APIData>;
+  props: CellContext<APIData, string>;
 }
 
 const ChampionCell = ({ props }: TableRowProps) => {
