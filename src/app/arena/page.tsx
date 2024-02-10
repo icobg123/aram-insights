@@ -37,7 +37,6 @@ export default async function Home() {
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
       <TableWrapper
         championData={championDataApi}
-        version={patchVersion}
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
