@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { RunesChangesScrapped } from "@/app/page";
-
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -10,13 +8,15 @@ import {
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
+  HeaderContext,
   Row,
   SortingState,
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
-import { RuneTableHeadCell } from "@/components/table/runes/RuneTableHeadCell";
 import RuneCell from "@/components/table/runes/RuneCell";
-import { RuneTable } from "@/components/table/runes/RuneTable";
+import { RunesChangesScrapped } from "@/types";
+import { Table } from "@/components/table/Table";
+import { TableHeadCell } from "@/components/table/TableHeadCell";
 
 export interface TableWrapperProps {
   runeData: RunesChangesScrapped[];
@@ -50,7 +50,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
         id: "runeName",
         cell: (props) => <RuneCell props={props} />,
         header: (header) => (
-          <RuneTableHeadCell
+          <TableHeadCell
             header={header}
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
@@ -78,8 +78,8 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
           );
         },
         header: (header) => (
-          <RuneTableHeadCell
-            header={header}
+          <TableHeadCell
+            header={header as HeaderContext<RunesChangesScrapped, string>}
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Changes"
@@ -112,7 +112,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
   return (
     <>
       {runeData && runeData.length > 0 ? (
-        <RuneTable table={table} />
+        <Table table={table} />
       ) : (
         <span className="loading loading-spinner loading-lg text-info"></span>
       )}

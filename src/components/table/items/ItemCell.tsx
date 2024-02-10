@@ -1,7 +1,7 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
 import Image from "next/legacy/image";
-import { ItemChangesScrapped } from "@/app/page";
+import { ItemChangesScrapped } from "@/types";
 
 interface TableRowProps {
   props: CellContext<ItemChangesScrapped, ItemChangesScrapped>;

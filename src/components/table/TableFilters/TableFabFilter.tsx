@@ -1,7 +1,7 @@
 import React from "react";
 import TableFilter from "@/components/table/TableFilters/TableFilter";
-import { APIData } from "@/app/page";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
+import { ChampionDataApi } from "@/types";
 
 declare global {
   interface Window {
@@ -9,7 +9,7 @@ declare global {
   }
 }
 type TableFabFilterProps = {
-  table: TanTable<APIData>;
+  table: TanTable<ChampionDataApi>;
 };
 //declare const object that has key strings and string values
 

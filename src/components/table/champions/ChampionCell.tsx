@@ -1,10 +1,10 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
 import Image from "next/legacy/image";
-import { APIData } from "@/app/page";
+import { ChampionDataApi } from "@/types";
 
 interface TableRowProps {
-  props: CellContext<APIData, string>;
+  props: CellContext<ChampionDataApi, string>;
 }
 
 const ChampionCell = ({ props }: TableRowProps) => {

@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { APIData } from "@/app/page";
 
 import {
   ColumnFiltersState,
@@ -15,30 +14,31 @@ import {
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
 import OtherChangesCell from "@/components/table/OtherChangesCell";
-import { Table } from "@/components/table/champions/Table";
-import ChampionCell from "@/components/table/ChampionCell";
-import { TableHeadCell } from "@/components/table/champions/TableHeadCell";
+import { Table } from "@/components/table/Table";
+import TableCell from "@/components/table/champions/ChampionCell";
+import { TableHeadCell } from "@/components/table/TableHeadCell";
 import TableFabFilter from "@/components/table/TableFilters/TableFabFilter";
+import { ChampionDataApi } from "@/types";
+import TableFilter from "@/components/table/TableFilters/TableFilter";
 
 export interface TableWrapperProps {
-  // scrappedData: ScrappedData;
-  version: string;
-  apiData: APIData[];
+  ChampionDataApi: ChampionDataApi[];
 }
 
 export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
-  // scrappedData,
-  apiData,
-  version,
+  ChampionDataApi,
 }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const columnHelper = React.useMemo(() => createColumnHelper<APIData>(), []);
+  const columnHelper = React.useMemo(
+    () => createColumnHelper<ChampionDataApi>(),
+    []
+  );
   const globalFilterFn = React.useCallback(
-    (row: Row<APIData>, columnId: string, filterValue: any) => {
+    (row: Row<ChampionDataApi>, columnId: string, filterValue: any) => {
       const searchTerm = String(filterValue);
       return row.original.champion
         .toLowerCase()
@@ -46,20 +46,21 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
     },
     []
   );
-  const tabData = React.useMemo(() => [...apiData], [apiData]);
+  const tabData = React.useMemo(() => [...ChampionDataApi], [ChampionDataApi]);
 
   const columns = React.useMemo(() => {
     return [
       // Display Column
       columnHelper.accessor((row) => row.champion, {
         id: "champion",
-        cell: (props) => <ChampionCell props={props} />,
+        cell: (props) => <TableCell props={props} />,
         header: (header) => (
           <TableHeadCell
             header={header}
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Champion"
+            filter={<TableFilter column={header.column} table={table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -78,6 +79,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Win %"
+            filter={<TableFilter column={header.column} table={table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -111,6 +113,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg dealt"
+            filter={<TableFilter column={header.column} table={table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -144,6 +147,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg received"
+            filter={<TableFilter column={header.column} table={table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -163,7 +167,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
         enableColumnFilter: false,
       }),
     ];
-  }, []);
+  }, [columnHelper]);
 
   const table = useReactTable({
     data: tabData,

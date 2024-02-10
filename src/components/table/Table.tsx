@@ -2,13 +2,12 @@ import React from "react";
 import { flexRender } from "@tanstack/react-table";
 import { Table as TanTable } from "@tanstack/table-core";
 import { NoChampionsFoundRow } from "@/components/table/NoChampionsFoundRow";
-import { ItemChangesScrapped } from "@/app/page";
 
-export type TableProps = {
-  table: TanTable<ItemChangesScrapped>;
+type TableProps<T> = {
+  table: TanTable<T>;
 };
 
-export const Table = ({ table }: TableProps) => {
+export const Table = <T,>({ table }: TableProps<T>) => {
   return (
     <table className="h-full w-full bg-gray-900 text-left text-sm text-gray-500">
       <thead className="sticky top-0 z-10 bg-gray-700 text-xs uppercase text-gray-200">

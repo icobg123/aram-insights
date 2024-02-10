@@ -7,29 +7,32 @@ import {
   scrapePatchVersion,
 } from "@/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
+import React from "react";
 
 export const revalidate = 300; // If you want to revalidate every 10s
 
 export async function generateMetadata() {
   return {
-    title: "ARAM Balance - Who's your pick this game?",
-    description: `Welcome to ARAM Balance: Your Ultimate Destination for Champion Balance Insights in League of Legends' ARAM Game Mode. Explore in-depth data on champion buffs, nerfs, win rates, and gameplay dynamics, ensuring you stay at the forefront of the ever-evolving ARAM battlefield. Level up your League of Legends experience with ARAM Balance, where data meets strategy.`,
+    title: "Arena Balance - Who's your pick this game?",
+    description: `Arena nerfs and buffs`,
   };
 }
 
 export default async function Home() {
   const patchVersion = await scrapePatchVersion(
-    "https://leagueoflegends.fandom.com/wiki/ARAM"
+    "https://leagueoflegends.fandom.com/wiki/Arena_(League_of_Legends)/Patch_history"
   );
+  // const patchVersion = await scrapePatchVersion(versionUrl);
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     patchVersion,
-    "https://leagueoflegends.fandom.com/wiki/ARAM"
+    "https://leagueoflegends.fandom.com/wiki/Arena_(League_of_Legends)"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
-    fetchChampionAllData(patchVersion, championData, "aram"),
+    fetchChampionAllData(patchVersion, championData, "arena"),
     fetchItemsAllData(patchVersion, itemData),
     fetchRunesAllData(patchVersion, runeData),
   ]);
+
   return (
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
       <TableWrapper
@@ -38,7 +41,7 @@ export default async function Home() {
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
-        <TableWrapperHeader version={patchVersion} mode="Aram" />
+        <TableWrapperHeader version={patchVersion} mode="Arena" />
       </TableWrapper>
     </div>
   );

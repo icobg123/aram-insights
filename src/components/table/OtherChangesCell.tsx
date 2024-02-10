@@ -1,10 +1,10 @@
 import React from "react";
 import { CellContext } from "@tanstack/table-core";
 import { AbilityChanges } from "@/components/table/AbilityChanges";
-import { APIData } from "@/app/page";
+import { ChampionDataApi } from "@/types";
 
 interface TableRowProps {
-  props: CellContext<APIData, APIData>;
+  props: CellContext<ChampionDataApi, ChampionDataApi>;
 }
 
 const OtherChangesCell: React.FC<TableRowProps> = ({ props }) => {

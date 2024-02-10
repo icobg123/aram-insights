@@ -1,27 +1,29 @@
 "use client";
 import React, { useState } from "react";
-import { APIData, ItemChangesScrapped, RunesChangesScrapped } from "@/app/page";
+
 import Image from "next/legacy/image";
-import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
-import peekingPoro from "../../../public/peeking-poro.svg";
+import peekingPoro from "@/public/peeking-poro.svg";
 import { ItemTableWrapper } from "@/components/table/items/ItemTableWrapper";
 import { ChampionTableWrapper } from "@/components/table/champions/ChampionTableWrapper";
 import { RuneTableWrapper } from "@/components/table/runes/RuneTableWrapper";
+import {
+  ChampionDataApi,
+  ItemChangesScrapped,
+  RunesChangesScrapped,
+} from "@/types";
 
 export interface TableWrapperProps {
-  // scrappedData: ScrappedData;
-  version: string;
-  championData: APIData[];
+  championData: ChampionDataApi[];
   itemData: ItemChangesScrapped[];
   runeData: RunesChangesScrapped[];
+  children: React.ReactNode;
 }
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
-  // scrappedData,
   championData,
-  version,
   itemData,
   runeData,
+  children,
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   return (
@@ -39,7 +41,8 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             blurDataURL="/transperant-placeholder.png"
           />
         </div>
-        <TableWrapperHeader version={version} />
+        {children}
+
         <div className="tabs flex pb-2">
           <a
             className={`tab tab-bordered flex-auto ${
@@ -68,12 +71,9 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         </div>
         <div className="container max-w-5xl">
           <div className="max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[66svh]">
-            <div>
+            <div className="flex h-full w-full items-center justify-center">
               {activeTab === 0 && (
-                <ChampionTableWrapper
-                  apiData={championData}
-                  version={version}
-                />
+                <ChampionTableWrapper ChampionDataApi={championData} />
               )}
               {activeTab === 1 && <ItemTableWrapper itemData={itemData} />}
               {activeTab === 2 && <RuneTableWrapper runeData={runeData} />}

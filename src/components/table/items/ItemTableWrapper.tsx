@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { ItemChangesScrapped } from "@/app/page";
 
 import {
   ColumnFiltersState,
@@ -14,9 +13,11 @@ import {
   SortingState,
 } from "@tanstack/table-core";
 import { useReactTable } from "@tanstack/react-table";
-import { Table } from "@/components/table/items/ItemTable";
-import { TableHeadCell } from "@/components/table/items/TableHeadCell";
+
 import ItemCell from "@/components/table/items/ItemCell";
+import { ItemChangesScrapped } from "@/types";
+import { TableHeadCell } from "@/components/table/TableHeadCell";
+import { Table } from "@/components/table/Table";
 
 export interface TableWrapperProps {
   itemData: ItemChangesScrapped[];

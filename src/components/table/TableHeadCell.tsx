@@ -1,23 +1,22 @@
 import React from "react";
 import { HeaderContext } from "@tanstack/table-core";
-import { ItemChangesScrapped } from "@/app/page";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 
-type TableHeadCellProps = {
+type TableHeadCellProps<T> = {
   className?: string;
   title?: string;
-  header: HeaderContext<
-    ItemChangesScrapped,
-    ItemChangesScrapped | number | string
-  >;
-  table: TanTable<ItemChangesScrapped>;
+  header: HeaderContext<T, T | number | string>;
+  table: TanTable<T>;
+  filter?: React.ReactNode;
 };
-export const TableHeadCell = ({
+
+export const TableHeadCell = <T,>({
   className,
   title,
   header,
   table,
-}: TableHeadCellProps) => {
+  filter,
+}: TableHeadCellProps<T>) => {
   /*accessing the arrows object with the array notation*/
   const arrows: string | null =
     {
@@ -41,6 +40,12 @@ export const TableHeadCell = ({
           {title}
           {arrows}
         </div>
+        {header.column.getCanFilter() ? (
+          <div className="hidden pt-2 md:block">
+            {/* You can render the filter component here */}
+            {filter && filter}
+          </div>
+        ) : null}
       </div>
     </th>
   );
