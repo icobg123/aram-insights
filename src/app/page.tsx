@@ -33,12 +33,12 @@ export interface APIData {
 
 export type ItemChangesScrapped = {
   itemName: string;
-  changes: string;
+  changes: string[];
   icon?: string;
 };
 export type RunesChangesScrapped = {
   runeName: string;
-  changes: string;
+  changes: string[];
   icon?: string;
 };
 
@@ -146,10 +146,18 @@ const scrapeLoLWikiData = async (version: string): Promise<ScrappedData> => {
 
     $("div.wds-tab__content")
       .eq(1)
-      .find("ul li")
-      .each((index, element) => {
-        const changes = $(element).text().trim();
-        const itemName = $(element).parent().prev("p").text().trim();
+      .find("ul")
+      .each((index, ulElement) => {
+        const itemName = $(ulElement).prev("p").find("a").text().trim();
+
+        const changes: string[] = [];
+        $(ulElement)
+          .find("li")
+          .each((index, liElement) => {
+            const change = $(liElement).text().trim();
+            changes.push(change);
+          });
+
         itemData[itemName] = {
           itemName: itemName,
           changes: changes,
@@ -159,10 +167,18 @@ const scrapeLoLWikiData = async (version: string): Promise<ScrappedData> => {
     const runeData: RunesDataScrapped = {};
     $("div.wds-tab__content")
       .eq(2)
-      .find("ul li")
-      .each((index, element) => {
-        const changes = $(element).text().trim();
-        const runeName = $(element).parent().prev("p").text().trim();
+      .find("ul")
+      .each((index, ulElement) => {
+        const runeName = $(ulElement).prev("p").find("a").text().trim();
+
+        const changes: string[] = [];
+        $(ulElement)
+          .find("li")
+          .each((index, liElement) => {
+            const change = $(liElement).text().trim();
+            changes.push(change);
+          });
+
         runeData[runeName] = {
           runeName: runeName,
           changes: changes,
@@ -337,10 +353,6 @@ type Item = {
   effect: {
     Effect1Amount: string;
   };
-};
-
-type ItemData = {
-  [key: string]: Item;
 };
 
 const fetchItemsAllData = async (

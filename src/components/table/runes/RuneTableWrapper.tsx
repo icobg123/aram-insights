@@ -60,12 +60,20 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
         // footer: (props) => props.column.id,
       }),
       columnHelper.accessor((row) => row.changes, {
-        id: "itemChanges",
+        id: "runeChanges",
         cell: (info) => {
-          const itemChanges = info.getValue();
+          const runeChanges = info.getValue();
           return (
             <td className={`p-2 text-left md:p-4`}>
-              {itemChanges ? itemChanges : "No changes"}
+              {runeChanges ? (
+                <div className="flex flex-col space-y-1">
+                  {runeChanges.map((change, index) => (
+                    <div key={index + change}>{change}</div>
+                  ))}
+                </div>
+              ) : (
+                "No changes"
+              )}
             </td>
           );
         },
@@ -80,7 +88,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
         footer: (props) => props.column.id,
       }),
     ];
-  }, []);
+  }, [columnHelper]);
 
   const table = useReactTable({
     data: itemsTabData,

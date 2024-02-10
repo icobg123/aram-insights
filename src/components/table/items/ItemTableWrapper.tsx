@@ -65,7 +65,15 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
           const itemChanges = info.getValue();
           return (
             <td className={`p-2 text-left md:p-4`}>
-              {itemChanges ? itemChanges : "No changes"}
+              {itemChanges ? (
+                <div className="flex flex-col space-y-1">
+                  {itemChanges.map((change, index) => (
+                    <div key={index + change}>{change}</div>
+                  ))}
+                </div>
+              ) : (
+                "No changes"
+              )}
             </td>
           );
         },
@@ -80,7 +88,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
         footer: (props) => props.column.id,
       }),
     ];
-  }, []);
+  }, [columnHelper]);
 
   const table = useReactTable({
     data: itemsTabData,
