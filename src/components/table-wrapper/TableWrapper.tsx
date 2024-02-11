@@ -55,13 +55,11 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
         </div>
         <div className="container max-w-5xl">
           <div className="max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[66svh]">
-            <div className="flex h-full w-full items-center justify-center">
-              {activeTab === 0 && (
-                <ChampionTableWrapper ChampionDataApi={championData} />
-              )}
-              {activeTab === 1 && <ItemTableWrapper itemData={itemData} />}
-              {activeTab === 2 && <RuneTableWrapper runeData={runeData} />}
-            </div>
+            {activeTab === 0 && (
+              <ChampionTableWrapper ChampionDataApi={championData} />
+            )}
+            {activeTab === 1 && <ItemTableWrapper itemData={itemData} />}
+            {activeTab === 2 && <RuneTableWrapper runeData={runeData} />}
           </div>
         </div>
       </div>
