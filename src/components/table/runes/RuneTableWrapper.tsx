@@ -66,7 +66,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
           return (
             <td className={`p-2 text-left md:p-4`}>
               {runeChanges ? (
-                <div className="flex flex-col space-y-1">
+                <div className="flex flex-col space-y-1 whitespace-pre-wrap">
                   {runeChanges.map((change, index) => (
                     <div key={index + change}>{change}</div>
                   ))}

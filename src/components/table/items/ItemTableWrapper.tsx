@@ -9,6 +9,7 @@ import {
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
+  HeaderContext,
   Row,
   SortingState,
 } from "@tanstack/table-core";
@@ -67,7 +68,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
           return (
             <td className={`p-2 text-left md:p-4`}>
               {itemChanges ? (
-                <div className="flex flex-col space-y-1">
+                <div className="flex flex-col space-y-1 whitespace-pre-wrap">
                   {itemChanges.map((change, index) => (
                     <div key={index + change}>{change}</div>
                   ))}
@@ -80,7 +81,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
         },
         header: (header) => (
           <TableHeadCell
-            header={header}
+            header={header as HeaderContext<ItemChangesScrapped, string[]>}
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Changes"

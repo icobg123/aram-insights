@@ -173,6 +173,7 @@ export const fetchItemsAllData = async (
             itemName: itemName || "",
             changes: item.changes,
           };
+
           return itemObject;
         }
 
@@ -330,49 +331,81 @@ const parseChampionData = ($: CheerioAPI): ChampionDataScrapped => {
 
 const parseItemData = ($: CheerioAPI): ItemDataScrapped => {
   const itemData: ItemDataScrapped = {};
-  $("div.wds-tab__content")
-    .eq(1)
-    .find("ul")
-    .each((index, ulElement) => {
-      const itemName = $(ulElement).prev("p").find("a").text().trim();
+  $("div.wds-tab__content").each((index, contentElement) => {
+    $(contentElement)
+      .find("p")
+      .each((index, pElement) => {
+        const itemName = $(pElement)
+          .find("span.inline-image")
+          .attr("data-item");
+        if (!itemName) return; // Skip if itemName is not found
 
-      const changes: string[] = [];
-      $(ulElement)
-        .find("li")
-        .each((index, liElement) => {
-          const change = $(liElement).text().trim();
-          changes.push(change);
-        });
+        const changes: string[] = [];
 
-      itemData[itemName] = {
-        itemName: itemName,
-        changes: changes,
-      } as ItemChangesScrapped;
-    });
+        // Find the <ul> element(s) containing the changes for the current item
+        $(pElement)
+          .nextUntil("p", "ul")
+          .each((index, ulElement) => {
+            // Extract each change from the <ul> element
+            $(ulElement)
+              .find("li")
+              .each((index, liElement) => {
+                const change = $(liElement).text().trim();
+                changes.push(change);
+              });
+          });
+
+        itemData[itemName] = {
+          itemName: itemName,
+          changes: changes,
+        } as ItemChangesScrapped;
+      });
+  });
+
   return itemData;
 };
 
 const parseRuneData = ($: CheerioAPI): RunesDataScrapped => {
   const runeData: RunesDataScrapped = {};
-  $("div.wds-tab__content")
-    .eq(2)
-    .find("ul")
-    .each((index, ulElement) => {
-      const runeName = $(ulElement).prev("p").find("a").text().trim();
+  $("div.wds-tab__content").each((index, contentElement) => {
+    $(contentElement)
+      .find("p")
+      .each((index, pElement) => {
+        const runeName = $(pElement)
+          .find("span.inline-image")
+          .attr("data-rune");
+        if (!runeName) return; // Skip if runeName is not found
 
-      const changes: string[] = [];
-      $(ulElement)
-        .find("li")
-        .each((index, liElement) => {
-          const change = $(liElement).text().trim();
-          changes.push(change);
-        });
+        const changes: string[] = [];
 
-      runeData[runeName] = {
-        runeName: runeName,
-        changes: changes,
-      } as RunesChangesScrapped;
-    });
+        // Find the <ul> element(s) containing the changes for the current rune
+        $(pElement)
+          .nextUntil("p", "ul")
+          .each((index, ulElement) => {
+            // Extract each change from the <ul> element
+            $(ulElement)
+              .find("li")
+              .each((index, liElement) => {
+                const change = $(liElement).text().trim();
+                changes.push(change);
+              });
+          });
+
+        // Check if the rune already exists in the runeData object
+        if (runeData[runeName]) {
+          // If the rune already exists, append the changes to its existing array
+          runeData[runeName].changes =
+            runeData[runeName].changes.concat(changes);
+        } else {
+          // If the rune doesn't exist, create a new entry in the runeData object
+          runeData[runeName] = {
+            runeName: runeName,
+            changes: changes,
+          } as RunesChangesScrapped;
+        }
+      });
+  });
+
   return runeData;
 };
 
