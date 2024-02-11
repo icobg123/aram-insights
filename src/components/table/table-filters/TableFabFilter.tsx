@@ -1,5 +1,5 @@
 import React from "react";
-import TableFilter from "@/components/table/TableFilters/TableFilter";
+import TableFilter from "@/components/table/table-filters/TableFilter";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 import { ChampionDataApi } from "@/types";
 

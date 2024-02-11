@@ -1,8 +1,5 @@
 "use client";
 import React, { useState } from "react";
-
-import Image from "next/legacy/image";
-import peekingPoro from "@/public/peeking-poro.svg";
 import { ItemTableWrapper } from "@/components/table/items/ItemTableWrapper";
 import { ChampionTableWrapper } from "@/components/table/champions/ChampionTableWrapper";
 import { RuneTableWrapper } from "@/components/table/runes/RuneTableWrapper";
@@ -29,20 +26,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   return (
     <div className="container max-w-5xl p-1">
       <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg">
-        <div className="absolute right-4 top-[-131px]">
-          <Image
-            className=""
-            width={212}
-            height={215}
-            src={peekingPoro}
-            alt="A poro table background"
-            title="A poro peeking behind the table"
-            placeholder="blur"
-            blurDataURL="/transperant-placeholder.png"
-          />
-        </div>
         {children}
-
         <div className="tabs flex pb-2">
           <a
             className={`tab tab-bordered flex-auto ${

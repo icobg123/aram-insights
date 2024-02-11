@@ -1,7 +1,7 @@
 import { Column, Table } from "@tanstack/table-core";
 import { DebouncedInput } from "@/components/table/DebouncedInput";
 import React from "react";
-import { TextFilter } from "@/components/table/TableFilters/TextFilter";
+import { TextFilter } from "@/components/table/table-filters/TextFilter";
 
 export default function TableFilter({
   column,
@@ -34,7 +34,7 @@ export default function TableFilter({
   const noArrowsClasses =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-  //TODO: Make numer input change color based on value. e.g. green if positive, red if negative for dmg dealt and oposite for dmg received
+  //TODO: Make number input change color based on value. e.g. green if positive, red if negative for dmg dealt and opposite for dmg received
   const numberInputColours = (columnFilterValue as [number, number])?.[0]
     ? (columnFilterValue as [number, number])?.[0] >= 0
       ? "text-green-400"

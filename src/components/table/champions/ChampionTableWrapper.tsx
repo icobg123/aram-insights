@@ -17,9 +17,9 @@ import OtherChangesCell from "@/components/table/OtherChangesCell";
 import { Table } from "@/components/table/Table";
 import TableCell from "@/components/table/champions/ChampionCell";
 import { TableHeadCell } from "@/components/table/TableHeadCell";
-import TableFabFilter from "@/components/table/TableFilters/TableFabFilter";
+import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
 import { ChampionDataApi } from "@/types";
-import TableFilter from "@/components/table/TableFilters/TableFilter";
+import TableFilter from "@/components/table/table-filters/TableFilter";
 
 export interface TableWrapperProps {
   ChampionDataApi: ChampionDataApi[];
