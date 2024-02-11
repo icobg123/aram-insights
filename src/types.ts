@@ -151,3 +151,9 @@ export type Item = {
     Effect1Amount: string;
   };
 };
+
+export type AbilityChanges = {
+  abilityName: string;
+  changes: string;
+  iconName: string;
+};

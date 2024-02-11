@@ -1,4 +1,4 @@
-import { AbilityChanges as AbilityChangesProps } from "@/app/aramAdjustments/route";
+import { AbilityChanges as AbilityChangesProps } from "@/types";
 import React from "react";
 import Image from "next/legacy/image";
 

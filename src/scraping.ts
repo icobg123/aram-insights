@@ -1,5 +1,4 @@
 /*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
-import axios from "axios";
 import { CheerioAPI, load } from "cheerio";
 import {
   AbilityChangesScrapped,
@@ -22,8 +21,9 @@ const initializeCheerio = (html: string) => load(html);
 
 export const scrapePatchVersion = async (url: string): Promise<string> => {
   try {
-    const response = await axios.get(url);
-    const $ = initializeCheerio(response.data);
+    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const html = await response.text();
+    const $ = initializeCheerio(html);
 
     // Check if the first table exists
     const wrappingDivExists = $("h2:has(span#Patch_History) + div").length > 0;
@@ -62,9 +62,9 @@ export const scrapeWinRate = async (
   url: string
 ): Promise<ChampionWinRates> => {
   try {
-    const response = await axios.get(url);
-    const $ = load(response.data);
-
+    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const html = await response.text();
+    const $ = load(html);
     const winRateData: { [key: string]: number } = {};
 
     $(".stats-table tbody tr").each((index, element) => {
@@ -101,7 +101,8 @@ export const fetchChampionAllData = async (
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion.json`
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion.json`,
+      { next: { revalidate: 3600 } }
     );
 
     // Get the HTML code of the webpage
@@ -154,7 +155,8 @@ export const fetchItemsAllData = async (
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/item.json`
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/item.json`,
+      { next: { revalidate: 3600 } }
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -195,7 +197,8 @@ export const fetchRunesAllData = async (
 ) => {
   try {
     const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/runesReforged.json`
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/runesReforged.json`,
+      { next: { revalidate: 3600 } }
     );
     const runesData = await response.json();
 
@@ -237,7 +240,8 @@ export const fetchIndividualChampionData = async (
   try {
     // Go to the dev.to tags page
     const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`,
+      { next: { revalidate: 3600 } }
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -414,8 +418,9 @@ export const scrapeLoLWikiData = async (
   url: string
 ): Promise<ScrappedData> => {
   try {
-    const response = await axios.get(url);
-    const $ = initializeCheerio(response.data);
+    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const html = await response.text();
+    const $ = initializeCheerio(html);
     const championData = parseChampionData($);
     const itemData = parseItemData($);
     const runeData = parseRuneData($);
