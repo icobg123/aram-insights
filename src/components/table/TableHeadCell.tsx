@@ -20,7 +20,7 @@ export const TableHeadCell = <T,>({
   filter,
 }: TableHeadCellProps<T>) => {
   const smBreakpoint = screens.md;
-  const isLarge = useMedia(`(min-width: ${smBreakpoint})`, false);
+  const isLarge = useMedia(`(min-width: ${smBreakpoint})`, true);
   /*accessing the arrows object with the array notation*/
   const arrows: string | null =
     {

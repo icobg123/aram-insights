@@ -1,6 +1,8 @@
 import { DebouncedInput } from "@/components/table/DebouncedInput";
 import React from "react";
 import { Column } from "@tanstack/table-core";
+import { screens } from "tailwindcss/defaultTheme";
+import { useMedia } from "react-use";
 
 type TextFilterProps = {
   column: Column<any, unknown>;
@@ -14,6 +16,8 @@ export const TextFilter = ({
   sortedUniqueValues,
   totalResults,
 }: TextFilterProps) => {
+  const smBreakpoint = screens.md;
+  const isLarge = useMedia(`(min-width: ${smBreakpoint})`, true);
   return (
     <>
       <div className="w-7/8 join join-horizontal">
@@ -29,7 +33,7 @@ export const TextFilter = ({
           className="input join-item input-xs w-full rounded bg-gray-900 font-normal text-gray-400"
           list={column.id + "list"}
           clearInput
-          autoFocus
+          autoFocus={isLarge}
         />
       </div>
     </>
