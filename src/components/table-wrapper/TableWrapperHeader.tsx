@@ -19,8 +19,6 @@ export const TableWrapperHeader = ({
   return (
     <>
       <TableImage
-        width={212}
-        height={215}
         src={peekingPoro}
         priority
         alt="A poro table background"

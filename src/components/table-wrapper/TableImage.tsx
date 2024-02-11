@@ -7,8 +7,6 @@ interface TableImageProps extends ImageProps {
 
 const TableImage: React.FC<TableImageProps> = ({
   className,
-  width,
-  height,
   src,
   alt,
   title,
@@ -17,17 +15,20 @@ const TableImage: React.FC<TableImageProps> = ({
 }) => {
   return (
     <div
-      className={`absolute right-4 top-[-131px] z-20 ${className && className}`}
+      className={`absolute right-4 top-[-78px] z-20 md:top-[-108px] lg:top-[-117px] ${
+        className && className
+      }`}
     >
-      <Image
-        width={width}
-        height={height}
-        src={src}
-        alt={alt}
-        title={title}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
-      />
+      <div className="relative h-32 w-32 sm:h-32 sm:w-32 md:h-44 md:w-44 lg:h-48 lg:w-48">
+        <Image
+          fill
+          src={src}
+          alt={alt}
+          title={title}
+          placeholder={placeholder}
+          blurDataURL={blurDataURL}
+        />
+      </div>
     </div>
   );
 };
