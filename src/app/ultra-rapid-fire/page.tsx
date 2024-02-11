@@ -8,12 +8,10 @@ import {
 } from "@/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 
-export const revalidate = 300; // If you want to revalidate every 10s
-
 export async function generateMetadata() {
   return {
-    title: "URF Balance - Who's your pick this game?",
-    description: `URF nerfs and buffs`,
+    title: "URF nerfs and buffs - Who's your pick this game?",
+    description: `Discover URF Balance: The best source for League of Legends Arena champion nerfs and buffs.`,
   };
 }
 

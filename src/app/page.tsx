@@ -11,12 +11,10 @@ import TableImage from "@/components/table-wrapper/TableImage";
 import peekingPoro from "@/public/peeking-poro.svg";
 import React from "react";
 
-export const revalidate = 300; // If you want to revalidate every 10s
-
 export async function generateMetadata() {
   return {
-    title: "ARAM Balance - Who's your pick this game?",
-    description: `Welcome to ARAM Balance: Your Ultimate Destination for Champion Balance Insights in League of Legends' ARAM Game Mode. Explore in-depth data on champion buffs, nerfs, win rates, and gameplay dynamics, ensuring you stay at the forefront of the ever-evolving ARAM battlefield. Level up your League of Legends experience with ARAM Balance, where data meets strategy.`,
+    title: "ARAM nerfs and buffs - Who's your pick this game?",
+    description: `Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.`,
   };
 }
 

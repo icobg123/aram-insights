@@ -17,11 +17,13 @@ import {
   ScrappedData,
 } from "@/types";
 
+const revalidate = 604800; // If you want to revalidate every 10s
+
 const initializeCheerio = (html: string) => load(html);
 
 export const scrapePatchVersion = async (url: string): Promise<string> => {
   try {
-    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const response = await fetch(url, { next: { revalidate: revalidate } });
     const html = await response.text();
     const $ = initializeCheerio(html);
 
@@ -62,7 +64,7 @@ export const scrapeWinRate = async (
   url: string
 ): Promise<ChampionWinRates> => {
   try {
-    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const response = await fetch(url, { next: { revalidate: revalidate } });
     const html = await response.text();
     const $ = load(html);
     const winRateData: { [key: string]: number } = {};
@@ -102,7 +104,7 @@ export const fetchChampionAllData = async (
     // Go to the dev.to tags page
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion.json`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: revalidate } }
     );
 
     // Get the HTML code of the webpage
@@ -156,7 +158,7 @@ export const fetchItemsAllData = async (
     // Go to the dev.to tags page
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/item.json`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: revalidate } }
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -198,7 +200,7 @@ export const fetchRunesAllData = async (
   try {
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/runesReforged.json`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: revalidate } }
     );
     const runesData = await response.json();
 
@@ -241,7 +243,7 @@ export const fetchIndividualChampionData = async (
     // Go to the dev.to tags page
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: revalidate } }
     );
     // Get the HTML code of the webpage
     const json = await response.json();
@@ -418,7 +420,7 @@ export const scrapeLoLWikiData = async (
   url: string
 ): Promise<ScrappedData> => {
   try {
-    const response = await fetch(url, { next: { revalidate: 3600 } });
+    const response = await fetch(url, { next: { revalidate: revalidate } });
     const html = await response.text();
     const $ = initializeCheerio(html);
     const championData = parseChampionData($);

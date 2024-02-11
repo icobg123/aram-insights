@@ -9,12 +9,10 @@ import {
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
 
-export const revalidate = 300; // If you want to revalidate every 10s
-
 export async function generateMetadata() {
   return {
-    title: "Arena Balance - Who's your pick this game?",
-    description: `Arena nerfs and buffs`,
+    title: "Arena nerfs and buffs - Who's your pick this game?",
+    description: `Discover Arena Balance: The best source for League of Legends Arena champion nerfs and buffs.`,
   };
 }
 
