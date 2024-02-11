@@ -16,7 +16,9 @@ const TableImage: React.FC<TableImageProps> = ({
   blurDataURL,
 }) => {
   return (
-    <div className={`absolute right-4 top-[-131px] ${className && className}`}>
+    <div
+      className={`absolute right-4 top-[-131px] z-20 ${className && className}`}
+    >
       <Image
         width={width}
         height={height}

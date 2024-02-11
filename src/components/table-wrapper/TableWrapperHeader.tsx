@@ -28,7 +28,7 @@ export const TableWrapperHeader = ({
         placeholder="blur"
         blurDataURL="/transperant-placeholder.png"
       />
-      <div className=" relative z-[100] flex items-center justify-between">
+      <div className=" relative  flex items-center justify-between">
         {children}
         <div className="ml-2 flex flex-grow justify-between md:items-baseline">
           <div className="prose">
