@@ -7,8 +7,6 @@ import {
   scrapePatchVersion,
 } from "@/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
-import TableImage from "@/components/table-wrapper/TableImage";
-import peekingPoro from "@/public/peeking-poro.svg";
 import React from "react";
 
 export async function generateMetadata() {
@@ -38,16 +36,6 @@ export default async function Home() {
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
-        <TableImage
-          className=""
-          width={212}
-          height={215}
-          src={peekingPoro}
-          alt="A poro table background"
-          title="A poro peeking behind the table"
-          placeholder="blur"
-          blurDataURL="/transperant-placeholder.png"
-        />
         <TableWrapperHeader version={patchVersion} mode="Aram" />
       </TableWrapper>
     </div>

@@ -1,5 +1,7 @@
 import React from "react";
 import { getWikiUrl } from "@/scraping";
+import TableImage from "@/components/table-wrapper/TableImage";
+import peekingPoro from "@/public/peeking-poro.svg";
 
 interface TableWrapperHeaderProps {
   version: string;
@@ -15,22 +17,32 @@ export const TableWrapperHeader = ({
   /*Tooltip overflows causing the page to break*/
 
   return (
-    <div className=" relative z-[100] flex items-center justify-between">
-      {children}
-      {/*<div className="tooltip ml-2 self-end" data-tip="League of Legends patch">*/}
-      <div className="ml-2 flex flex-grow justify-between md:items-baseline">
-        <div className="prose">
-          <h1 className="mb-0 font-medium">{mode}</h1>
-        </div>
-        <div className="badge badge-neutral ml-2 self-end md:self-baseline">
-          <span>
-            <a target={"_blank"} href={getWikiUrl(mode)}>
-              {"v" + version}
-            </a>
-          </span>
+    <>
+      <TableImage
+        width={212}
+        height={215}
+        src={peekingPoro}
+        priority
+        alt="A poro table background"
+        title="A poro peeking behind the table"
+        placeholder="blur"
+        blurDataURL="/transperant-placeholder.png"
+      />
+      <div className=" relative z-[100] flex items-center justify-between">
+        {children}
+        <div className="ml-2 flex flex-grow justify-between md:items-baseline">
+          <div className="prose">
+            <h1 className="mb-0 font-medium">{mode}</h1>
+          </div>
+          <div className="badge badge-neutral ml-2 self-end md:self-baseline">
+            <span>
+              <a target={"_blank"} href={getWikiUrl(mode)}>
+                {"v" + version}
+              </a>
+            </span>
+          </div>
         </div>
       </div>
-      {/*</div>*/}
-    </div>
+    </>
   );
 };
