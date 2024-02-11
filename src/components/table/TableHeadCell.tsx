@@ -1,6 +1,8 @@
 import React from "react";
 import { HeaderContext } from "@tanstack/table-core";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
+import { useMedia } from "react-use";
+import { screens } from "tailwindcss/defaultTheme";
 
 type TableHeadCellProps<T> = {
   className?: string;
@@ -17,6 +19,8 @@ export const TableHeadCell = <T,>({
   table,
   filter,
 }: TableHeadCellProps<T>) => {
+  const smBreakpoint = screens.md;
+  const isLarge = useMedia(`(min-width: ${smBreakpoint})`, false);
   /*accessing the arrows object with the array notation*/
   const arrows: string | null =
     {
@@ -40,11 +44,8 @@ export const TableHeadCell = <T,>({
           {title}
           {arrows}
         </div>
-        {header.column.getCanFilter() ? (
-          <div className="hidden pt-2 md:block">
-            {/* You can render the filter component here */}
-            {filter && filter}
-          </div>
+        {isLarge && header.column.getCanFilter() ? (
+          <div className="hidden pt-2 sm:block">{filter && filter}</div>
         ) : null}
       </div>
     </th>

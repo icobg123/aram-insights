@@ -16,17 +16,10 @@ export const TextFilter = ({
 }: TextFilterProps) => {
   return (
     <>
-      {/*<datalist id={column.id + "list"}>
-        {sortedUniqueValues.map((value: any) => (
-          <option value={value} key={value} />
-        ))}
-      </datalist>*/}
-
       <div className="w-7/8 join join-horizontal">
         <div className="join-item  btn-xs flex min-w-[38px] items-center justify-end bg-gray-900 text-gray-400">
           {totalResults}
         </div>
-
         <DebouncedInput
           type="text"
           id={column.id + "list"}
@@ -38,17 +31,6 @@ export const TextFilter = ({
           clearInput
           autoFocus
         />
-
-        {/* <Autocomplete
-          autoFocus
-          clearInput
-          id={column.id + "list"}
-          list={column.id + "list"}
-          value={(columnFilterValue ?? "") as string}
-          items={sortedUniqueValues}
-          onChange={(value: string | number) => column.setFilterValue(value)}
-          placeholder={`Who's your pick?`}
-        />*/}
       </div>
     </>
   );
