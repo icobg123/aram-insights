@@ -16,7 +16,7 @@ export async function generateMetadata() {
   };
 }
 
-export default async function Home() {
+export default async function URFPage() {
   const patchVersion = await scrapePatchVersion(
     "https://leagueoflegends.fandom.com/wiki/Ultra_Rapid_Fire/Patch_and_Buff_History"
   );

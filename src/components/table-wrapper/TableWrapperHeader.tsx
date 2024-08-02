@@ -32,7 +32,7 @@ export const TableWrapperHeader = ({
           <div className="prose">
             <h1 className="mb-0 font-medium">{mode}</h1>
           </div>
-          <div className="badge badge-neutral ml-2 self-end md:self-baseline">
+          <div className="badge badge-neutral z-40 ml-2 self-end md:self-baseline">
             <span>
               <a target={"_blank"} href={getWikiUrl(mode)}>
                 {"v" + version}

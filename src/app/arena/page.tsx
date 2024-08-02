@@ -16,7 +16,7 @@ export async function generateMetadata() {
   };
 }
 
-export default async function Home() {
+export default async function ArenaPage() {
   const patchVersion = await scrapePatchVersion(
     "https://leagueoflegends.fandom.com/wiki/Arena_(League_of_Legends)/Patch_history"
   );

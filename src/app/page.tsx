@@ -18,8 +18,9 @@ export async function generateMetadata() {
 
 export default async function Home() {
   const patchVersion = await scrapePatchVersion(
-    "https://leagueoflegends.fandom.com/wiki/ARAM"
+    "https://leagueoflegends.fandom.com/wiki/ARAM/Patch_history"
   );
+
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     patchVersion,
     "https://leagueoflegends.fandom.com/wiki/ARAM"
