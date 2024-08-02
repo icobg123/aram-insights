@@ -18,8 +18,7 @@
     "animate.css": "^4.1.1",
     "autoprefixer": "10.4.14",
     "cheerio": "^1.0.0-rc.12",
-    "eslint": "8.45.0",
-    "eslint-config-next": "14.1.0",
+    "eslint-config-next": "14.2.5",
     "galeforce": "^0.6.1",
     "next": "14.2.5",
     "postcss": "8.4.31",
@@ -33,6 +32,7 @@
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
     "daisyui": "^3.2.1",
+    "eslint": "8.57.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.4.1"
   }
