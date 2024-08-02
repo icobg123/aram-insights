@@ -1,4 +1,3 @@
-/*create a function similar to the scrapetable function below that finds the first patch version on the same page which has the following format - V13.13*/
 import { CheerioAPI, load } from "cheerio";
 import {
   AbilityChangesScrapped,
@@ -9,13 +8,12 @@ import {
   Item,
   ItemChangesScrapped,
   ItemDataScrapped,
-  Rune,
   RuneData,
   RunesChangesScrapped,
   RunesDataScrapped,
-  RuneSlot,
   ScrappedData,
 } from "@/types";
+import { getImage } from "@/utils";
 
 const revalidate = 604800; // If you want to revalidate every 10s
 
@@ -126,9 +124,12 @@ export const fetchChampionAllData = async (
         const winRate =
           championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
         promises.push(spells);
+        const { base64, img } = await getImage(
+          `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`
+        );
 
         const championObject: ChampionDataApi = {
-          icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`,
+          icon: { base64, ...img },
           title: championTitle,
           spells: spells,
           winRate: winRate,
@@ -155,40 +156,44 @@ export const fetchItemsAllData = async (
   itemData: ItemDataScrapped
 ): Promise<ItemChangesScrapped[]> => {
   try {
-    // Go to the dev.to tags page
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/item.json`,
       { next: { revalidate: revalidate } }
     );
-    // Get the HTML code of the webpage
+
     const json = await response.json();
-    const items: Item[] = json.data;
+    const items: Record<string, Item> = json.data;
 
-    const itemObjects: ItemChangesScrapped[] = Object.values(itemData).map(
-      (item: ItemChangesScrapped) => {
+    const itemObjects = await Promise.all(
+      Object.values(itemData).map(async (scrappedItem) => {
         const itemData = Object.values(items).find(
-          (itemData) => itemData.name === item.itemName
+          (itemData) => itemData.name === scrappedItem.itemName
         );
-        if (itemData) {
-          const { name: itemName, image } = itemData;
-          const itemIcon = image.full;
-          const itemObject: ItemChangesScrapped = {
-            icon: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/item/${itemIcon}`,
-            itemName: itemName || "",
-            changes: item.changes,
-          };
 
-          return itemObject;
+        if (itemData) {
+          const { name, image } = itemData;
+          const itemIcon = image.full;
+          const { base64, img } = await getImage(
+            `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/item/${itemIcon}`
+          );
+          return {
+            icon: { base64, ...img },
+            itemName: name || "",
+            changes: scrappedItem.changes,
+          };
         }
 
-        // Return empty object if no matching item is found
-        return {} as ItemChangesScrapped;
-      }
+        return null;
+      })
     );
+
+    // Filter out null values
     return itemObjects.filter(
-      (itemObject) => Object.keys(itemObject).length !== 0
+      (itemObject): itemObject is ItemChangesScrapped => itemObject !== null
     );
   } catch (error) {
+    // @ts-ignore
+    console.error(`Error fetching items data: ${error.message}`);
     throw error;
   }
 };
@@ -196,41 +201,46 @@ export const fetchItemsAllData = async (
 export const fetchRunesAllData = async (
   version: string,
   runeData: RunesDataScrapped
-) => {
+): Promise<RunesChangesScrapped[]> => {
   try {
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/runesReforged.json`,
       { next: { revalidate: revalidate } }
     );
-    const runesData = await response.json();
 
-    const runeObjects: RunesChangesScrapped[] = Object.values(runeData).map(
-      (scrappedRune) => {
+    const runesData: RuneData[] = await response.json();
+
+    const runeObjects = await Promise.all(
+      Object.values(runeData).map(async (scrappedRune) => {
         const matchingRune = runesData
-          .flatMap((runeData: RuneData) =>
-            runeData.slots.flatMap((runeSlot: RuneSlot) => runeSlot.runes)
+          .flatMap((runeData) =>
+            runeData.slots.flatMap((runeSlot) => runeSlot.runes)
           )
-          .find((rune: Rune) => rune.name === scrappedRune.runeName);
+          .find((rune) => rune.name === scrappedRune.runeName);
 
         if (matchingRune) {
-          const { name: runeName, icon } = matchingRune;
-          const runeObject: RunesChangesScrapped = {
-            icon: `https://ddragon.canisback.com/img/${icon}`,
-            runeName: runeName || "",
+          const { name, icon } = matchingRune;
+          const { base64, img } = await getImage(
+            `https://ddragon.canisback.com/img/${icon}`
+          );
+
+          return {
+            icon: { base64, ...img },
+            runeName: name || "",
             changes: scrappedRune.changes,
           };
-          return runeObject;
         }
 
-        // Return empty object if no matching rune is found
-        return {} as RunesChangesScrapped;
-      }
+        return null;
+      })
     );
 
     return runeObjects.filter(
-      (runeObject) => Object.keys(runeObject).length !== 0
+      (runeObject): runeObject is RunesChangesScrapped => runeObject !== null
     );
   } catch (error) {
+    // @ts-ignore
+    console.error(`Error fetching runes data: ${error.message}`);
     throw error;
   }
 };

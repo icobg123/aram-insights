@@ -1,5 +1,10 @@
 "use client";
 import React from "react";
+import { useReactTable } from "@tanstack/react-table";
+import RuneCell from "@/components/table/runes/RuneCell";
+import { RunesChangesScrapped } from "@/types";
+import { Table } from "@/components/table/Table";
+import { TableHeadCell } from "@/components/table/TableHeadCell";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -12,11 +17,6 @@ import {
   Row,
   SortingState,
 } from "@tanstack/table-core";
-import { useReactTable } from "@tanstack/react-table";
-import RuneCell from "@/components/table/runes/RuneCell";
-import { RunesChangesScrapped } from "@/types";
-import { Table } from "@/components/table/Table";
-import { TableHeadCell } from "@/components/table/TableHeadCell";
 
 export interface TableWrapperProps {
   runeData: RunesChangesScrapped[];

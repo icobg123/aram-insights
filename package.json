@@ -12,6 +12,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "@tanstack/match-sorter-utils": "^8.8.4",
     "@tanstack/react-table": "^8.9.3",
+    "@tanstack/table-core": "^8.19.3",
     "@types/node": "22.1.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
@@ -21,11 +22,11 @@
     "eslint-config-next": "14.2.5",
     "galeforce": "^0.6.1",
     "next": "14.2.5",
+    "node-fetch": "^3.3.2",
     "postcss": "^8.4.31",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-use": "^17.5.0",
-    "sharp": "^0.33.4",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.5.4"
   },
@@ -35,5 +36,21 @@
     "eslint": "8.9.0",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.6.5"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "darwin",
+        "current"
+      ],
+      "cpu": [
+        "x64",
+        "arm64"
+      ]
+    }
+  },
+  "optionalDependencies": {
+    "plaiceholder": "^3.0.0",
+    "sharp": "^0.33.4"
   }
 }

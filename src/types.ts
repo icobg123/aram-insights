@@ -1,3 +1,9 @@
+export type IconData = {
+  src: string;
+  height: number;
+  width: number;
+  base64: string;
+};
 export type AbilityChangesScrapped = {
   abilityName: string;
   changes: string;
@@ -20,7 +26,7 @@ export interface ChampionDataApi {
   generalChanges: string[];
   abilityChanges: AbilityChangesScrapped[];
   winRate: number;
-  icon?: string;
+  icon: IconData;
   title?: string;
   spells?: { [spellName: string]: string };
 }
@@ -28,12 +34,12 @@ export interface ChampionDataApi {
 export type ItemChangesScrapped = {
   itemName: string;
   changes: string[];
-  icon?: string;
+  icon: IconData;
 };
 export type RunesChangesScrapped = {
   runeName: string;
   changes: string[];
-  icon?: string;
+  icon: IconData;
 };
 
 export type ItemDataScrapped = {
