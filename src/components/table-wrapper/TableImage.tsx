@@ -12,6 +12,7 @@ const TableImage: React.FC<TableImageProps> = ({
   title,
   placeholder,
   blurDataURL,
+  priority = false,
 }) => {
   return (
     <div
@@ -22,6 +23,7 @@ const TableImage: React.FC<TableImageProps> = ({
       <div className="relative h-32 w-32 sm:h-32 sm:w-32 md:h-44 md:w-44 lg:h-48 lg:w-48">
         <Image
           fill
+          priority={priority}
           src={src}
           alt={alt}
           title={title}
