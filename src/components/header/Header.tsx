@@ -51,7 +51,7 @@ const Header = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu dropdown-content rounded-box menu-sm z-[999px] mt-3 w-52 bg-base-100 p-2 shadow"
+            className="menu dropdown-content menu-sm z-[999px] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
           >
             {items.map((item) => (
               <li key={item.id}>
@@ -72,16 +72,17 @@ const Header = () => {
         <div className="avatar">
           <div className="rounded-full">
             <Image
-              src={logo}
+              src={logo.src}
               width={40}
               height={40}
               alt="Aram Balance logo"
               placeholder="blur"
-              blurDataURL="/transperant-placeholder.png"
             />
           </div>
         </div>
-        <a className="btn btn-ghost text-xl">Aram balance</a>
+        <a className="btn btn-ghost text-xl" href="/">
+          Aram balance
+        </a>
       </div>
       <nav className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">

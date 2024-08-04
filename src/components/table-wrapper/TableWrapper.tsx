@@ -16,7 +16,7 @@ export interface TableWrapperProps {
   children: React.ReactNode;
 }
 
-const tabs = ["Champions", "Items", "Runes"];
+export const tabs = ["Champions", "Items", "Runes"];
 
 export const TableWrapper: React.FC<TableWrapperProps> = ({
   championData,

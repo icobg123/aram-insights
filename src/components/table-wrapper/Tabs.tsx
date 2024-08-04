@@ -1,6 +1,7 @@
 "use client";
 
 import React, { ReactNode, useState } from "react";
+import { tabs } from "@/components/table-wrapper/TableWrapper";
 
 interface TabsProps {
   tabLabels: string[];
@@ -17,10 +18,14 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
           {tabLabels.map((label, index) => (
             <a
               key={index}
+              aria-label={tabs[index]}
               className={`tab-bordered tab flex-auto ${
                 activeTab === index && "tab-active"
               }`}
-              onClick={() => setActiveTab(index)}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab(index);
+              }}
             >
               {label}
             </a>
