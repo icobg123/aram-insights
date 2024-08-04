@@ -33,7 +33,11 @@ const Header = () => {
     <div className="navbar sticky top-0 z-10 mb-[-80px] bg-base-100 px-4">
       <div className="navbar-start space-x-2">
         <nav className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <button
+            tabIndex={0}
+            aria-label="Open mobile menu"
+            className="btn btn-ghost lg:hidden"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -48,7 +52,7 @@ const Header = () => {
                 d="M4 6h16M4 12h8m-8 6h16"
               />
             </svg>
-          </div>
+          </button>
           <ul
             tabIndex={0}
             className="menu dropdown-content menu-sm z-[999px] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
