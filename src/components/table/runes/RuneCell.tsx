@@ -20,7 +20,7 @@ const RuneCell = ({ props }: TableRowProps) => {
               width={96}
               height={96}
               src={src}
-              alt={runeName}
+              alt={`Rune icon for ${runeName}`}
               placeholder="blur"
               blurDataURL={base64}
             />

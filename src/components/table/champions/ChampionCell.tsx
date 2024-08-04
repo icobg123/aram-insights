@@ -20,7 +20,7 @@ const ChampionCell = ({ props }: TableRowProps) => {
               width={96}
               height={96}
               src={src}
-              alt={champion}
+              alt={`${champion} splash art cutout`}
               placeholder="blur"
               blurDataURL={base64}
             />

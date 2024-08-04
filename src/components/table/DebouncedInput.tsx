@@ -7,13 +7,17 @@ type DebouncedInputProps = {
   debounce?: number;
   autoFocus?: boolean;
   clearInput?: boolean;
+  label?: string; // Add a label prop
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">;
+
 export const DebouncedInput = ({
   value: initialValue,
   onChange,
   debounce = 300,
   autoFocus = false,
   clearInput = false,
+  label, // Destructure the label prop
+  id,
   ...props
 }: DebouncedInputProps) => {
   const [value, setValue] = React.useState(initialValue);
@@ -32,8 +36,14 @@ export const DebouncedInput = ({
 
   return (
     <>
+      {label && (
+        <label htmlFor={id} className="hidden">
+          {label}
+        </label>
+      )}
       <input
         ref={autoFocus ? champSearch : null}
+        id={id} // Add id to the input
         {...props}
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -43,6 +53,7 @@ export const DebouncedInput = ({
           disabled={!value}
           className="btn join-item btn-xs rounded border text-gray-400 disabled:bg-gray-900 disabled:text-gray-700"
           onClick={() => setValue("")}
+          aria-label="Clear search input"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

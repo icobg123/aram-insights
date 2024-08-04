@@ -25,6 +25,7 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
     <>
       <button
         className="btn btn-circle fixed bottom-10 right-7 bg-blue-300 text-black md:hidden"
+        aria-label="Open filters"
         onClick={() => window.filterModal.showModal()}
       >
         <svg

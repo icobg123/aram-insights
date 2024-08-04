@@ -26,11 +26,11 @@ export default function TableFilter({
     .getFilteredRowModel()
     .rows.map((row) => row.getValue("champion"));
   /*const sortedUniqueValues = React.useMemo(() => {
-      const uniqueValues = Array.from(
-        column.getFacetedUniqueValues().keys()
-      ).sort();
-      return typeof firstValue === "number" ? [] : uniqueValues;
-    }, [column, firstValue]);*/
+        const uniqueValues = Array.from(
+          column.getFacetedUniqueValues().keys()
+        ).sort();
+        return typeof firstValue === "number" ? [] : uniqueValues;
+      }, [column, firstValue]);*/
   const noArrowsClasses =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
@@ -42,8 +42,9 @@ export default function TableFilter({
     : "text-gray-400";
 
   return typeof firstValue === "number" ? (
-    <div className="join ">
+    <div className="join">
       <DebouncedInput
+        label={column.id}
         type="number"
         debounce={500}
         // min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
@@ -57,11 +58,10 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[0]})`
             : ""
         }`}
-        className={`
-          input join-item  input-xs w-1/2 bg-gray-900 font-normal text-gray-400 
-        ${noArrowsClasses}`}
+        className={`input input-xs join-item w-1/2 bg-gray-900 font-normal text-gray-400 ${noArrowsClasses}`}
       />
       <DebouncedInput
+        label={column.id}
         type="number"
         debounce={500}
         // min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
@@ -75,9 +75,7 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[1]})`
             : ""
         }`}
-        className={`
-          input join-item input-xs w-1/2 bg-gray-900 font-normal text-gray-400 
-        ${noArrowsClasses}`}
+        className={`input input-xs join-item w-1/2 bg-gray-900 font-normal text-gray-400 ${noArrowsClasses}`}
       />
     </div>
   ) : (
