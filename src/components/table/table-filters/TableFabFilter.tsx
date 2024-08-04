@@ -42,7 +42,7 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
           <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
             ✕
           </button>
-          <h3 className="text-lg font-bold">Filters</h3>
+          <h2 className="text-lg font-bold">Filters</h2>
           {table.getHeaderGroups().map((headerGroup) => (
             <React.Fragment key={headerGroup.id}>
               {table.getHeaderGroups().map((headerGroup) => (
