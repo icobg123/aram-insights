@@ -5,11 +5,10 @@ import React, { ReactNode, useState } from "react";
 interface TabsProps {
   tabLabels: string[];
   tabContents: ReactNode[];
-  initialTab: number;
 }
 
-const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents, initialTab }) => {
-  const [activeTab, setActiveTab] = useState<number>(initialTab);
+const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
+  const [activeTab, setActiveTab] = useState<number>(0);
 
   return (
     <>
