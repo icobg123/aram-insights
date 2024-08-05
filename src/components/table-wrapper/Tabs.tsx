@@ -19,8 +19,8 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
             href={`#${tabs[index]}`}
             key={index}
             aria-label={tabs[index]}
-            className={`tab-bordered tab flex-auto ${
-              activeTab === index && "tab-active"
+            className={`tab-bordered tab flex-auto text-gray-200 ${
+              activeTab === index ? "tab-active bg-gray-700" : ""
             }`}
             onClick={() => setActiveTab(index)}
           >
