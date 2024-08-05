@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
-import logo from "@/public/logo.jpeg";
+import logo from "@/public/logo_tiny.webp";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 export const items = [
