@@ -1,24 +1,24 @@
 "use client";
 
 import React, { ReactNode, useState } from "react";
-import { tabs } from "@/components/table-wrapper/TableWrapper";
 
 interface TabsProps {
   tabLabels: string[];
   tabContents: ReactNode[];
+  initialTab: number;
 }
 
-const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents, initialTab }) => {
+  const [activeTab, setActiveTab] = useState<number>(initialTab);
 
   return (
     <>
       <div className="tabs z-40 flex pb-2">
         {tabLabels.map((label, index) => (
           <a
-            href={`#${tabs[index]}`}
+            href={`#${tabLabels[index]}`}
             key={index}
-            aria-label={tabs[index]}
+            aria-label={tabLabels[index]}
             className={`tab-bordered tab flex-auto rounded-t-lg text-gray-200 ${
               activeTab === index ? "tab-active bg-gray-700" : ""
             }`}
