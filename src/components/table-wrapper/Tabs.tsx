@@ -13,7 +13,7 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
 
   return (
     <>
-      <div className="tabs flex pb-2">
+      <div className="tabs z-40 flex pb-2">
         {tabLabels.map((label, index) => (
           <a
             href={`#${tabs[index]}`}
