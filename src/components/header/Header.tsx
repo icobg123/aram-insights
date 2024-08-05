@@ -96,7 +96,7 @@ const Header = () => {
                 href={item.href}
                 className={`${
                   activeSegment === item.activeSegment
-                    ? "btn-active"
+                    ? "btn-active bg-gray-950"
                     : "text-muted-foreground"
                 } text-gray-200`}
               >
