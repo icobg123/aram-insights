@@ -21,7 +21,11 @@ const initializeCheerio = (html: string) => load(html);
 
 export const scrapePatchVersion = async (url: string): Promise<string> => {
   try {
-    const response = await fetch(url, { next: { revalidate: revalidate } });
+    const response = await fetch(url, {
+      next: {
+        revalidate: revalidate,
+      },
+    });
     const html = await response.text();
     const $ = initializeCheerio(html);
 
