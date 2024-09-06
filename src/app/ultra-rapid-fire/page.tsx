@@ -9,6 +9,8 @@ import {
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
 
+export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+
 export async function generateMetadata() {
   return {
     title: "URF nerfs and buffs - Who's your pick this game?",
