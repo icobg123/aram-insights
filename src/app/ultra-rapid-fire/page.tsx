@@ -5,7 +5,7 @@ import {
   fetchRunesAllData,
   scrapeLoLWikiData,
   scrapePatchVersion,
-} from "@/scraping";
+} from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
 

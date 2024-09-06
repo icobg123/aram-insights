@@ -1,5 +1,5 @@
 import React from "react";
-import { getWikiUrl } from "@/scraping";
+import { getWikiUrl } from "@/app/fetching/scraping";
 import TableImage from "@/components/table-wrapper/TableImage";
 import peekingPoro from "@/public/peeking-poro.svg";
 
