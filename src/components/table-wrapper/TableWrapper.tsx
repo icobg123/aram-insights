@@ -8,6 +8,8 @@ import {
   RunesChangesScrapped,
 } from "@/types";
 import Tabs from "@/components/table-wrapper/Tabs";
+import { FaXTwitter } from "react-icons/fa6";
+import Link from "next/link";
 
 export interface TableWrapperProps {
   championData: ChampionDataApi[];
@@ -39,6 +41,11 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             <RuneTableWrapper runeData={runeData} key={tabs[2]} />,
           ]}
         />
+        <div className="mt-auto flex items-center justify-end">
+          <Link href={"https://x.com/jointless_inc"} target="_blank">
+            <FaXTwitter />
+          </Link>
+        </div>
       </div>
     </div>
   );

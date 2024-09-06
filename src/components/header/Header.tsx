@@ -80,7 +80,7 @@ const Header = () => {
               width={40}
               height={40}
               alt="Aram Balance logo"
-              placeholder="blur"
+              priority
             />
           </div>
         </div>
