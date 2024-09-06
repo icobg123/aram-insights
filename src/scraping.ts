@@ -110,31 +110,30 @@ export const fetchChampionAllData = async (
     const json = await response.json();
     const champions = json.data;
     const championNames = Object.keys(champions);
-
     const winRates = await scrapeWinRate(
       version,
       metaSrcWinRateUrls(mode, version)
     );
 
-    const championDataPromises = championNames.map(async (championName) => {
+    const results: ChampionDataApi[] = [];
+
+    for (const championName of championNames) {
       const champion = champions[championName] as ChampionData;
       const championIcon = champion.image.full;
       const championTitle = champion.title;
       const champName = champion.name;
 
-      // Fetch spells and champion image concurrently
-      const [spells, { base64: iconBase64, img: iconImg }] = await Promise.all([
-        fetchIndividualChampionData(championName, version),
-        getImage(
-          `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`
-        ),
-      ]);
-
+      // Fetch spells and champion image sequentially
+      const spells = await fetchIndividualChampionData(championName, version);
       const winRate =
         championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
 
+      const { base64, img } = await getImage(
+        `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`
+      );
+
       const championObject: ChampionDataApi = {
-        icon: { base64: iconBase64, ...iconImg },
+        icon: { base64, ...img },
         title: championTitle,
         spells: spells,
         winRate: winRate,
@@ -145,16 +144,15 @@ export const fetchChampionAllData = async (
         champion: champName,
       };
 
-      return {
+      results.push({
         ...championObject,
         ...allChampionData[champName],
         champion: champName,
-      };
-    });
+      });
+    }
 
-    return await Promise.all(championDataPromises);
+    return results;
   } catch (error) {
-    console.error("Error fetching champion data:", error);
     throw error;
   }
 };
