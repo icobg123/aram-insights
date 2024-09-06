@@ -6,7 +6,6 @@ import GoogleAnalytics from "@/components/google-analytics/GoogleAnalytics";
 import Header from "@/components/header/Header";
 
 const inter = Inter({ subsets: ["latin"] });
-export const maxDuration = 60; // This function can run for a maximum of 5 seconds
 
 export const metadata: Metadata = {
   title: "Aram Balance",
