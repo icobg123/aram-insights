@@ -28,7 +28,7 @@ export interface ChampionDataApi {
   winRate: number;
   icon: IconData;
   title?: string;
-  spells?: { [spellName: string]: string };
+  spells: Record<string, IconData>;
 }
 
 export type ItemChangesScrapped = {

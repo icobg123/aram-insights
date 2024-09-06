@@ -250,12 +250,10 @@ export const fetchIndividualChampionData = async (
   version?: string
 ) => {
   try {
-    // Go to the dev.to tags page
     const response = await fetch(
       `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`,
       { next: { revalidate: revalidate } }
     );
-    // Get the HTML code of the webpage
     const json = await response.json();
     const spells = json.data[champName][`spells`];
     const passiveName = json.data[champName][`passive`]["name"]
@@ -263,20 +261,44 @@ export const fetchIndividualChampionData = async (
       .toLowerCase();
     const passiveId = json.data[champName][`passive`]["image"]["full"];
 
-    return spells.reduce(
-      (acc: any, spell: any) => {
+    // Fetch passive image data
+    const { base64: passiveBase64, img: passiveImg } = await getImage(
+      `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/passive/${passiveId}`
+    );
+
+    // Use Promise.all with map to handle async reduce logic
+    const spellsData = await Promise.all(
+      spells.map(async (spell: any) => {
         const spellId = spell.image.full;
-        const spellName = spell.name.toLowerCase();
+        // Split the spell name by '/' and take the first part
+        let spellName = spell.name.split("/")[0].trim().toLowerCase();
+
+        // Edge case handling: Replace 'h-28 g' with 'h-28g'
+        if (spellName.includes("h-28 g")) {
+          spellName = spellName.replace("h-28 g", "h-28g");
+        }
+
+        // Fetch spell image data
+        const { base64, img } = await getImage(
+          `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/spell/${spellId}`
+        );
 
         return {
-          ...acc,
-          [`${spellName}`]: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/spell/${spellId}`,
+          [`${spellName}`]: { base64, ...img },
         };
-      },
-      {
-        [`${passiveName}`]: `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/passive/${passiveId}`,
-      }
+      })
     );
+
+    // Reduce the spellsData array into a single object
+    const spellsObject = spellsData.reduce((acc, spellObj) => {
+      return { ...acc, ...spellObj };
+    }, {});
+
+    // Combine passive ability data with spells data
+    return {
+      [`${passiveName}`]: { base64: passiveBase64, ...passiveImg },
+      ...spellsObject,
+    };
   } catch (error) {
     throw error;
   }
