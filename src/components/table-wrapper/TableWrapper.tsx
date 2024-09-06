@@ -41,7 +41,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             <RuneTableWrapper runeData={runeData} key={tabs[2]} />,
           ]}
         />
-        <div className="mt-auto flex items-center justify-end">
+        <div className="mt-auto flex items-center justify-start">
           <Link href={"https://x.com/jointless_inc"} target="_blank">
             <FaXTwitter />
           </Link>
