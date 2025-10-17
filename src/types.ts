@@ -31,6 +31,19 @@ export interface ChampionDataApi {
   spells: Record<string, IconData>;
 }
 
+export type ItemDataScrapped = {
+  [key: string]: {
+    itemName: string;
+    changes: string[];
+  };
+};
+export type RunesDataScrapped = {
+  [key: string]: {
+    runeName: string;
+    changes: string[];
+  };
+};
+
 export type ItemChangesScrapped = {
   itemName: string;
   changes: string[];
@@ -40,13 +53,6 @@ export type RunesChangesScrapped = {
   runeName: string;
   changes: string[];
   icon: IconData;
-};
-
-export type ItemDataScrapped = {
-  [key: string]: ItemChangesScrapped;
-};
-export type RunesDataScrapped = {
-  [key: string]: RunesChangesScrapped;
 };
 export type ScrappedData = {
   championData: ChampionDataScrapped;

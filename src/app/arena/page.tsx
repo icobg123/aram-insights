@@ -4,6 +4,7 @@ import {
   fetchItemsAllData,
   fetchRunesAllData,
   scrapeLoLWikiData,
+  fetchLatestDDragonVersion,
   scrapePatchVersion,
 } from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
@@ -19,18 +20,22 @@ export async function generateMetadata() {
 }
 
 export default async function ArenaPage() {
-  const patchVersion = await scrapePatchVersion(
-    "https://leagueoflegends.fandom.com/wiki/Arena_(League_of_Legends)/Patch_history"
+  // Use DDragon version API for compatibility with DDragon data
+  const ddragonVersion = await fetchLatestDDragonVersion();
+
+  // Get wiki version for display
+  const wikiVersion = await scrapePatchVersion(
+    "https://wiki.leagueoflegends.com/en-us/Patch"
   );
-  // const patchVersion = await scrapePatchVersion(versionUrl);
+
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
-    patchVersion,
-    "https://leagueoflegends.fandom.com/wiki/Arena_(League_of_Legends)"
+    ddragonVersion,
+    "https://wiki.leagueoflegends.com/en-us/Arena"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
-    fetchChampionAllData(patchVersion, championData, "arena"),
-    fetchItemsAllData(patchVersion, itemData),
-    fetchRunesAllData(patchVersion, runeData),
+    fetchChampionAllData(ddragonVersion, championData, "arena"),
+    fetchItemsAllData(ddragonVersion, itemData),
+    fetchRunesAllData(ddragonVersion, runeData),
   ]);
 
   return (
@@ -40,7 +45,7 @@ export default async function ArenaPage() {
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
-        <TableWrapperHeader version={patchVersion} mode="Arena" />
+        <TableWrapperHeader version={wikiVersion} mode="Arena" />
       </TableWrapper>
     </div>
   );

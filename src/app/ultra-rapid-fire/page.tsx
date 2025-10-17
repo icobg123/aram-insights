@@ -4,6 +4,7 @@ import {
   fetchItemsAllData,
   fetchRunesAllData,
   scrapeLoLWikiData,
+  fetchLatestDDragonVersion,
   scrapePatchVersion,
 } from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
@@ -19,17 +20,22 @@ export async function generateMetadata() {
 }
 
 export default async function URFPage() {
-  const patchVersion = await scrapePatchVersion(
-    "https://leagueoflegends.fandom.com/wiki/Ultra_Rapid_Fire/Patch_and_Buff_History"
+  // Use DDragon version API for compatibility with DDragon data
+  const ddragonVersion = await fetchLatestDDragonVersion();
+
+  // Get wiki version for display
+  const wikiVersion = await scrapePatchVersion(
+    "https://wiki.leagueoflegends.com/en-us/Patch"
   );
+
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
-    patchVersion,
-    "https://leagueoflegends.fandom.com/wiki/Ultra_Rapid_Fire"
+    ddragonVersion,
+    "https://wiki.leagueoflegends.com/en-us/Ultra_Rapid_Fire"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
-    fetchChampionAllData(patchVersion, championData, "urf"),
-    fetchItemsAllData(patchVersion, itemData),
-    fetchRunesAllData(patchVersion, runeData),
+    fetchChampionAllData(ddragonVersion, championData, "urf"),
+    fetchItemsAllData(ddragonVersion, itemData),
+    fetchRunesAllData(ddragonVersion, runeData),
   ]);
 
   return (
@@ -39,7 +45,7 @@ export default async function URFPage() {
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
-        <TableWrapperHeader version={patchVersion} mode="URF" />
+        <TableWrapperHeader version={wikiVersion} mode="URF" />
       </TableWrapper>
     </div>
   );

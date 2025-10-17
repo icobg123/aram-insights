@@ -4,6 +4,7 @@ import {
   fetchItemsAllData,
   fetchRunesAllData,
   scrapeLoLWikiData,
+  fetchLatestDDragonVersion,
   scrapePatchVersion,
 } from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
@@ -19,18 +20,22 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const patchVersion = await scrapePatchVersion(
-    "https://leagueoflegends.fandom.com/wiki/ARAM/Patch_history"
+  // Use DDragon version API for compatibility with DDragon data
+  const ddragonVersion = await fetchLatestDDragonVersion();
+  // Get wiki version for display
+  const wikiVersion = await scrapePatchVersion(
+    "https://wiki.leagueoflegends.com/en-us/Patch"
   );
+  console.log({ ddragonVersion, wikiVersion });
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
-    patchVersion,
-    "https://leagueoflegends.fandom.com/wiki/ARAM"
+    ddragonVersion,
+    "https://wiki.leagueoflegends.com/en-us/ARAM"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
-    fetchChampionAllData(patchVersion, championData, "aram"),
-    fetchItemsAllData(patchVersion, itemData),
-    fetchRunesAllData(patchVersion, runeData),
+    fetchChampionAllData(ddragonVersion, championData, "aram"),
+    fetchItemsAllData(ddragonVersion, itemData),
+    fetchRunesAllData(ddragonVersion, runeData),
   ]);
   return (
     <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
@@ -39,7 +44,7 @@ export default async function Home() {
         itemData={itemDataApi}
         runeData={runesDataApi}
       >
-        <TableWrapperHeader version={patchVersion} mode="Aram" />
+        <TableWrapperHeader version={wikiVersion} mode="Aram" />
       </TableWrapper>
     </div>
   );
