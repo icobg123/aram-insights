@@ -39,10 +39,10 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
   );
   const globalFilterFn = React.useCallback(
     (row: Row<ChampionDataApi>, columnId: string, filterValue: any) => {
-      const searchTerm = String(filterValue);
+      const searchTerm = String(filterValue).toLowerCase();
       return row.original.champion
         .toLowerCase()
-        .startsWith(searchTerm.toLowerCase());
+        .startsWith(searchTerm);
     },
     []
   );

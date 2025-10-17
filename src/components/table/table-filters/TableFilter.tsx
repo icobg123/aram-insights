@@ -17,22 +17,6 @@ export default function TableFilter({
     .flatRows[0]?.getValue(column.id);
 
   const columnFilterValue = column.getFilterValue();
-  const sortedUniqueValues = React.useMemo(() => {
-    const uniqueValues = table
-      .getFilteredRowModel()
-      .rows.map((row) => row.getValue(column.id));
-    return typeof firstValue === "number" ? [] : uniqueValues;
-  }, [firstValue, table, column.id]);
-
-  const uniqueValues = table
-    .getFilteredRowModel()
-    .rows.map((row) => row.getValue(column.id));
-  /*const sortedUniqueValues = React.useMemo(() => {
-        const uniqueValues = Array.from(
-          column.getFacetedUniqueValues().keys()
-        ).sort();
-        return typeof firstValue === "number" ? [] : uniqueValues;
-      }, [column, firstValue]);*/
   const noArrowsClasses =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
@@ -82,7 +66,6 @@ export default function TableFilter({
     </div>
   ) : (
     <TextFilter
-      sortedUniqueValues={typeof firstValue === "number" ? [] : uniqueValues}
       column={column}
       columnFilterValue={columnFilterValue}
       totalResults={table.getFilteredRowModel().rows.length}

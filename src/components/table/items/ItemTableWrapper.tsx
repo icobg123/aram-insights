@@ -38,10 +38,10 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
   );
   const globalFilterFn = React.useCallback(
     (row: Row<ItemChangesScrapped>, columnId: string, filterValue: any) => {
-      const searchTerm = String(filterValue);
+      const searchTerm = String(filterValue).toLowerCase();
       return row.original.itemName
         .toLowerCase()
-        .startsWith(searchTerm.toLowerCase());
+        .startsWith(searchTerm);
     },
     []
   );

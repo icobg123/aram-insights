@@ -7,14 +7,12 @@ import { useMedia } from "react-use";
 type TextFilterProps = {
   column: Column<any, unknown>;
   columnFilterValue?: string | number | undefined | unknown;
-  sortedUniqueValues: any[];
   totalResults: number;
   placeholder?: string;
 };
 export const TextFilter = ({
   column,
   columnFilterValue,
-  sortedUniqueValues,
   totalResults,
   placeholder = "Search...",
 }: TextFilterProps) => {
@@ -37,6 +35,7 @@ export const TextFilter = ({
           list={column.id + "list"}
           clearInput
           autoFocus={isLarge}
+          debounce={100}
         />
       </div>
     </>

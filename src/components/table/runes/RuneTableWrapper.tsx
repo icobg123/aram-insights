@@ -36,10 +36,10 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
   );
   const globalFilterFn = React.useCallback(
     (row: Row<RunesChangesScrapped>, columnId: string, filterValue: any) => {
-      const searchTerm = String(filterValue);
+      const searchTerm = String(filterValue).toLowerCase();
       return row.original.runeName
         .toLowerCase()
-        .startsWith(searchTerm.toLowerCase());
+        .startsWith(searchTerm);
     },
     []
   );

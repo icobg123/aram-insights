@@ -48,20 +48,16 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
           <h2 className="text-lg font-bold">Filters</h2>
           {table.getHeaderGroups().map((headerGroup) => (
             <React.Fragment key={headerGroup.id}>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <React.Fragment key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <React.Fragment key={header.id}>
-                      {header.column.getCanFilter() ? (
-                        <div className="flex flex-col space-y-3 pt-2">
-                          <span>{`${
-                            tableHeaderTitles[header.column.id]
-                          }`}</span>
-                          <TableFilter column={header.column} table={table} />
-                        </div>
-                      ) : null}
-                    </React.Fragment>
-                  ))}
+              {headerGroup.headers.map((header) => (
+                <React.Fragment key={header.id}>
+                  {header.column.getCanFilter() ? (
+                    <div className="flex flex-col space-y-3 pt-2">
+                      <span>{`${
+                        tableHeaderTitles[header.column.id]
+                      }`}</span>
+                      <TableFilter column={header.column} table={table} />
+                    </div>
+                  ) : null}
                 </React.Fragment>
               ))}
             </React.Fragment>
