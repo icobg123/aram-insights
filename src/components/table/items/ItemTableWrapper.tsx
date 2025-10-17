@@ -19,6 +19,8 @@ import ItemCell from "@/components/table/items/ItemCell";
 import { ItemChangesScrapped } from "@/types";
 import { TableHeadCell } from "@/components/table/TableHeadCell";
 import { Table } from "@/components/table/Table";
+import TableFilter from "@/components/table/table-filters/TableFilter";
+import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
 
 export interface TableWrapperProps {
   itemData: ItemChangesScrapped[];
@@ -57,8 +59,11 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Item"
+            filter={<TableFilter column={header.column} table={table} placeholder="Search items..." />}
           />
         ),
+        enableColumnFilter: true,
+        filterFn: globalFilterFn,
         // footer: (props) => props.column.id,
       }),
       columnHelper.accessor((row) => row.changes, {
@@ -114,7 +119,10 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
   return (
     <>
       {itemData && itemData.length > 0 ? (
-        <Table table={table} />
+        <>
+          <Table table={table} />
+          <TableFabFilter table={table} />
+        </>
       ) : (
         <span className="loading loading-spinner loading-lg text-info"></span>
       )}

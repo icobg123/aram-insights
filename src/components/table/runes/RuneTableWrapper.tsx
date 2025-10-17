@@ -5,6 +5,8 @@ import RuneCell from "@/components/table/runes/RuneCell";
 import { RunesChangesScrapped } from "@/types";
 import { Table } from "@/components/table/Table";
 import { TableHeadCell } from "@/components/table/TableHeadCell";
+import TableFilter from "@/components/table/table-filters/TableFilter";
+import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
 import {
   ColumnFiltersState,
   createColumnHelper,
@@ -54,9 +56,12 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
             header={header}
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
-            title="Item"
+            title="Rune"
+            filter={<TableFilter column={header.column} table={table} placeholder="Search runes..." />}
           />
         ),
+        enableColumnFilter: true,
+        filterFn: globalFilterFn,
         // footer: (props) => props.column.id,
       }),
       columnHelper.accessor((row) => row.changes, {
@@ -112,7 +117,10 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
   return (
     <>
       {runeData && runeData.length > 0 ? (
-        <Table table={table} />
+        <>
+          <Table table={table} />
+          <TableFabFilter table={table} />
+        </>
       ) : (
         <span className="loading loading-spinner loading-lg text-info"></span>
       )}

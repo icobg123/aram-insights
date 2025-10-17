@@ -1,15 +1,14 @@
 import React from "react";
 import TableFilter from "@/components/table/table-filters/TableFilter";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
-import { ChampionDataApi } from "@/types";
 
 declare global {
   interface Window {
     filterModal: any; // Change 'any' to the actual type if available
   }
 }
-type TableFabFilterProps = {
-  table: TanTable<ChampionDataApi>;
+type TableFabFilterProps<T = any> = {
+  table: TanTable<T>;
 };
 //declare const object that has key strings and string values
 
@@ -19,6 +18,10 @@ const tableHeaderTitles: { [key: string]: string } = {
   damageDealt: "Dmg Dealt",
   damageReceived: "Dmg Received",
   otherChanges: "Other Changes",
+  itemName: "Item",
+  itemChanges: "Changes",
+  runeName: "Rune",
+  runeChanges: "Changes",
 };
 const TableFabFilter = ({ table }: TableFabFilterProps) => {
   return (

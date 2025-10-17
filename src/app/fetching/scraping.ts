@@ -356,8 +356,7 @@ const parseChampionData = ($: CheerioAPI, mode: "aram" | "arena" | "urf"): Champ
     return championData;
   }
 
-  const rows = championTable.find("tbody tr");
-  // console.log(`Found ${rows.length} champion rows in balance table`);
+
 
   // Process each row (skip header row which is in thead)
   championTable.find("tbody tr").each((index, element) => {

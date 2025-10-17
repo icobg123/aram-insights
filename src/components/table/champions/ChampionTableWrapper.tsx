@@ -60,7 +60,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Champion"
-            filter={<TableFilter column={header.column} table={table} />}
+            filter={<TableFilter column={header.column} table={table} placeholder="Who's your pick?" />}
           />
         ),
         footer: (props) => props.column.id,

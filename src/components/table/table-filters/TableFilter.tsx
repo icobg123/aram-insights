@@ -6,9 +6,11 @@ import { TextFilter } from "@/components/table/table-filters/TextFilter";
 export default function TableFilter({
   column,
   table,
+  placeholder,
 }: {
   column: Column<any, unknown>;
   table: Table<any>;
+  placeholder?: string;
 }) {
   const firstValue = table
     .getPreFilteredRowModel()
@@ -18,13 +20,13 @@ export default function TableFilter({
   const sortedUniqueValues = React.useMemo(() => {
     const uniqueValues = table
       .getFilteredRowModel()
-      .rows.map((row) => row.getValue("champion"));
+      .rows.map((row) => row.getValue(column.id));
     return typeof firstValue === "number" ? [] : uniqueValues;
-  }, [firstValue, table]);
+  }, [firstValue, table, column.id]);
 
   const uniqueValues = table
     .getFilteredRowModel()
-    .rows.map((row) => row.getValue("champion"));
+    .rows.map((row) => row.getValue(column.id));
   /*const sortedUniqueValues = React.useMemo(() => {
         const uniqueValues = Array.from(
           column.getFacetedUniqueValues().keys()
@@ -84,6 +86,7 @@ export default function TableFilter({
       column={column}
       columnFilterValue={columnFilterValue}
       totalResults={table.getFilteredRowModel().rows.length}
+      placeholder={placeholder}
     />
   );
 }

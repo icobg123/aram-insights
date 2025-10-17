@@ -9,12 +9,14 @@ type TextFilterProps = {
   columnFilterValue?: string | number | undefined | unknown;
   sortedUniqueValues: any[];
   totalResults: number;
+  placeholder?: string;
 };
 export const TextFilter = ({
   column,
   columnFilterValue,
   sortedUniqueValues,
   totalResults,
+  placeholder = "Search...",
 }: TextFilterProps) => {
   const smBreakpoint = screens.md;
   const isLarge = useMedia(`(min-width: ${smBreakpoint})`, true);
@@ -25,12 +27,12 @@ export const TextFilter = ({
           {totalResults}
         </div>
         <DebouncedInput
-          label="Champion search"
+          label={`${column.id} search`}
           type="text"
           id={column.id + "list"}
           value={(columnFilterValue ?? "") as string}
           onChange={(value: string | number) => column.setFilterValue(value)}
-          placeholder={`Who's your pick?`}
+          placeholder={placeholder}
           className="input input-xs join-item w-full rounded bg-gray-900 font-normal text-gray-400"
           list={column.id + "list"}
           clearInput

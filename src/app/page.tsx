@@ -26,7 +26,7 @@ export default async function Home() {
   const wikiVersion = await scrapePatchVersion(
     "https://wiki.leagueoflegends.com/en-us/Patch"
   );
-  console.log({ ddragonVersion, wikiVersion });
+
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
