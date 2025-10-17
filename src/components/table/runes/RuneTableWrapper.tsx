@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useReactTable } from "@tanstack/react-table";
 import RuneCell from "@/components/table/runes/RuneCell";
 import { RunesChangesScrapped } from "@/types";
@@ -15,21 +15,59 @@ import {
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
-  HeaderContext,
   Row,
   SortingState,
 } from "@tanstack/table-core";
+import { useTableState } from "@/hooks/useTableState";
 
 export interface TableWrapperProps {
   runeData: RunesChangesScrapped[];
 }
 
 export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
+  const { search, setSearch, tab } = useTableState();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    () => {
+      // Initialize column filter from URL search param
+      if (search && tab === "runes") {
+        return [{ id: "runeName", value: search }];
+      }
+      return [];
+    }
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  // Sync URL search param with rune column filter
+  useEffect(() => {
+    if (tab === "runes") {
+      const runeFilter = columnFilters.find((f) => f.id === "runeName");
+      const filterValue = runeFilter?.value as string | undefined;
+      if (filterValue !== search) {
+        if (filterValue) {
+          setColumnFilters([{ id: "runeName", value: search }]);
+        } else if (search) {
+          setColumnFilters([{ id: "runeName", value: search }]);
+        }
+      }
+    } else {
+      // Clear filters when switching away from this tab
+      if (columnFilters.length > 0) {
+        setColumnFilters([]);
+      }
+    }
+  }, [search, tab]);
+
+  // Update URL when rune column filter changes
+  useEffect(() => {
+    if (tab === "runes") {
+      const runeFilter = columnFilters.find((f) => f.id === "runeName");
+      const filterValue = (runeFilter?.value as string) || "";
+      if (filterValue !== search) {
+        void setSearch(filterValue || null);
+      }
+    }
+  }, [columnFilters, tab, setSearch]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<RunesChangesScrapped>(),
     []
@@ -39,7 +77,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
       const searchTerm = String(filterValue).toLowerCase();
       return row.original.runeName
         .toLowerCase()
-        .startsWith(searchTerm);
+        .includes(searchTerm);
     },
     []
   );
@@ -57,7 +95,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Rune"
-            filter={<TableFilter column={header.column} table={table} placeholder="Search runes..." />}
+            filter={<TableFilter column={header.column} table={header.table} placeholder="Search runes..." />}
           />
         ),
         enableColumnFilter: true,
@@ -84,7 +122,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
         },
         header: (header) => (
           <TableHeadCell
-            header={header as HeaderContext<RunesChangesScrapped, string>}
+            header={header}
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Changes"
@@ -93,7 +131,7 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
         footer: (props) => props.column.id,
       }),
     ];
-  }, [columnHelper]);
+  }, [columnHelper, globalFilterFn]);
 
   const table = useReactTable({
     data: itemsTabData,

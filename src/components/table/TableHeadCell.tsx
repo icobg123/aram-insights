@@ -4,21 +4,21 @@ import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 import { useMedia } from "react-use";
 import { screens } from "tailwindcss/defaultTheme";
 
-type TableHeadCellProps<T> = {
+type TableHeadCellProps<T, TValue = any> = {
   className?: string;
   title?: string;
-  header: HeaderContext<T, T | number | string>;
+  header: HeaderContext<T, TValue>;
   table: TanTable<T>;
   filter?: React.ReactNode;
 };
 
-export const TableHeadCell = <T,>({
+export const TableHeadCell = <T, TValue = any>({
   className,
   title,
   header,
   table,
   filter,
-}: TableHeadCellProps<T>) => {
+}: TableHeadCellProps<T, TValue>) => {
   const smBreakpoint = screens.md;
   const isLarge = useMedia(`(min-width: ${smBreakpoint})`, true);
   /*accessing the arrows object with the array notation*/

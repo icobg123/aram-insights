@@ -24,6 +24,7 @@
     "galeforce": "^0.6.1",
     "next": "14.2.33",
     "node-fetch": "^3.3.2",
+    "nuqs": "^2.7.2",
     "plaiceholder": "^3.0.0",
     "postcss": "^8.4.31",
     "react": "^18.3.1",

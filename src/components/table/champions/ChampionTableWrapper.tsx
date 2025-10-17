@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   ColumnFiltersState,
@@ -20,6 +20,7 @@ import { TableHeadCell } from "@/components/table/TableHeadCell";
 import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
 import { ChampionDataApi } from "@/types";
 import TableFilter from "@/components/table/table-filters/TableFilter";
+import { useTableState } from "@/hooks/useTableState";
 
 export interface TableWrapperProps {
   ChampionDataApi: ChampionDataApi[];
@@ -28,11 +29,49 @@ export interface TableWrapperProps {
 export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
   ChampionDataApi,
 }) => {
+  const { search, setSearch, tab } = useTableState();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    () => {
+      // Initialize column filter from URL search param
+      if (search && tab === "champions") {
+        return [{ id: "champion", value: search }];
+      }
+      return [];
+    }
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  // Sync URL search param with champion column filter
+  useEffect(() => {
+    if (tab === "champions") {
+      const championFilter = columnFilters.find((f) => f.id === "champion");
+      const filterValue = championFilter?.value as string | undefined;
+      if (filterValue !== search) {
+        if (filterValue) {
+          setColumnFilters([{ id: "champion", value: search }]);
+        } else if (search) {
+          setColumnFilters([{ id: "champion", value: search }]);
+        }
+      }
+    } else {
+      // Clear filters when switching away from this tab
+      if (columnFilters.length > 0) {
+        setColumnFilters([]);
+      }
+    }
+  }, [search, tab]);
+
+  // Update URL when champion column filter changes
+  useEffect(() => {
+    if (tab === "champions") {
+      const championFilter = columnFilters.find((f) => f.id === "champion");
+      const filterValue = (championFilter?.value as string) || "";
+      if (filterValue !== search) {
+        void setSearch(filterValue || null);
+      }
+    }
+  }, [columnFilters, tab, setSearch]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<ChampionDataApi>(),
     []
@@ -42,7 +81,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
       const searchTerm = String(filterValue).toLowerCase();
       return row.original.champion
         .toLowerCase()
-        .startsWith(searchTerm);
+        .includes(searchTerm);
     },
     []
   );
@@ -60,7 +99,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Champion"
-            filter={<TableFilter column={header.column} table={table} placeholder="Who's your pick?" />}
+            filter={<TableFilter column={header.column} table={header.table} placeholder="Who's your pick?" />}
           />
         ),
         footer: (props) => props.column.id,
@@ -79,7 +118,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Win %"
-            filter={<TableFilter column={header.column} table={table} />}
+            filter={<TableFilter column={header.column} table={header.table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -113,7 +152,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg dealt"
-            filter={<TableFilter column={header.column} table={table} />}
+            filter={<TableFilter column={header.column} table={header.table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -147,7 +186,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Dmg received"
-            filter={<TableFilter column={header.column} table={table} />}
+            filter={<TableFilter column={header.column} table={header.table} />}
           />
         ),
         footer: (props) => props.column.id,
@@ -167,7 +206,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
         enableColumnFilter: false,
       }),
     ];
-  }, [columnHelper]);
+  }, [columnHelper, globalFilterFn]);
 
   const table = useReactTable({
     data: tabData,

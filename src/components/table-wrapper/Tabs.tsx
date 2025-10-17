@@ -1,6 +1,7 @@
 "use client";
 
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect } from "react";
+import { useTableState } from "@/hooks/useTableState";
 
 interface TabsProps {
   tabLabels: string[];
@@ -8,23 +9,42 @@ interface TabsProps {
 }
 
 const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const { tab, setTab } = useTableState();
+
+  // Determine active tab index from URL
+  const activeTab = React.useMemo(() => {
+    const normalizedTab = tab.toLowerCase();
+    const index = tabLabels.findIndex(
+      (label) => label.toLowerCase() === normalizedTab
+    );
+    return index >= 0 ? index : 0;
+  }, [tab, tabLabels]);
+
+  // Set initial tab if not present in URL
+  useEffect(() => {
+    if (!tab) {
+      setTab(tabLabels[0].toLowerCase());
+    }
+  }, [tab, setTab, tabLabels]);
+
+  const handleTabClick = (index: number) => {
+    setTab(tabLabels[index].toLowerCase());
+  };
 
   return (
     <>
       <div className="tabs z-40 flex pb-2">
         {tabLabels.map((label, index) => (
-          <a
-            href={`#${tabLabels[index]}`}
+          <button
             key={index}
             aria-label={tabLabels[index]}
             className={`tab-bordered tab flex-auto rounded-t-lg text-gray-200 ${
               activeTab === index ? "tab-active bg-gray-700" : ""
             }`}
-            onClick={() => setActiveTab(index)}
+            onClick={() => handleTabClick(index)}
           >
             {label}
-          </a>
+          </button>
         ))}
       </div>
       <div className="container max-w-5xl">

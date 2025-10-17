@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { ItemTableWrapper } from "@/components/table/items/ItemTableWrapper";
 import { ChampionTableWrapper } from "@/components/table/champions/ChampionTableWrapper";
 import { RuneTableWrapper } from "@/components/table/runes/RuneTableWrapper";
@@ -30,17 +30,25 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
     <div className="container max-w-5xl p-1">
       <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg">
         {children}
-        <Tabs
-          tabLabels={tabs}
-          tabContents={[
-            <ChampionTableWrapper
-              ChampionDataApi={championData}
-              key={tabs[0]}
-            />,
-            <ItemTableWrapper itemData={itemData} key={tabs[1]} />,
-            <RuneTableWrapper runeData={runeData} key={tabs[2]} />,
-          ]}
-        />
+        <Suspense
+          fallback={
+            <div className="flex h-full w-full items-center justify-center">
+              <span className="loading loading-spinner loading-lg text-info"></span>
+            </div>
+          }
+        >
+          <Tabs
+            tabLabels={tabs}
+            tabContents={[
+              <ChampionTableWrapper
+                ChampionDataApi={championData}
+                key={tabs[0]}
+              />,
+              <ItemTableWrapper itemData={itemData} key={tabs[1]} />,
+              <RuneTableWrapper runeData={runeData} key={tabs[2]} />,
+            ]}
+          />
+        </Suspense>
         <div className="mt-auto flex items-center justify-start">
           <Link href={"https://x.com/jointless_inc"} target="_blank">
             <FaXTwitter />

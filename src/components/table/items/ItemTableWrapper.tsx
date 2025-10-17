@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   ColumnFiltersState,
@@ -9,7 +9,6 @@ import {
   getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
-  HeaderContext,
   Row,
   SortingState,
 } from "@tanstack/table-core";
@@ -21,17 +20,56 @@ import { TableHeadCell } from "@/components/table/TableHeadCell";
 import { Table } from "@/components/table/Table";
 import TableFilter from "@/components/table/table-filters/TableFilter";
 import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
+import { useTableState } from "@/hooks/useTableState";
 
 export interface TableWrapperProps {
   itemData: ItemChangesScrapped[];
 }
 
 export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
+  const { search, setSearch, tab } = useTableState();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    () => {
+      // Initialize column filter from URL search param
+      if (search && tab === "items") {
+        return [{ id: "itemName", value: search }];
+      }
+      return [];
+    }
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  // Sync URL search param with item column filter
+  useEffect(() => {
+    if (tab === "items") {
+      const itemFilter = columnFilters.find((f) => f.id === "itemName");
+      const filterValue = itemFilter?.value as string | undefined;
+      if (filterValue !== search) {
+        if (filterValue) {
+          setColumnFilters([{ id: "itemName", value: search }]);
+        } else if (search) {
+          setColumnFilters([{ id: "itemName", value: search }]);
+        }
+      }
+    } else {
+      // Clear filters when switching away from this tab
+      if (columnFilters.length > 0) {
+        setColumnFilters([]);
+      }
+    }
+  }, [search, tab]);
+
+  // Update URL when item column filter changes
+  useEffect(() => {
+    if (tab === "items") {
+      const itemFilter = columnFilters.find((f) => f.id === "itemName");
+      const filterValue = (itemFilter?.value as string) || "";
+      if (filterValue !== search) {
+        void setSearch(filterValue || null);
+      }
+    }
+  }, [columnFilters, tab, setSearch]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<ItemChangesScrapped>(),
     []
@@ -41,7 +79,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
       const searchTerm = String(filterValue).toLowerCase();
       return row.original.itemName
         .toLowerCase()
-        .startsWith(searchTerm);
+        .includes(searchTerm);
     },
     []
   );
@@ -59,7 +97,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Item"
-            filter={<TableFilter column={header.column} table={table} placeholder="Search items..." />}
+            filter={<TableFilter column={header.column} table={header.table} placeholder="Search items..." />}
           />
         ),
         enableColumnFilter: true,
@@ -86,7 +124,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
         },
         header: (header) => (
           <TableHeadCell
-            header={header as HeaderContext<ItemChangesScrapped, string[]>}
+            header={header}
             table={header.table}
             className="w-auto px-2 py-2 md:w-[100px]"
             title="Changes"
@@ -95,7 +133,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
         footer: (props) => props.column.id,
       }),
     ];
-  }, [columnHelper]);
+  }, [columnHelper, globalFilterFn]);
 
   const table = useReactTable({
     data: itemsTabData,
