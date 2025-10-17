@@ -10,12 +10,16 @@ import {
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
 
-export const maxDuration = 60; // This function can run for a maximum of 5 seconds
+export const maxDuration = 60;
+
+// Revalidate every 7 days (604800 seconds)
+export const revalidate = 604800;
 
 export async function generateMetadata() {
   return {
     title: "ARAM nerfs and buffs - Who's your pick this game?",
-    description: `Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.`,
+    description:
+      "Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.",
   };
 }
 
@@ -26,7 +30,6 @@ export default async function Home() {
   const wikiVersion = await scrapePatchVersion(
     "https://wiki.leagueoflegends.com/en-us/Patch"
   );
-
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
@@ -39,7 +42,7 @@ export default async function Home() {
     fetchRunesAllData(ddragonVersion, runeData),
   ]);
   return (
-    <div className={`flex min-h-screen items-end justify-center pb-4 md:pb-6`}>
+    <div className="flex min-h-screen items-end justify-center pb-4 md:pb-6">
       <TableWrapper
         championData={championDataApi}
         itemData={itemDataApi}
