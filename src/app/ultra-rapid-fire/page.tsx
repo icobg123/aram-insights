@@ -30,7 +30,8 @@ export default async function URFPage() {
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
-    "https://wiki.leagueoflegends.com/en-us/Ultra_Rapid_Fire"
+    "https://wiki.leagueoflegends.com/en-us/Ultra_Rapid_Fire",
+    "urf"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
     fetchChampionAllData(ddragonVersion, championData, "urf"),

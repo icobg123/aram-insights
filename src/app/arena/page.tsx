@@ -30,7 +30,8 @@ export default async function ArenaPage() {
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
-    "https://wiki.leagueoflegends.com/en-us/Arena"
+    "https://wiki.leagueoflegends.com/en-us/Arena",
+    "arena"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
     fetchChampionAllData(ddragonVersion, championData, "arena"),

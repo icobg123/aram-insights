@@ -30,7 +30,8 @@ export default async function Home() {
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
-    "https://wiki.leagueoflegends.com/en-us/ARAM"
+    "https://wiki.leagueoflegends.com/en-us/ARAM",
+    "aram"
   );
   const [championDataApi, itemDataApi, runesDataApi] = await Promise.all([
     fetchChampionAllData(ddragonVersion, championData, "aram"),

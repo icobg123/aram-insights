@@ -338,7 +338,7 @@ export const fetchIndividualChampionData = async (
   }
 };
 
-const parseChampionData = ($: CheerioAPI): ChampionDataScrapped => {
+const parseChampionData = ($: CheerioAPI, mode: "aram" | "arena" | "urf"): ChampionDataScrapped => {
   const championData: ChampionDataScrapped = {};
 
   // Find the table with champion data - look for table with "Champion" header
@@ -379,47 +379,49 @@ const parseChampionData = ($: CheerioAPI): ChampionDataScrapped => {
     const generalChanges: string[] = [];
     const abilityChanges: AbilityChangesScrapped[] = [];
 
-    // Column 1: General changes (Special modifiers)
-    const generalChangesCell = $row.find("td").eq(1);
+    // Column 1: General changes (Special modifiers) - ARAM/URF only
+    if (mode === "aram" || mode === "urf") {
+      const generalChangesCell = $row.find("td").eq(1);
 
-    // Look for "Special modifiers" paragraph and its list
-    const specialModifiersParagraph = generalChangesCell.find("p").filter((i, el) =>
-      $(el).text().trim() === "Special modifiers"
-    );
+      // Look for "Special modifiers" paragraph and its list
+      const specialModifiersParagraph = generalChangesCell.find("p").filter((i, el) =>
+        $(el).text().trim() === "Special modifiers"
+      );
 
-    if (specialModifiersParagraph.length > 0) {
-      // Find the ul that follows the "Special modifiers" paragraph
-      const modifiersList = specialModifiersParagraph.next("ul");
+      if (specialModifiersParagraph.length > 0) {
+        // Find the ul that follows the "Special modifiers" paragraph
+        const modifiersList = specialModifiersParagraph.next("ul");
 
-      modifiersList.find("li").each((i, li) => {
-        const text = $(li).text().trim();
+        modifiersList.find("li").each((i, li) => {
+          const text = $(li).text().trim();
 
-        // Parse damage dealt/received from text
-        if (text.match(/damage dealt/i)) {
-          const match = text.match(/(increased|reduced)\s+by\s+(\d+)%/i);
-          if (match) {
-            const value = parseInt(match[2]);
-            damageDealt =
-              match[1].toLowerCase() === "increased" ? value : -value;
+          // Parse damage dealt/received from text
+          if (text.match(/damage dealt/i)) {
+            const match = text.match(/(increased|reduced)\s+by\s+(\d+)%/i);
+            if (match) {
+              const value = parseInt(match[2]);
+              damageDealt =
+                match[1].toLowerCase() === "increased" ? value : -value;
+            }
+          } else if (text.match(/damage (received|taken)/i)) {
+            const match = text.match(/(increased|reduced)\s+by\s+(\d+)%/i);
+            if (match) {
+              const value = parseInt(match[2]);
+              damageReceived =
+                match[1].toLowerCase() === "reduced" ? value : -value;
+            }
+          } else if (text) {
+            // All other modifiers go to general changes
+            generalChanges.push(text);
           }
-        } else if (text.match(/damage (received|taken)/i)) {
-          const match = text.match(/(increased|reduced)\s+by\s+(\d+)%/i);
-          if (match) {
-            const value = parseInt(match[2]);
-            damageReceived =
-              match[1].toLowerCase() === "reduced" ? value : -value;
-          }
-        } else if (text) {
-          // All other modifiers go to general changes
-          generalChanges.push(text);
-        }
-      });
+        });
+      }
     }
 
     // console.log(`  Damage dealt: ${damageDealt}, Damage received: ${damageReceived}`);
     // console.log(`  General changes: ${generalChanges.length}`);
 
-    // Column 2: Abilities changes
+    // Column 2: Abilities changes (for all modes)
     const abilitiesCell = $row.find("td").eq(2);
 
     // Each ability change is represented by a <p> tag with ability info followed by a <ul> with changes
@@ -604,7 +606,8 @@ const parseRuneData = ($: CheerioAPI): RunesDataScrapped => {
 
 export const scrapeLoLWikiData = async (
   version: string,
-  url: string
+  url: string,
+  mode: "aram" | "arena" | "urf" = "aram"
 ): Promise<ScrappedData> => {
   try {
     const response = await fetch(url, { next: { revalidate: revalidate } });
@@ -614,7 +617,7 @@ export const scrapeLoLWikiData = async (
     // console.log(`Scraping URL: ${url}`);
     // console.log(`HTML length: ${html.length}`);
 
-    const championData = parseChampionData($);
+    const championData = parseChampionData($, mode);
     // console.log(`Scraped ${Object.keys(championData).length} champions`);
 
     // Log first champion as example
