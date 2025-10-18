@@ -16,10 +16,28 @@ export const maxDuration = 60;
 export const revalidate = 604800;
 
 export async function generateMetadata() {
+  const title = "ARAM nerfs and buffs - Who's your pick this game?";
+  const description =
+    "Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.";
+
   return {
-    title: "ARAM nerfs and buffs - Who's your pick this game?",
-    description:
-      "Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.",
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
 }
 

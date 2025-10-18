@@ -11,8 +11,22 @@ import { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Aram Balance",
-  description: "Aram and URF League of Legends changes",
+  title: {
+    default: "ARAM Insights - League of Legends Balance Changes",
+    template: "%s | ARAM Insights",
+  },
+  description:
+    "Track League of Legends champion, item, and rune balance changes for ARAM, Arena, and URF game modes. Stay updated with the latest nerfs and buffs.",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+  },
+  openGraph: {
+    title: "ARAM Insights - League of Legends Balance Changes",
+    description:
+      "Track League of Legends champion, item, and rune balance changes for ARAM, Arena, and URF game modes.",
+    type: "website",
+  },
 };
 
 interface RootLayoutProps {
