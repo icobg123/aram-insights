@@ -31,7 +31,8 @@ const Header = () => {
   const activeSegment = useSelectedLayoutSegment();
 
   return (
-    <div className="navbar sticky top-0 z-10 mb-[-80px] bg-base-200 px-4">
+    <div className="navbar sticky top-0 z-10 bg-base-200 px-4">
+    {/*<div className="navbar sticky top-0 z-10 mb-[-80px] bg-base-200 px-4">*/}
       <div className="navbar-start space-x-2">
         <nav className="dropdown">
           <button

@@ -18,8 +18,8 @@ export const TextFilter = ({
   const isLarge = useMedia("(min-width: 768px)", true);
   return (
     <>
-      <div className="w-7/8 join join-horizontal">
-        <div className="join-item btn-xs flex min-w-[38px] items-center justify-end bg-base-200 text-base-content/70">
+      <div className="join w-full flex-1 md:w-7/8">
+        <div className="btn join-item flex min-w-[38px] items-center justify-center text-base-content/70 md:btn-xs">
           {totalResults}
         </div>
         <DebouncedInput
@@ -29,7 +29,7 @@ export const TextFilter = ({
           value={(columnFilterValue ?? "") as string}
           onChange={(value: string | number) => column.setFilterValue(value)}
           placeholder={placeholder}
-          className="input input-xs join-item w-full rounded bg-base-200 font-normal"
+          className="input-md join-item w-full md:input-xs"
           list={column.id + "list"}
           clearInput
           autoFocus={isLarge}

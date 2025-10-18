@@ -2,6 +2,7 @@ import { Column, Table } from "@tanstack/table-core";
 import { DebouncedInput } from "@/components/table/DebouncedInput";
 import React from "react";
 import { TextFilter } from "@/components/table/table-filters/TextFilter";
+import { cn } from "@/lib/cn";
 
 export default function TableFilter({
   column,
@@ -19,7 +20,10 @@ export default function TableFilter({
   const columnFilterValue = column.getFilterValue();
   const noArrowsClasses =
     "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
-
+  const minMaxClasses = cn(
+    `input input-md join-item font-normal md:input-xs`,
+    noArrowsClasses
+  );
   //TODO: Make number input change color based on value. e.g. green if positive, red if negative for dmg dealt and opposite for dmg received
   const numberInputColours = (columnFilterValue as [number, number])?.[0]
     ? (columnFilterValue as [number, number])?.[0] >= 0
@@ -44,7 +48,7 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[0]})`
             : ""
         }`}
-        className={`input input-xs join-item w-1/2 bg-base-200 font-normal ${noArrowsClasses}`}
+        className={minMaxClasses}
       />
       <DebouncedInput
         label={column.id}
@@ -61,7 +65,7 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[1]})`
             : ""
         }`}
-        className={`input input-xs join-item w-1/2 bg-base-200 font-normal ${noArrowsClasses}`}
+        className={minMaxClasses}
       />
     </div>
   ) : (

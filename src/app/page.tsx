@@ -42,7 +42,7 @@ export default async function Home() {
     fetchRunesAllData(ddragonVersion, runeData),
   ]);
   return (
-    <div className="flex min-h-screen items-end justify-center pb-4 md:pb-6">
+    <div className="flex min-h-[calc(100vh-65px)]  items-end justify-center md:pb-6">
       <TableWrapper
         championData={championDataApi}
         itemData={itemDataApi}

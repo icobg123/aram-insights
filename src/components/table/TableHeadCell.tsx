@@ -2,6 +2,7 @@ import React from "react";
 import { HeaderContext } from "@tanstack/table-core";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 import { useMedia } from "react-use";
+import { cn } from "@/lib/cn";
 
 type TableHeadCellProps<T, TValue = any> = {
   className?: string;
@@ -28,7 +29,8 @@ export const TableHeadCell = <T, TValue = any>({
   return (
     <th
       scope="col"
-      className={`${className}  text-center hover:bg-base-300`}
+      colSpan={1}
+      className={cn(`text-center hover:bg-primary/10`,className)}
     >
       <div className="flex h-full flex-col justify-between">
         <div

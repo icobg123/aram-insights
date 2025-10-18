@@ -21,6 +21,7 @@ import TableFabFilter from "@/components/table/table-filters/TableFabFilter";
 import { ChampionDataApi } from "@/types";
 import TableFilter from "@/components/table/table-filters/TableFilter";
 import { useTableState } from "@/hooks/useTableState";
+import { useMedia } from "react-use";
 
 export interface TableWrapperProps {
   ChampionDataApi: ChampionDataApi[];
@@ -41,7 +42,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
     }
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
-
+  const isLarge = useMedia("(min-width: 768px)", false);
   // Sync URL search param with champion column filter
   useEffect(() => {
     if (tab === "champions") {
@@ -79,16 +80,14 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
   const globalFilterFn = React.useCallback(
     (row: Row<ChampionDataApi>, columnId: string, filterValue: any) => {
       const searchTerm = String(filterValue).toLowerCase();
-      return row.original.champion
-        .toLowerCase()
-        .includes(searchTerm);
+      return row.original.champion.toLowerCase().includes(searchTerm);
     },
     []
   );
   const tabData = React.useMemo(() => [...ChampionDataApi], [ChampionDataApi]);
 
   const columns = React.useMemo(() => {
-    return [
+    const cols: any[] = [
       // Display Column
       columnHelper.accessor((row) => row.champion, {
         id: "champion",
@@ -97,9 +96,15 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
           <TableHeadCell
             header={header}
             table={header.table}
-            className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
+            className="w-1/5 max-w-[100px] px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Champion"
-            filter={<TableFilter column={header.column} table={header.table} placeholder="Who's your pick?" />}
+            filter={
+              <TableFilter
+                column={header.column}
+                table={header.table}
+                placeholder="Who's your pick?"
+              />
+            }
           />
         ),
         footer: (props) => props.column.id,
@@ -192,21 +197,26 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
         footer: (props) => props.column.id,
         enableColumnFilter: true,
       }),
-      columnHelper.accessor((row) => row, {
+    ];
+    if (isLarge) {
+      const otherChanges = columnHelper.display({
         id: "otherChanges",
         cell: (props) => <OtherChangesCell props={props} />,
         header: () => (
           <th
             scope="col"
-            className="w-1/4 cursor-default px-2 py-2 text-center md:w-1/3"
+            className="hidden w-1/4 cursor-default px-2 py-2 text-center md:table-cell md:w-1/3"
           >
             Other changes
           </th>
         ),
         enableColumnFilter: false,
-      }),
-    ];
-  }, [columnHelper, globalFilterFn]);
+      });
+      cols.push(otherChanges);
+    }
+
+    return cols;
+  }, [columnHelper, globalFilterFn, isLarge]);
 
   const table = useReactTable({
     data: tabData,

@@ -77,9 +77,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
   const globalFilterFn = React.useCallback(
     (row: Row<ItemChangesScrapped>, columnId: string, filterValue: any) => {
       const searchTerm = String(filterValue).toLowerCase();
-      return row.original.itemName
-        .toLowerCase()
-        .includes(searchTerm);
+      return row.original.itemName.toLowerCase().includes(searchTerm);
     },
     []
   );
@@ -97,7 +95,13 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
             table={header.table}
             className="w-1/4 px-2 py-2 sm:w-1/5 md:w-1/4"
             title="Item"
-            filter={<TableFilter column={header.column} table={header.table} placeholder="Search items..." />}
+            filter={
+              <TableFilter
+                column={header.column}
+                table={header.table}
+                placeholder="Search items..."
+              />
+            }
           />
         ),
         enableColumnFilter: true,
@@ -162,7 +166,7 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
           <TableFabFilter table={table} />
         </>
       ) : (
-        <span className="loading loading-spinner loading-lg text-info"></span>
+        <span className="loading loading-lg loading-spinner text-info"></span>
       )}
     </>
   );

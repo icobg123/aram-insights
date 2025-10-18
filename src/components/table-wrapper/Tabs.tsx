@@ -33,25 +33,25 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
 
   return (
     <>
-      <div className="tabs z-40 flex pb-2">
+      <div role="tablist" className="tabs tabs-lift z-40">
         {tabLabels.map((label, index) => (
-          <button
+          <a
             key={index}
+            role="tab"
             aria-label={tabLabels[index]}
-            className={`tab-border tab flex-auto rounded-t-lg ${
+            className={`tab flex-auto ${
               activeTab === index ? "tab-active" : ""
             }`}
             onClick={() => handleTabClick(index)}
           >
             {label}
-          </button>
+          </a>
         ))}
       </div>
 
-        <div className="flex-1 container max-w-5xl max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-none">
-          {tabContents[activeTab]}
-        </div>
-
+      <div className="container  w-full max-w-5xl flex-1 overflow-auto rounded-lg shadow-md md:max-h-none">
+        {tabContents[activeTab]}
+      </div>
     </>
   );
 };

@@ -1,5 +1,7 @@
 import React from "react";
 import useAutoFocus from "@/components/hooks/useAutoFocus";
+import { XIcon } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 type DebouncedInputProps = {
   value: string | number;
@@ -18,6 +20,7 @@ export const DebouncedInput = ({
   clearInput = false,
   label, // Destructure the label prop
   id,
+  className,
   ...props
 }: DebouncedInputProps) => {
   const [value, setValue] = React.useState(initialValue);
@@ -37,37 +40,27 @@ export const DebouncedInput = ({
   return (
     <>
       {label && (
-        <label htmlFor={id} className="hidden">
-          {label}
+        <label htmlFor={id} className="label w-full">
+          <span className="hidden">{label}</span>
+          <input
+            ref={autoFocus ? champSearch : null}
+            id={id} // Add id to the input
+            {...props}
+            className={cn("input input-xs w-full", className)}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
         </label>
       )}
-      <input
-        ref={autoFocus ? champSearch : null}
-        id={id} // Add id to the input
-        {...props}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+
       {clearInput && (
         <button
           disabled={!value}
-          className="btn join-item btn-xs rounded border disabled:bg-base-200 disabled:opacity-50"
+          className="btn join-item disabled:bg-base-200/50 md:btn-xs"
           onClick={() => setValue("")}
           aria-label="Clear search input"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M2.293 2.293a1 1 0 011.414 0L10 8.586l6.293-6.293a1 1 0 111.414 1.414L11.414 10l6.293 6.293a1 1 0 11-1.414 1.414L10 11.414l-6.293 6.293a1 1 0 01-1.414-1.414L8.586 10 2.293 3.707a1 1 0 010-1.414z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <XIcon size={14} />
         </button>
       )}
     </>

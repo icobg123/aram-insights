@@ -27,8 +27,8 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
   children,
 }) => {
   return (
-    <div className="container max-w-5xl p-1">
-      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-base-300 px-4 pb-0 pt-3 shadow-lg">
+    <div className="container max-w-5xl md:p-1">
+      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col md:rounded-lg bg-base-300 px-4 pb-0 pt-3 md:shadow-lg">
         {children}
         <Suspense
           fallback={
@@ -50,8 +50,8 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
           />
         </Suspense>
         <div className="mt-auto  py-1">
-          <Link href={"https://bsky.app/profile/jointless.bsky.social"} target="_blank" className="flex items-center justify-end ">
-            Feedback welcome on&nbsp;  <FaBluesky />
+          <Link href={"https://bsky.app/profile/jointless.bsky.social"} target="_blank" className="flex items-center justify-start gap-2 ">
+            Feedback <FaBluesky />
           </Link>
         </div>
       </div>
