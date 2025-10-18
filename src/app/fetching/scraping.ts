@@ -140,44 +140,52 @@ export const fetchChampionAllData = async (
     const champions = championJson.data;
     const championNames = Object.keys(champions);
 
-    const results = await Promise.all(
-      championNames.map(async (championName) => {
-        const champion = champions[championName] as ChampionData;
-        const championIcon = champion.image.full;
-        const championTitle = champion.title;
-        const champName = champion.name;
+    // Process champions in batches to avoid overwhelming APIs
+    const BATCH_SIZE = 20; // Process 20 champions at a time
+    const results: ChampionDataApi[] = [];
 
-        // Fetch champion spells and icon concurrently
-        const [spells, { base64, img }] = await Promise.all([
-          fetchIndividualChampionData(championName, version),
-          getImage(
-            `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`
-          ),
-        ]);
+    for (let i = 0; i < championNames.length; i += BATCH_SIZE) {
+      const batch = championNames.slice(i, i + BATCH_SIZE);
+      const batchResults = await Promise.all(
+        batch.map(async (championName) => {
+          const champion = champions[championName] as ChampionData;
+          const championIcon = champion.image.full;
+          const championTitle = champion.title;
+          const champName = champion.name;
 
-        const winRate =
-          championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
+          // Fetch champion spells and icon concurrently
+          const [spells, { base64, img }] = await Promise.all([
+            fetchIndividualChampionData(championName, version),
+            getImage(
+              `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/champion/${championIcon}`
+            ),
+          ]);
 
-        // Build champion data object
-        const championObject: ChampionDataApi = {
-          icon: { base64, ...img },
-          title: championTitle,
-          spells: spells,
-          winRate: winRate,
-          damageReceived: 0,
-          damageDealt: 0,
-          generalChanges: [],
-          abilityChanges: [],
-          champion: champName,
-        };
+          const winRate =
+            championName === "Nunu" ? winRates["Nunu"] : winRates[champName];
 
-        return {
-          ...championObject,
-          ...allChampionData[champName],
-          champion: champName,
-        };
-      })
-    );
+          // Build champion data object
+          const championObject: ChampionDataApi = {
+            icon: { base64, ...img },
+            title: championTitle,
+            spells: spells,
+            winRate: winRate,
+            damageReceived: 0,
+            damageDealt: 0,
+            generalChanges: [],
+            abilityChanges: [],
+            champion: champName,
+          };
+
+          return {
+            ...championObject,
+            ...allChampionData[champName],
+            champion: champName,
+          };
+        })
+      );
+      results.push(...batchResults);
+    }
 
     return results;
   } catch (error) {
@@ -280,62 +288,81 @@ export const fetchRunesAllData = async (
   }
 };
 
+// Cache for individual champion data to avoid duplicate API calls
+const championDataCache = new Map<
+  string,
+  Promise<Record<string, any>>
+>();
+
 export const fetchIndividualChampionData = async (
   champName: string,
   version: string
 ) => {
-  try {
-    // Fetch the champion data from the API
-    const response = await fetch(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`,
-      { next: { revalidate: revalidate } }
-    );
-    const json = await response.json();
-    const spells = json.data[champName].spells;
-    const passiveName = json.data[champName].passive.name.trim().toLowerCase();
-    const passiveId = json.data[champName].passive.image.full;
-
-    // Fetch passive image data
-    const { base64: passiveBase64, img: passiveImg } = await getImage(
-      `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/passive/${passiveId}`
-    );
-
-    // Fetch spells' images using Promise.all with map
-    const spellsData = await Promise.all(
-      spells.map(async (spell: any) => {
-        const spellId = spell.image.full;
-        let spellName = spell.name.split("/")[0].trim().toLowerCase();
-
-        // Handling edge case for spell names with specific formatting
-        if (spellName.includes("h-28 g")) {
-          spellName = spellName.replace("h-28 g", "h-28g");
-        }
-
-        // Fetch the spell image
-        const { base64, img } = await getImage(
-          `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/spell/${spellId}`
-        );
-
-        return {
-          [spellName]: { base64, ...img },
-        };
-      })
-    );
-
-    // Reduce the spells data into a single object
-    const spellsObject = spellsData.reduce((acc, spellObj) => {
-      return { ...acc, ...spellObj };
-    }, {});
-
-    // Combine passive and spell data into a single object
-    return {
-      [passiveName]: { base64: passiveBase64, ...passiveImg },
-      ...spellsObject,
-    };
-  } catch (error) {
-    console.error(`Error fetching data for champion ${champName}:`, error);
-    throw error;
+  const cacheKey = `${version}-${champName}`;
+  const cached = championDataCache.get(cacheKey);
+  if (cached) {
+    return cached;
   }
+
+  const dataPromise = (async () => {
+    try {
+      // Fetch the champion data from the API
+      const response = await fetch(
+        `https://ddragon.leagueoflegends.com/cdn/${version}.1/data/en_US/champion/${champName}.json`,
+        { next: { revalidate: revalidate } }
+      );
+      const json = await response.json();
+      const spells = json.data[champName].spells;
+      const passiveName = json.data[champName].passive.name
+        .trim()
+        .toLowerCase();
+      const passiveId = json.data[champName].passive.image.full;
+
+      // Fetch passive image data
+      const { base64: passiveBase64, img: passiveImg } = await getImage(
+        `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/passive/${passiveId}`
+      );
+
+      // Fetch spells' images using Promise.all with map
+      const spellsData = await Promise.all(
+        spells.map(async (spell: any) => {
+          const spellId = spell.image.full;
+          let spellName = spell.name.split("/")[0].trim().toLowerCase();
+
+          // Handling edge case for spell names with specific formatting
+          if (spellName.includes("h-28 g")) {
+            spellName = spellName.replace("h-28 g", "h-28g");
+          }
+
+          // Fetch the spell image
+          const { base64, img } = await getImage(
+            `https://ddragon.leagueoflegends.com/cdn/${version}.1/img/spell/${spellId}`
+          );
+
+          return {
+            [spellName]: { base64, ...img },
+          };
+        })
+      );
+
+      // Reduce the spells data into a single object
+      const spellsObject = spellsData.reduce((acc, spellObj) => {
+        return { ...acc, ...spellObj };
+      }, {});
+
+      // Combine passive and spell data into a single object
+      return {
+        [passiveName]: { base64: passiveBase64, ...passiveImg },
+        ...spellsObject,
+      };
+    } catch (error) {
+      console.error(`Error fetching data for champion ${champName}:`, error);
+      throw error;
+    }
+  })();
+
+  championDataCache.set(cacheKey, dataPromise);
+  return dataPromise;
 };
 
 const parseChampionData = ($: CheerioAPI, mode: "aram" | "arena" | "urf"): ChampionDataScrapped => {
