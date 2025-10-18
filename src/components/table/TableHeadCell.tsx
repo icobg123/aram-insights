@@ -2,7 +2,6 @@ import React from "react";
 import { HeaderContext } from "@tanstack/table-core";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
 import { useMedia } from "react-use";
-import { screens } from "tailwindcss/defaultTheme";
 
 type TableHeadCellProps<T, TValue = any> = {
   className?: string;
@@ -19,8 +18,7 @@ export const TableHeadCell = <T, TValue = any>({
   table,
   filter,
 }: TableHeadCellProps<T, TValue>) => {
-  const smBreakpoint = screens.md;
-  const isLarge = useMedia(`(min-width: ${smBreakpoint})`, true);
+  const isLarge = useMedia("(min-width: 768px)", true);
   /*accessing the arrows object with the array notation*/
   const arrows: string | null =
     {

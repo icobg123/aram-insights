@@ -14,7 +14,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       "react-icons",
-      "@tanstack/react-table",
       "react-use",
     ],
     // Mark sharp and plaiceholder as server-only packages
