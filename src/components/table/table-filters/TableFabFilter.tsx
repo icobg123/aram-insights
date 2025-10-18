@@ -27,7 +27,7 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
   return (
     <>
       <button
-        className="btn btn-circle fixed bottom-10 right-7 bg-blue-300 text-black md:hidden"
+        className="btn btn-circle btn-primary fixed bottom-10 right-7 md:hidden"
         aria-label="Open filters"
         onClick={() => window.filterModal.showModal()}
       >
@@ -41,7 +41,7 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
         </svg>
       </button>
       <dialog id="filterModal" className="modal">
-        <form method="dialog" className="modal-box bg-gray-700 text-white">
+        <form method="dialog" className="modal-box bg-base-200">
           <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
             ✕
           </button>

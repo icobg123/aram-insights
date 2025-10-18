@@ -51,7 +51,7 @@ export const DebouncedInput = ({
       {clearInput && (
         <button
           disabled={!value}
-          className="btn join-item btn-xs rounded border text-gray-400 disabled:bg-gray-900 disabled:text-gray-700"
+          className="btn join-item btn-xs rounded border disabled:bg-base-200 disabled:opacity-50"
           onClick={() => setValue("")}
           aria-label="Clear search input"
         >

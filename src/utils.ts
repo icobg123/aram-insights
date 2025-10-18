@@ -1,6 +1,4 @@
 import { getPlaiceholder } from "plaiceholder";
-import clsx, { ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 // In-memory cache for image data to avoid duplicate fetches during build
 const imageCache = new Map<
   string,
@@ -38,7 +36,3 @@ export async function getImage(src: string) {
   imageCache.set(src, imagePromise);
   return imagePromise;
 }
-
-export const cn = (...inputs: ClassValue[]) => {
-  return twMerge(clsx(inputs));
-};

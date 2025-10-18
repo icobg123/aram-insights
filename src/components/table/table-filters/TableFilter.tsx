@@ -23,9 +23,9 @@ export default function TableFilter({
   //TODO: Make number input change color based on value. e.g. green if positive, red if negative for dmg dealt and opposite for dmg received
   const numberInputColours = (columnFilterValue as [number, number])?.[0]
     ? (columnFilterValue as [number, number])?.[0] >= 0
-      ? "text-green-400"
-      : "text-red-400"
-    : "text-gray-400";
+      ? "text-success"
+      : "text-error"
+    : "";
 
   return typeof firstValue === "number" ? (
     <div className="join">
@@ -44,7 +44,7 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[0]})`
             : ""
         }`}
-        className={`input input-xs join-item w-1/2 bg-gray-900 font-normal text-gray-400 ${noArrowsClasses}`}
+        className={`input input-xs join-item w-1/2 bg-base-200 font-normal ${noArrowsClasses}`}
       />
       <DebouncedInput
         label={column.id}
@@ -61,7 +61,7 @@ export default function TableFilter({
             ? `(${column.getFacetedMinMaxValues()?.[1]})`
             : ""
         }`}
-        className={`input input-xs join-item w-1/2 bg-gray-900 font-normal text-gray-400 ${noArrowsClasses}`}
+        className={`input input-xs join-item w-1/2 bg-base-200 font-normal ${noArrowsClasses}`}
       />
     </div>
   ) : (

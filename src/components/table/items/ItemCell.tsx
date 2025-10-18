@@ -11,10 +11,10 @@ const ItemCell = ({ props }: TableRowProps) => {
   const { itemName, icon } = props.row.original;
   const { src, base64 } = icon;
   return (
-    <th scope="row" className="p-2 font-medium text-white md:p-4">
+    <th scope="row" className="p-2 font-medium md:p-4">
       <div className="flex items-center md:flex-row md:items-center">
         <div className="avatar ml-2 flex justify-center md:inline-flex">
-          <div className="mt-2 w-12 rounded-full ring ring-offset-2 ring-offset-gray-900 md:w-20">
+          <div className="mt-2 w-12 rounded-full ring ring-offset-2 ring-offset-base-100 md:w-20">
             <Image
               width={96}
               height={96}

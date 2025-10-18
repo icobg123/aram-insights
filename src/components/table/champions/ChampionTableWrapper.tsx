@@ -133,8 +133,8 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
               className={`p-2 text-center md:p-4 ${
                 damageDealt
                   ? damageDealt >= 0
-                    ? "text-green-400"
-                    : "text-red-400"
+                    ? "text-success"
+                    : "text-error"
                   : "inherit"
               }`}
             >
@@ -167,8 +167,8 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
               className={`p-2 text-center md:p-4 ${
                 damageReceived
                   ? damageReceived <= 0
-                    ? "text-green-400"
-                    : "text-red-400"
+                    ? "text-success"
+                    : "text-error"
                   : "inherit"
               }`}
             >

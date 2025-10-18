@@ -30,7 +30,7 @@ export const TableWrapperHeader = ({
         {children}
         <div className="ml-2 flex flex-grow justify-between md:items-baseline">
           <div className="prose">
-            <h1 className="mb-0 font-medium text-gray-200">{mode}</h1>
+            <h1 className="mb-0 font-medium">{mode}</h1>
           </div>
           <div className="badge badge-neutral z-40 ml-2 self-end md:self-baseline">
             <span>

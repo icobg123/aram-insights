@@ -28,7 +28,7 @@ export const TableHeadCell = <T, TValue = any>({
   return (
     <th
       scope="col"
-      className={`${className}  text-center hover:bg-gray-600 hover:text-gray-200`}
+      className={`${className}  text-center hover:bg-base-300`}
     >
       <div className="flex h-full flex-col justify-between">
         <div

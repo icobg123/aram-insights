@@ -38,8 +38,8 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
           <button
             key={index}
             aria-label={tabLabels[index]}
-            className={`tab-border tab flex-auto rounded-t-lg text-gray-200 ${
-              activeTab === index ? "tab-active bg-gray-700" : ""
+            className={`tab-border tab flex-auto rounded-t-lg ${
+              activeTab === index ? "tab-active" : ""
             }`}
             onClick={() => handleTabClick(index)}
           >

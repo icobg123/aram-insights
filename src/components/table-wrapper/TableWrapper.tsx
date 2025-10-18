@@ -28,7 +28,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 }) => {
   return (
     <div className="container max-w-5xl p-1">
-      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-0 pt-3 shadow-lg">
+      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-base-300 px-4 pb-0 pt-3 shadow-lg">
         {children}
         <Suspense
           fallback={
