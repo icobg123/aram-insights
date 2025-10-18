@@ -101,7 +101,7 @@ export default async function GameModePage({
   ]);
 
   return (
-    <div className="flex min-h-screen items-end justify-center  md:pb-6">
+    <div className="flex min-h-[calc(100vh-65px)] items-end justify-center md:pb-6">
       <TableWrapper
         championData={championDataApi}
         itemData={itemDataApi}

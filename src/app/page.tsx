@@ -2,9 +2,9 @@ import { TableWrapper } from "@/components/table-wrapper/TableWrapper";
 import {
   fetchChampionAllData,
   fetchItemsAllData,
+  fetchLatestDDragonVersion,
   fetchRunesAllData,
   scrapeLoLWikiData,
-  fetchLatestDDragonVersion,
   scrapePatchVersion,
 } from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
@@ -42,7 +42,7 @@ export default async function Home() {
     fetchRunesAllData(ddragonVersion, runeData),
   ]);
   return (
-    <div className="flex min-h-[calc(100vh-65px)]  items-end justify-center md:pb-6">
+    <div className="flex min-h-[calc(100vh-65px)] items-end justify-center md:pb-6">
       <TableWrapper
         championData={championDataApi}
         itemData={itemDataApi}
