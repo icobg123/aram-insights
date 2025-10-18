@@ -8,7 +8,7 @@ import {
   RunesChangesScrapped,
 } from "@/types";
 import Tabs from "@/components/table-wrapper/Tabs";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaBluesky, FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 
 export interface TableWrapperProps {
@@ -28,7 +28,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
 }) => {
   return (
     <div className="container max-w-5xl p-1">
-      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-4 pt-3 shadow-lg">
+      <div className="relative flex h-[81svh] min-h-[81svh] w-full flex-col rounded-lg bg-gray-950 px-4 pb-0 pt-3 shadow-lg">
         {children}
         <Suspense
           fallback={
@@ -49,9 +49,9 @@ export const TableWrapper: React.FC<TableWrapperProps> = ({
             ]}
           />
         </Suspense>
-        <div className="mt-auto flex items-center justify-start">
-          <Link href={"https://x.com/jointless_inc"} target="_blank">
-            <FaXTwitter />
+        <div className="mt-auto  py-1">
+          <Link href={"https://bsky.app/profile/jointless.bsky.social"} target="_blank" className="flex items-center justify-end ">
+            Feedback welcome on&nbsp;  <FaBluesky />
           </Link>
         </div>
       </div>

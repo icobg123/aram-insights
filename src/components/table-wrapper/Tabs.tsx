@@ -47,11 +47,11 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
           </button>
         ))}
       </div>
-      <div className="container max-w-5xl">
-        <div className="max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-[66svh]">
+
+        <div className="flex-1 container max-w-5xl max-h-[62svh] w-full overflow-auto rounded-lg shadow-md md:max-h-none">
           {tabContents[activeTab]}
         </div>
-      </div>
+
     </>
   );
 };
