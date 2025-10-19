@@ -65,7 +65,7 @@ const Header = () => {
                   href={item.href}
                   className={
                     activeSegment === item.activeSegment
-                      ? "btn-active"
+                      ? "menu-active"
                       : ""
                   }
                 >
@@ -98,7 +98,7 @@ const Header = () => {
                 href={item.href}
                 className={
                   activeSegment === item.activeSegment
-                    ? "btn-active"
+                    ? "menu-active"
                     : ""
                 }
               >
