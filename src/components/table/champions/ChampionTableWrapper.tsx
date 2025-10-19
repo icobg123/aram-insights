@@ -42,7 +42,7 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
     }
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const isLarge = useMedia("(min-width: 768px)", false);
+  const isLarge = useMedia("(min-width: 768px)", true);
   // Sync URL search param with champion column filter
   useEffect(() => {
     if (tab === "champions") {
