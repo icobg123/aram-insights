@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import {
   ColumnFiltersState,
@@ -40,16 +40,28 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
 
+  // Use ref to prevent infinite loop between the two effects
+  const isUpdatingFromUrl = useRef(false);
+  const isUpdatingFromFilter = useRef(false);
+
   // Sync URL search param with item column filter
   useEffect(() => {
+    if (isUpdatingFromFilter.current) {
+      isUpdatingFromFilter.current = false;
+      return;
+    }
+
     if (tab === "items") {
       const itemFilter = columnFilters.find((f) => f.id === "itemName");
-      const filterValue = itemFilter?.value as string | undefined;
-      if (filterValue !== search) {
-        if (filterValue) {
-          setColumnFilters([{ id: "itemName", value: search }]);
-        } else if (search) {
-          setColumnFilters([{ id: "itemName", value: search }]);
+      const currentFilterValue = (itemFilter?.value as string) || "";
+      const searchValue = search || "";
+
+      if (currentFilterValue !== searchValue) {
+        isUpdatingFromUrl.current = true;
+        if (searchValue) {
+          setColumnFilters([{ id: "itemName", value: searchValue }]);
+        } else {
+          setColumnFilters([]);
         }
       }
     } else {
@@ -62,14 +74,22 @@ export const ItemTableWrapper: React.FC<TableWrapperProps> = ({ itemData }) => {
 
   // Update URL when item column filter changes
   useEffect(() => {
+    if (isUpdatingFromUrl.current) {
+      isUpdatingFromUrl.current = false;
+      return;
+    }
+
     if (tab === "items") {
       const itemFilter = columnFilters.find((f) => f.id === "itemName");
       const filterValue = (itemFilter?.value as string) || "";
-      if (filterValue !== search) {
+      const searchValue = search || "";
+
+      if (filterValue !== searchValue) {
+        isUpdatingFromFilter.current = true;
         void setSearch(filterValue || null);
       }
     }
-  }, [columnFilters, tab, setSearch]);
+  }, [columnFilters, tab]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<ItemChangesScrapped>(),
     []

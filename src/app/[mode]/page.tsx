@@ -104,12 +104,11 @@ export default async function GameModePage({
   const { apiMode, wikiMode } = config;
 
   // Use DDragon version API for compatibility with DDragon data
-  const ddragonVersion = await fetchLatestDDragonVersion();
-
   // Get wiki version for display
-  const wikiVersion = await scrapePatchVersion(
-    "https://wiki.leagueoflegends.com/en-us/Patch"
-  );
+  const [ddragonVersion, wikiVersion] = await Promise.all([
+    fetchLatestDDragonVersion(),
+    scrapePatchVersion("https://wiki.leagueoflegends.com/en-us/Patch"),
+  ]);
 
   const { runeData, championData, itemData } = await scrapeLoLWikiData(
     ddragonVersion,
@@ -124,7 +123,7 @@ export default async function GameModePage({
   ]);
 
   return (
-    <div className="flex min-h-[calc(100vh-65px)] items-end justify-center md:pb-6">
+    <div className="flex min-h-[calc(100svh-65px)] items-end justify-center md:pb-6">
       <TableWrapper
         championData={championDataApi}
         itemData={itemDataApi}

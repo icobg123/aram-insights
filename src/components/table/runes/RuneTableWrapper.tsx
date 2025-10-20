@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useReactTable } from "@tanstack/react-table";
 import RuneCell from "@/components/table/runes/RuneCell";
 import { RunesChangesScrapped } from "@/types";
@@ -38,16 +38,28 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
 
+  // Use ref to prevent infinite loop between the two effects
+  const isUpdatingFromUrl = useRef(false);
+  const isUpdatingFromFilter = useRef(false);
+
   // Sync URL search param with rune column filter
   useEffect(() => {
+    if (isUpdatingFromFilter.current) {
+      isUpdatingFromFilter.current = false;
+      return;
+    }
+
     if (tab === "runes") {
       const runeFilter = columnFilters.find((f) => f.id === "runeName");
-      const filterValue = runeFilter?.value as string | undefined;
-      if (filterValue !== search) {
-        if (filterValue) {
-          setColumnFilters([{ id: "runeName", value: search }]);
-        } else if (search) {
-          setColumnFilters([{ id: "runeName", value: search }]);
+      const currentFilterValue = (runeFilter?.value as string) || "";
+      const searchValue = search || "";
+
+      if (currentFilterValue !== searchValue) {
+        isUpdatingFromUrl.current = true;
+        if (searchValue) {
+          setColumnFilters([{ id: "runeName", value: searchValue }]);
+        } else {
+          setColumnFilters([]);
         }
       }
     } else {
@@ -60,14 +72,22 @@ export const RuneTableWrapper: React.FC<TableWrapperProps> = ({ runeData }) => {
 
   // Update URL when rune column filter changes
   useEffect(() => {
+    if (isUpdatingFromUrl.current) {
+      isUpdatingFromUrl.current = false;
+      return;
+    }
+
     if (tab === "runes") {
       const runeFilter = columnFilters.find((f) => f.id === "runeName");
       const filterValue = (runeFilter?.value as string) || "";
-      if (filterValue !== search) {
+      const searchValue = search || "";
+
+      if (filterValue !== searchValue) {
+        isUpdatingFromFilter.current = true;
         void setSearch(filterValue || null);
       }
     }
-  }, [columnFilters, tab, setSearch]);
+  }, [columnFilters, tab]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<RunesChangesScrapped>(),
     []

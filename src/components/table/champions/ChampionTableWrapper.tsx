@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import {
   ColumnFiltersState,
@@ -43,16 +43,30 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
   );
   const [globalFilter, setGlobalFilter] = React.useState("");
   const isLarge = useMedia("(min-width: 768px)", true);
+
+  // Use ref to prevent infinite loop between the two effects
+  const isUpdatingFromUrl = useRef(false);
+  const isUpdatingFromFilter = useRef(false);
+
   // Sync URL search param with champion column filter
   useEffect(() => {
+    if (isUpdatingFromFilter.current) {
+      isUpdatingFromFilter.current = false;
+      return;
+    }
+
     if (tab === "champions") {
+      // Only update columnFilters if search param changes and differs from current filter
       const championFilter = columnFilters.find((f) => f.id === "champion");
-      const filterValue = championFilter?.value as string | undefined;
-      if (filterValue !== search) {
-        if (filterValue) {
-          setColumnFilters([{ id: "champion", value: search }]);
-        } else if (search) {
-          setColumnFilters([{ id: "champion", value: search }]);
+      const currentFilterValue = (championFilter?.value as string) || "";
+      const searchValue = search || "";
+
+      if (currentFilterValue !== searchValue) {
+        isUpdatingFromUrl.current = true;
+        if (searchValue) {
+          setColumnFilters([{ id: "champion", value: searchValue }]);
+        } else {
+          setColumnFilters([]);
         }
       }
     } else {
@@ -63,16 +77,25 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
     }
   }, [search, tab]);
 
-  // Update URL when champion column filter changes
+  // Update URL when champion column filter changes (user types in filter)
   useEffect(() => {
+    if (isUpdatingFromUrl.current) {
+      isUpdatingFromUrl.current = false;
+      return;
+    }
+
     if (tab === "champions") {
       const championFilter = columnFilters.find((f) => f.id === "champion");
       const filterValue = (championFilter?.value as string) || "";
-      if (filterValue !== search) {
+      const searchValue = search || "";
+
+      // Only update URL if filter was changed by user input (not by URL sync)
+      if (filterValue !== searchValue) {
+        isUpdatingFromFilter.current = true;
         void setSearch(filterValue || null);
       }
     }
-  }, [columnFilters, tab, setSearch]);
+  }, [columnFilters, tab]);
   const columnHelper = React.useMemo(
     () => createColumnHelper<ChampionDataApi>(),
     []

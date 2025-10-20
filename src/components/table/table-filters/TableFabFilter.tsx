@@ -1,6 +1,10 @@
+"use client";
 import React from "react";
 import TableFilter from "@/components/table/table-filters/TableFilter";
 import { Table as TanTable } from "@tanstack/table-core/build/lib/types";
+import { useTableState } from "@/hooks/useTableState";
+import { Filter } from "lucide-react";
+import { cn } from "@/lib/cn";
 
 declare global {
   interface Window {
@@ -24,25 +28,22 @@ const tableHeaderTitles: { [key: string]: string } = {
   runeChanges: "Changes",
 };
 const TableFabFilter = ({ table }: TableFabFilterProps) => {
+  const { tab, setTab } = useTableState();
   return (
     <>
       <button
-        className="btn btn-circle btn-primary fixed bottom-10 right-7 md:hidden"
+        className={cn(
+          "btn fixed right-7 bottom-10 btn-circle btn-primary md:hidden",
+          tab !== "champions" && "hidden"
+        )}
         aria-label="Open filters"
         onClick={() => window.filterModal.showModal()}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className="h-6 w-6"
-        >
-          <path d="M18.75 12.75h1.5a.75.75 0 000-1.5h-1.5a.75.75 0 000 1.5zM12 6a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 6zM12 18a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 0112 18zM3.75 6.75h1.5a.75.75 0 100-1.5h-1.5a.75.75 0 000 1.5zM5.25 18.75h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 010 1.5zM3 12a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 013 12zM9 3.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zM12.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0zM9 15.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-        </svg>
+        <Filter size={16} />
       </button>
-      <dialog id="filterModal" className="modal modal-bottom	">
-        <form method="dialog" className="modal-box bg-base-200 ">
-          <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2">
+      <dialog id="filterModal" className="modal modal-bottom">
+        <form method="dialog" className="modal-box bg-base-200">
+          <button className="btn absolute top-2 right-2 btn-circle btn-ghost btn-sm">
             ✕
           </button>
           <h2 className="text-lg font-bold">Filters</h2>
@@ -52,9 +53,7 @@ const TableFabFilter = ({ table }: TableFabFilterProps) => {
                 <React.Fragment key={header.id}>
                   {header.column.getCanFilter() ? (
                     <div className="flex flex-col space-y-3 pt-2">
-                      <span>{`${
-                        tableHeaderTitles[header.column.id]
-                      }`}</span>
+                      <span>{`${tableHeaderTitles[header.column.id]}`}</span>
                       <TableFilter column={header.column} table={table} />
                     </div>
                   ) : null}
