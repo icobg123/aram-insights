@@ -1,34 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ARAM Insights
+
+A Next.js application that tracks and displays League of Legends champion, item, and rune balance adjustments for special game modes (ARAM, Arena, Ultra Rapid Fire).
+
+## Features
+
+- Real-time balance changes scraped from League of Legends Wiki
+- Champion statistics including damage modifiers and win rates
+- Item and rune adjustments for special game modes
+- Interactive tables with sorting, filtering, and search
+- Responsive dark theme UI with TailwindCSS and DaisyUI
+- Automatic weekly data updates via ISR (Incremental Static Regeneration)
+
+## Tech Stack
+
+- **Framework**: Next.js 14+ (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS + DaisyUI
+- **Data Fetching**: Server Components with ISR
+- **Web Scraping**: Cheerio
+- **Tables**: TanStack React Table
+- **Image Optimization**: Plaiceholder for blur placeholders
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development Commands
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm start        # Start production server
+npm run lint     # Run ESLint
+npx prettier --write .  # Format code
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project Structure
 
-## Learn More
+```
+src/
+├── app/
+│   ├── fetching/scraping.ts    # All data fetching logic
+│   ├── aram/                   # ARAM mode page
+│   ├── arena/                  # Arena mode page
+│   └── urf/                    # URF mode page
+├── components/                 # Client components (tables, UI)
+├── types.ts                    # TypeScript type definitions
+└── utils.ts                    # Utility functions
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Data Sources
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **League of Legends Wiki**: Balance changes for special game modes
+- **DDragon API**: Official champion/item/rune data and images
+- **MetaSrc**: Win rate statistics
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+MIT
