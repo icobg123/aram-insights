@@ -1,5 +1,5 @@
 import { Column, Table } from "@tanstack/table-core";
-import { DebouncedInput } from "@/components/table/DebouncedInput";
+import { TableInput } from "@/components/table/TableInput";
 import React from "react";
 import { TextFilter } from "@/components/table/table-filters/TextFilter";
 import { cn } from "@/lib/cn";
@@ -33,10 +33,9 @@ export default function TableFilter({
 
   return typeof firstValue === "number" ? (
     <div className="join">
-      <DebouncedInput
+      <TableInput
         label={column.id}
         type="number"
-        debounce={500}
         // min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
         // max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
         value={(columnFilterValue as [number, number])?.[0] ?? ""}
@@ -50,10 +49,9 @@ export default function TableFilter({
         }`}
         className={minMaxClasses}
       />
-      <DebouncedInput
+      <TableInput
         label={column.id}
         type="number"
-        debounce={500}
         // min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
         // max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
         value={(columnFilterValue as [number, number])?.[1] ?? ""}

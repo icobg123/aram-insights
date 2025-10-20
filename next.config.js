@@ -67,13 +67,10 @@ const nextConfig = {
   },
   // Performance optimizations
   experimental: {
-    optimizePackageImports: [
-      "react-icons",
-      "react-use",
-    ],
+    optimizePackageImports: ["react-icons", "react-use"],
     // Mark sharp and plaiceholder as server-only packages
-    serverComponentsExternalPackages: ["sharp", "plaiceholder"],
   },
+  serverExternalPackages: ["sharp", "plaiceholder"],
   // Optimize development performance
   onDemandEntries: {
     // Keep pages in memory longer during development

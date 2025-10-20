@@ -1,4 +1,4 @@
-import { DebouncedInput } from "@/components/table/DebouncedInput";
+import { TableInput } from "@/components/table/TableInput";
 import React from "react";
 import { Column } from "@tanstack/table-core";
 import { useMedia } from "react-use";
@@ -22,7 +22,7 @@ export const TextFilter = ({
         <div className="btn join-item flex min-w-[38px] items-center justify-center text-base-content/70 md:btn-xs">
           {totalResults}
         </div>
-        <DebouncedInput
+        <TableInput
           label={`${column.id} search`}
           type="text"
           id={column.id + "list"}
@@ -33,7 +33,6 @@ export const TextFilter = ({
           list={column.id + "list"}
           clearInput
           autoFocus={isLarge}
-          debounce={100}
         />
       </div>
     </>

@@ -49,9 +49,10 @@ const modeConfig: Record<
 export async function generateMetadata({
   params,
 }: {
-  params: { mode: string };
+  params: Promise<{ mode: string }>;
 }) {
-  const config = modeConfig[params.mode as Mode];
+  const { mode } = await params;
+  const config = modeConfig[mode as Mode];
 
   if (!config) {
     return {
@@ -90,10 +91,11 @@ export async function generateMetadata({
 export default async function GameModePage({
   params,
 }: {
-  params: { mode: string };
+  params: Promise<{ mode: string }>;
 }) {
   // Validate mode
-  const config = modeConfig[params.mode as Mode];
+  const { mode } = await params;
+  const config = modeConfig[mode as Mode];
 
   if (!config) {
     notFound();

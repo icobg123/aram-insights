@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <div className="navbar sticky top-0 z-10 bg-base-200 px-4">
-    {/*<div className="navbar sticky top-0 z-10 mb-[-80px] bg-base-200 px-4">*/}
+      {/*<div className="navbar sticky top-0 z-10 mb-[-80px] bg-base-200 px-4">*/}
       <div className="navbar-start space-x-2">
         <nav className="dropdown">
           <button
@@ -57,16 +57,14 @@ const Header = () => {
           </button>
           <ul
             tabIndex={0}
-            className="menu dropdown-content menu-sm z-[999px] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+            className="dropdown-content menu z-[999px] mt-3 w-52 menu-sm rounded-box bg-base-100 p-2 shadow"
           >
             {items.map((item) => (
               <li key={item.id}>
                 <Link
                   href={item.href}
                   className={
-                    activeSegment === item.activeSegment
-                      ? "menu-active"
-                      : ""
+                    activeSegment === item.activeSegment ? "menu-active" : ""
                   }
                 >
                   {item.title}
@@ -86,9 +84,9 @@ const Header = () => {
             />
           </div>
         </div>
-        <a className="btn btn-ghost text-xl" href="/">
+        <Link className="btn text-xl btn-ghost" href="/">
           Aram balance
-        </a>
+        </Link>
       </div>
       <nav className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
@@ -97,9 +95,7 @@ const Header = () => {
               <Link
                 href={item.href}
                 className={
-                  activeSegment === item.activeSegment
-                    ? "menu-active"
-                    : ""
+                  activeSegment === item.activeSegment ? "menu-active" : ""
                 }
               >
                 {item.title}
