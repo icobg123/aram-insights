@@ -77,6 +77,7 @@ const nextConfig = {
     maxInactiveAge: 60 * 60 * 1000, // 1 hour
     pagesBufferLength: 5,
   },
+  productionBrowserSourceMaps: true,
 };
 
 module.exports = nextConfig;
