@@ -11,35 +11,16 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "ARAM Insights - League of Legends Balance Changes",
-    template: "%s | ARAM Insights",
+    default: "ARAM balance - League of Legends Balance Changes",
+    template: "%s | ARAM balance",
   },
   description:
     "Track League of Legends champion, item, and rune balance changes for ARAM, Arena, and URF game modes. Stay updated with the latest nerfs and buffs.",
   openGraph: {
-    title: "ARAM Insights - League of Legends Balance Changes",
+    title: "ARAM balance - League of Legends Balance Changes",
     description:
       "Track League of Legends champion, item, and rune balance changes for ARAM, Arena, and URF game modes.",
     type: "website",
-  },
-  themeColor: "#1f2937",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "ARAM Insights",
-  },
-  icons: {
-    icon: [
-      { url: "/maskable_icon_x48.png", sizes: "48x48", type: "image/png" },
-      { url: "/maskable_icon_x72.png", sizes: "72x72", type: "image/png" },
-      { url: "/maskable_icon_x128.png", sizes: "128x128", type: "image/png" },
-      { url: "/maskable_icon_x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/maskable_icon_x384.png", sizes: "384x384", type: "image/png" },
-      { url: "/maskable_icon_x512.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/maskable_icon_x192.png", sizes: "192x192", type: "image/png" },
-    ],
   },
 };
 
