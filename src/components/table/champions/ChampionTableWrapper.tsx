@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 
 import {
+  CellContext,
   ColumnFiltersState,
   createColumnHelper,
   getCoreRowModel,
@@ -224,7 +225,11 @@ export const ChampionTableWrapper: React.FC<TableWrapperProps> = ({
     if (isLarge) {
       const otherChanges = columnHelper.display({
         id: "otherChanges",
-        cell: (props) => <OtherChangesCell props={props} />,
+        cell: (props) => (
+          <OtherChangesCell
+            props={props as CellContext<ChampionDataApi, ChampionDataApi>}
+          />
+        ),
         header: () => (
           <th
             scope="col"

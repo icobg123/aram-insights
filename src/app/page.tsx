@@ -9,13 +9,14 @@ import {
 } from "@/app/fetching/scraping";
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
+import { Metadata } from "next";
 
 export const maxDuration = 60;
 
 // Revalidate every 7 days (604800 seconds)
 export const revalidate = 604800;
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const title = "ARAM nerfs and buffs - Who's your pick this game?";
   const description =
     "Discover ARAM Balance: The best source for League of Legends ARAM champion nerfs and buffs.";

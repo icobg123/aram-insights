@@ -11,6 +11,7 @@ import {
 import { TableWrapperHeader } from "@/components/table-wrapper/TableWrapperHeader";
 import React from "react";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 export const maxDuration = 60;
 
@@ -50,7 +51,7 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ mode: string }>;
-}) {
+}): Promise<Metadata> {
   const { mode } = await params;
   const config = modeConfig[mode as Mode];
 
