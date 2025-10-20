@@ -65,6 +65,18 @@ const nextConfig = {
       },
     ];
   },
+  // Compiler optimizations for modern browsers
+  compiler: {
+    // Remove React properties in production (e.g., data-testid)
+    reactRemoveProperties: process.env.NODE_ENV === "production",
+    // Remove console statements in production
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"], // Keep error and warn logs
+          }
+        : false,
+  },
   // Performance optimizations
   experimental: {
     optimizePackageImports: ["react-icons", "react-use"],
