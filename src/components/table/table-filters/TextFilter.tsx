@@ -1,7 +1,6 @@
 import { TableInput } from "@/components/table/TableInput";
 import React from "react";
 import { Column } from "@tanstack/table-core";
-import { useMedia } from "react-use";
 
 type TextFilterProps = {
   column: Column<any, unknown>;
@@ -15,7 +14,6 @@ export const TextFilter = ({
   totalResults,
   placeholder = "Search...",
 }: TextFilterProps) => {
-  const isLarge = useMedia("(min-width: 768px)", true);
   return (
     <>
       <div className="join w-full flex-1 md:w-7/8">
@@ -32,7 +30,7 @@ export const TextFilter = ({
           className="input-md join-item w-full md:input-xs"
           list={column.id + "list"}
           clearInput
-          autoFocus={isLarge}
+          autoFocus={false}
         />
       </div>
     </>
