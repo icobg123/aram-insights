@@ -10,7 +10,7 @@ type TableProps<T> = {
 
 export const Table = <T,>({ table }: TableProps<T>) => {
   return (
-    <table className="h-full w-full bg-base-100 text-left text-sm text-base-content/70 table-zebra">
+    <table className="w-full bg-base-100 text-left text-sm text-base-content/70 table-zebra">
       <thead className="sticky top-0 z-10 bg-base-200 text-xs uppercase">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
