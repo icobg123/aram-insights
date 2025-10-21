@@ -89,7 +89,7 @@ const Header = () => {
         </Link>
       </div>
       <nav className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-1">
           {items.map((item) => (
             <li key={item.id}>
               <Link

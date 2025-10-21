@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useEffect } from "react";
 import { useTableState } from "@/hooks/useTableState";
+import { cn } from "@/lib/cn";
 
 interface TabsProps {
   tabLabels: string[];
@@ -33,15 +34,16 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
 
   return (
     <>
-      <div role="tablist" className="tabs tabs-lift z-40">
+      <div role="tablist" className="tabs-lift z-40 tabs">
         {tabLabels.map((label, index) => (
           <a
             key={index}
             role="tab"
             aria-label={tabLabels[index]}
-            className={`tab flex-auto ${
+            className={cn(
+              `tab flex-auto border-none`,
               activeTab === index ? "tab-active" : ""
-            }`}
+            )}
             onClick={() => handleTabClick(index)}
           >
             {label}
@@ -49,7 +51,7 @@ const Tabs: React.FC<TabsProps> = ({ tabLabels, tabContents }) => {
         ))}
       </div>
 
-      <div className="container  w-full max-w-5xl flex-1 overflow-auto rounded-lg shadow-md md:max-h-none">
+      <div className="container w-full max-w-5xl flex-1 overflow-auto shadow-md md:max-h-none">
         {tabContents[activeTab]}
       </div>
     </>
